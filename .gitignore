@@ -27,7 +27,7 @@ CMakeFiles/
 
 # Typical build directory
 /build/
-build*
+build*/**
 
 # Generated files in main directory, config/ and docs/
 /deps.mk
