@@ -32,7 +32,7 @@ build*/**
 # Generated files in main directory, config/ and docs/
 /deps.mk
 config/_config.hpp
-config/config.mk
+# config/config.mk
 config/sample-runs-build.log
 config/user.cmake
 config/user.mk
@@ -457,4 +457,4 @@ pkg.gitcommit
 TAGS
 
 # vs code
-.vscode
+.vscode/*.h

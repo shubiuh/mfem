@@ -1,0 +1,38 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "(gdb-oneapi) Launch in WSL",
+            "type": "cppdbg",
+            "request": "launch",
+
+            // Path to your program inside WSL
+            "program": "${workspaceFolder}/examples/ex1",
+            "args": [],
+            "cwd": "${workspaceFolder}/examples",
+            "preLaunchTask": "prep-ex0",
+
+            "MIMode": "gdb",
+
+            // Wrap gdb-oneapi so it sources the env script first
+            "miDebuggerPath": "",
+            "miDebuggerArgs": "'${workspaceFolder}/examples/debug_examples.sh && /home/shubin/spack/opt/spack/linux-skylake/intel-oneapi-compilers-2025.2.0-*/debugger/latest/bin/gdb-oneapi'",
+
+            "stopAtEntry": true,
+            "externalConsole": false,
+
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Set Disassembly Flavor to Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ]
+        }
+    ]
+}
