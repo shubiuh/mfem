@@ -18,6 +18,7 @@
 
 #include "mkl_pardiso.h"
 #include "operator.hpp"
+#include "densemat.hpp"
 
 namespace mfem
 {
@@ -34,7 +35,7 @@ public:
       REAL_STRUCTURE_SYMMETRIC = 1,
       REAL_SYMMETRIC_POSITIVE_DEFINITE = 2,
       REAL_SYMMETRIC_INDEFINITE = -2,
-      REAL_NONSYMMETRIC = 11
+      REAL_NONSYMMETRIC = 11,
 
       COMPLEX_STRUCTURALLY_SYMMETRIC = 3,      ///< Complex structurally symmetric
       COMPLEX_HERMITIAN_POSITIVE_DEFINITE = 4, ///< Complex Hermitian positive definite
@@ -72,7 +73,7 @@ public:
     * @param B RHS matrix
     * @param X Solution matrix
     */
-   void Mult(const DenseMatrix &B, DenseMatrix &X) const override;
+   void Mult(const DenseMatrix &B, DenseMatrix &X) const;
 
    /**
     * @brief Set the print level for MKL Pardiso
