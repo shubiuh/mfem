@@ -458,3 +458,6 @@ TAGS
 
 # vs code
 .vscode/*.h
+.vs
+obj
+*vcxproj.user
