@@ -20,7 +20,7 @@
 
 namespace mfem
 {
-CPardisoSolver::CPardisoSolver(MPI_Comm comm)
+CPardisoSolver::CPardisoSolver(MPI_Comm comm, int nrhs_)
 {
    comm_ = MPI_Comm_c2f(comm);
 
@@ -58,7 +58,7 @@ CPardisoSolver::CPardisoSolver(MPI_Comm comm)
    // Real nonsymmetric matrix
    mtype = MatType::REAL_NONSYMMETRIC;
    // Number of right hand sides
-   nrhs = 1;
+   nrhs = nrhs_;
 };
 
 void CPardisoSolver::SetOperator(const Operator &op)
@@ -208,9 +208,41 @@ void CPardisoSolver::Mult(const Vector &b, Vector &x) const
    MFEM_ASSERT(error == 0, "Pardiso solve error");
 }
 
+void CPardisoSolver::Mult(const DenseMatrix &B, DenseMatrix &X) const
+{
+   MFEM_ASSERT(B.Width() == X.Width(), "Incompatible matrix sizes");
+
+   // Solve for multiple right-hand side
+   phase = 33;
+   cluster_sparse_solver(pt,
+                         &maxfct,
+                         &mnum,
+                         &mtype,
+                         &phase,
+                         &m,
+                         reordered_csr_nzval,
+                         csr_rowptr,
+                         reordered_csr_colind,
+                         &idum,
+                         &nrhs,
+                         iparm,
+                         &msglvl,
+                         B.GetData(), // n x nrhs, column-major
+                         X.GetData(), // solution n x nrhs
+                         &comm_,
+                         &error);
+
+   MFEM_ASSERT(error == 0, "Pardiso solve error");
+}
+
 void CPardisoSolver::SetPrintLevel(int print_level)
 {
    msglvl = print_level;
+}
+
+void CPardisoSolver::setRHSCount(int nrhs_)
+{
+   nrhs = nrhs_;
 }
 
 void CPardisoSolver::SetMatrixType(MatType mat_type)

@@ -18,7 +18,7 @@
 namespace mfem
 {
 
-PardisoSolver::PardisoSolver()
+PardisoSolver::PardisoSolver(int nrhs_)
 {
    // Indicate that default parameters are changed
    iparm[0] = 1;
@@ -52,7 +52,7 @@ PardisoSolver::PardisoSolver()
    // Real nonsymmetric matrix
    mtype = MatType::REAL_NONSYMMETRIC;
    // Number of right hand sides
-   nrhs = 1;
+   nrhs = nrhs_;
 }
 
 void PardisoSolver::SetOperator(const Operator &op)
@@ -119,9 +119,30 @@ void PardisoSolver::Mult(const Vector &b, Vector &x) const
    MFEM_ASSERT(error == 0, "Pardiso solve error");
 }
 
+void PardisoSolver::Mult(const DenseMatrix &B, DenseMatrix &X) const
+{
+   MFEM_ASSERT(B.Width() == X.Width(), "Incompatible matrix sizes");
+
+   // Solve for multiple right-hand side
+   phase = 33;
+   PARDISO(pt, &maxfct, &mnum, &mtype, &phase, &m, reordered_csr_nzval, csr_rowptr,
+         reordered_csr_colind, &idum, &nrhs,
+         iparm, &msglvl,
+         B.GetData(), // n x nrhs, column-major
+         X.GetData(), // solution n x nrhs
+         &error);
+
+   MFEM_ASSERT(error == 0, "Pardiso solve error");
+}
+
 void PardisoSolver::SetPrintLevel(int print_level)
 {
    msglvl = print_level;
+}
+
+void PardisoSolver::setRHSCount(int nrhs_)
+{
+   nrhs = nrhs_;
 }
 
 void PardisoSolver::SetMatrixType(MatType mat_type)
