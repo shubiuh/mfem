@@ -1,0 +1,4362 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include=".">
+      <UniqueIdentifier>{1083c282-fdcc-4efe-8fe9-156343781840}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="bin">
+      <UniqueIdentifier>{bfd6be4f-b3e8-4970-a314-773f24d076f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="bin\x64">
+      <UniqueIdentifier>{cecc8f36-be99-43b7-94a9-7810debdc7c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="bin\x64\Debug">
+      <UniqueIdentifier>{0f252425-aa13-4f30-84e4-7f787ac6f71e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="config">
+      <UniqueIdentifier>{f2b4e97e-e963-4477-8036-69dba1981b16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="config\cmake">
+      <UniqueIdentifier>{dacc36c5-1261-4438-aeed-412f882828f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="config\cmake\modules">
+      <UniqueIdentifier>{cc9e6812-c829-43f5-b6fa-0b462c44712f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="config\docker">
+      <UniqueIdentifier>{dbe9fd14-2d34-44f0-8718-35813c28372a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="config\githooks">
+      <UniqueIdentifier>{12083773-766c-49a1-b5a8-2cb34ed7d755}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="config\vcpkg">
+      <UniqueIdentifier>{294c6f52-eadf-40a1-890e-cd2087e01caa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="config\vcpkg\ports">
+      <UniqueIdentifier>{3a2e6a1c-d84c-4d74-acae-7b46f85b66d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="config\vcpkg\ports\metis-mfem">
+      <UniqueIdentifier>{6fd7be55-c98c-4526-afa4-35c60c6ad73d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data">
+      <UniqueIdentifier>{334f8439-4ae9-4849-9bac-90e38c776f0a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="doc">
+      <UniqueIdentifier>{e01c7b9d-6066-42e1-aeda-42ec0a65d4a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="doc\css">
+      <UniqueIdentifier>{08eed225-4d02-48aa-9657-3ad1ae9043c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="doc\html">
+      <UniqueIdentifier>{a360d9e3-0ef6-4afa-8e51-b67d76a2a76d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="doc\js">
+      <UniqueIdentifier>{f963283e-be60-4700-a730-d840410c1ace}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="examples">
+      <UniqueIdentifier>{1dc6b811-efed-450e-aa12-29c8f933a21d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="examples\amgx">
+      <UniqueIdentifier>{3df81c7e-e5d9-4570-8c77-d5dd97276d96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="examples\caliper">
+      <UniqueIdentifier>{32668916-1cc9-44da-aaea-5e831df3cff4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="examples\ginkgo">
+      <UniqueIdentifier>{8b619b54-adaa-4909-9c55-df9c27dd4647}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="examples\hiop">
+      <UniqueIdentifier>{645d655c-0d56-4139-94cf-aa81b31abb36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="examples\jupyter">
+      <UniqueIdentifier>{293d8543-3e8a-44ed-9f3b-56638e22f6eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="examples\moonolith">
+      <UniqueIdentifier>{0dd5c652-3b37-42b2-bbb8-b3891a9bc879}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="examples\petsc">
+      <UniqueIdentifier>{966ba195-402b-46bc-b521-b56fd241d9f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="examples\pumi">
+      <UniqueIdentifier>{2bb5d40c-5254-4161-896a-f0a0ca04f11a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="examples\sundials">
+      <UniqueIdentifier>{8507f989-8971-4503-913b-edd4dea1f25e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="examples\superlu">
+      <UniqueIdentifier>{833d3a55-087f-4536-9644-e576485828f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="fem">
+      <UniqueIdentifier>{ca20c765-9b9a-4cae-89ce-b7f02e03280c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="fem\ceed">
+      <UniqueIdentifier>{a1dcf752-b052-4df4-b4b9-c25210d587b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="fem\ceed\integrators">
+      <UniqueIdentifier>{c148be23-049c-4eb1-af2f-438943d36279}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="fem\ceed\integrators\convection">
+      <UniqueIdentifier>{93b1c3a8-8913-44cc-ad75-295abe33be31}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="fem\ceed\integrators\diffusion">
+      <UniqueIdentifier>{a57f8bfa-bced-4125-9649-714df5aed31f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="fem\ceed\integrators\mass">
+      <UniqueIdentifier>{05894b45-6b69-4a08-97ad-d5c44f8bc163}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="fem\ceed\integrators\nlconvection">
+      <UniqueIdentifier>{5569b7d1-f137-4640-b021-3f50c3a33ab4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="fem\ceed\interface">
+      <UniqueIdentifier>{739e0ae0-06ae-44f7-88f3-6535bf2d2153}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="fem\ceed\solvers">
+      <UniqueIdentifier>{917cdba6-c82a-4e50-bfbf-d18a2dc1d5a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="fem\eltrans">
+      <UniqueIdentifier>{24dc7565-c9da-4871-a208-328ca863e75c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="fem\fe">
+      <UniqueIdentifier>{6ed9dd48-bafc-4d78-90be-30ac6eeb88a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="fem\gslib">
+      <UniqueIdentifier>{b3578515-c700-420c-af36-fbd09e6327a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="fem\integ">
+      <UniqueIdentifier>{c17e5422-0b36-4655-8c63-6cfd535359f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="fem\lor">
+      <UniqueIdentifier>{a2b19487-9a49-4903-b5aa-fd77041cd219}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="fem\moonolith">
+      <UniqueIdentifier>{efdece09-29b7-443c-bb01-d1a5ebf2e615}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="fem\qinterp">
+      <UniqueIdentifier>{5817e787-79a3-4396-a08e-b330966c2eb2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="fem\tmop">
+      <UniqueIdentifier>{70916848-c551-4c8d-95b2-70e0e1866175}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="general">
+      <UniqueIdentifier>{f154f9d4-86e8-4967-af54-b8ff6926ef27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="linalg">
+      <UniqueIdentifier>{e2ee0a8a-0634-446b-8b38-e7052b8057fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="linalg\batched">
+      <UniqueIdentifier>{bbd19a95-043e-4128-9a85-fcf64009fcee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="linalg\simd">
+      <UniqueIdentifier>{e350238c-a203-4235-9fc5-dbd907380d7a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mesh">
+      <UniqueIdentifier>{73194a0e-4da0-42b1-a1f9-f038d744b6db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mesh\submesh">
+      <UniqueIdentifier>{c520c318-59a8-4299-9150-3f89ee43327b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="miniapps">
+      <UniqueIdentifier>{6bd2af0f-786c-4882-9d45-f726c6dba734}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="miniapps\adjoint">
+      <UniqueIdentifier>{eda4228a-d49f-44f8-acc8-8159b3442b39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="miniapps\autodiff">
+      <UniqueIdentifier>{25646612-5730-4546-ac8c-be61b2940215}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="miniapps\common">
+      <UniqueIdentifier>{bf491f1a-9451-4122-aa74-5399e4e28f16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="miniapps\dpg">
+      <UniqueIdentifier>{87bcda90-9de8-47e3-8d31-87382347f026}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="miniapps\dpg\meshes">
+      <UniqueIdentifier>{f7c73adf-d022-4b09-877f-65e7542fefa7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="miniapps\dpg\util">
+      <UniqueIdentifier>{daa3023c-a451-42ec-a83f-5b0c89d9143a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="miniapps\electromagnetics">
+      <UniqueIdentifier>{c6c703b5-61bf-445f-b659-d57184f11484}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="miniapps\gslib">
+      <UniqueIdentifier>{9c3cda5f-a75f-40ae-b179-f2f8d5ea4022}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="miniapps\hdiv-linear-solver">
+      <UniqueIdentifier>{cb15c159-7243-499e-8d11-515065560f33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="miniapps\hooke">
+      <UniqueIdentifier>{89fd1c4f-0054-4212-927a-3e1ee2fbbf5e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="miniapps\hooke\kernels">
+      <UniqueIdentifier>{dafbb058-96a0-4e40-8ef9-dd3282fe7dff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="miniapps\hooke\materials">
+      <UniqueIdentifier>{67a93685-cea1-488b-8207-24db7e76aee8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="miniapps\hooke\operators">
+      <UniqueIdentifier>{6785dec2-cfe2-4acc-866a-d400dde3da77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="miniapps\hooke\preconditioners">
+      <UniqueIdentifier>{4088b5d6-5c26-45df-b867-24dcee33acb4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="miniapps\meshing">
+      <UniqueIdentifier>{547549d8-a8a4-40da-9a63-e0b893824cab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="miniapps\mtop">
+      <UniqueIdentifier>{b5abfd78-565a-4134-874e-fce6ccdf59fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="miniapps\multidomain">
+      <UniqueIdentifier>{fa2a8459-e905-41bd-994e-d0292bfa95de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="miniapps\navier">
+      <UniqueIdentifier>{ae192a3b-7da2-4f3c-a85a-acdfc20c5432}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="miniapps\nurbs">
+      <UniqueIdentifier>{1d78582b-d149-4360-960f-0cbf3bf5015f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="miniapps\nurbs\meshes">
+      <UniqueIdentifier>{73d4a73e-541d-4fb2-98fe-da1442212077}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="miniapps\parelag">
+      <UniqueIdentifier>{b117a3fc-40a7-485b-bde6-000928344c1a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="miniapps\performance">
+      <UniqueIdentifier>{2d1050ae-7c8b-4cd9-9218-2f91657d08f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="miniapps\shifted">
+      <UniqueIdentifier>{6b4ac2d8-1e28-42ed-afce-9eb1eb668384}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="miniapps\solvers">
+      <UniqueIdentifier>{2b440be8-b83c-4faa-9606-1181eb481c7c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="miniapps\spde">
+      <UniqueIdentifier>{8e719696-5bbc-45a3-92df-176c8aaf3789}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="miniapps\tools">
+      <UniqueIdentifier>{54ffe06d-d414-4684-87aa-6f1fdf3363ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="miniapps\toys">
+      <UniqueIdentifier>{cd9992fc-4bb3-45e7-8f4c-2a07f529ef7e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="miniapps\tribol">
+      <UniqueIdentifier>{7b05b686-499a-4cd2-bb55-e8e61affd45d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="obj">
+      <UniqueIdentifier>{86a7b21a-903c-4238-b496-6df38a552dfb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="obj\x64">
+      <UniqueIdentifier>{6c512d7c-fa44-4f1f-b6f2-55808c2858d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="obj\x64\Debug">
+      <UniqueIdentifier>{9729f068-cd83-4668-a5d4-210cb4dc4900}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="spack_patch">
+      <UniqueIdentifier>{c40275f8-21c9-4eaf-927c-47fa72f9345f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tests">
+      <UniqueIdentifier>{00ea8769-d412-4b32-83a9-a1ae1c3e6ee2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tests\benchmarks">
+      <UniqueIdentifier>{07fddbe6-f4ab-4451-925c-49a07e4c22c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tests\convergence">
+      <UniqueIdentifier>{a5dfa0bf-4922-4879-85f0-20551141892f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tests\gitlab">
+      <UniqueIdentifier>{e7140c21-923e-48eb-8ec8-9baf85c95941}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tests\mem_manager">
+      <UniqueIdentifier>{fa301cf0-9b6a-4500-8c4e-f0e5beea3d04}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tests\par-mesh-format">
+      <UniqueIdentifier>{26ba5e88-94aa-4d89-b203-8c907413be1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tests\scripts">
+      <UniqueIdentifier>{281b6ca4-199b-47c8-b061-301de16c6e2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tests\unit">
+      <UniqueIdentifier>{552baf2c-681a-45a6-b059-82e4699fc068}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tests\unit\ceed">
+      <UniqueIdentifier>{f2130490-3aa3-4930-a494-4da52f4051ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tests\unit\data">
+      <UniqueIdentifier>{7bc1d251-9339-4f2d-9fb4-3e0b73aa4dd2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tests\unit\enzyme">
+      <UniqueIdentifier>{9d643c20-af73-48ca-b6fa-4902781b4bca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tests\unit\fem">
+      <UniqueIdentifier>{ddad4852-93e9-4df5-9a1b-cbd8e77df4b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tests\unit\general">
+      <UniqueIdentifier>{257dc0cb-bb54-4afc-9c0a-6b68a4a23d84}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tests\unit\linalg">
+      <UniqueIdentifier>{374337d2-fd35-4f4b-8651-d5ca7968754d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tests\unit\mesh">
+      <UniqueIdentifier>{1e634106-6182-4bde-b1a8-c125f1674e4d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tests\unit\miniapps">
+      <UniqueIdentifier>{fb2b807f-e52e-4672-bbcd-3b025cd075f8}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".\build.md" />
+    <None Include=".\CHANGELOG" />
+    <None Include=".\CITATION.cff" />
+    <None Include=".\CODE_OF_CONDUCT.md" />
+    <None Include=".\config\cmake\config.hpp.in">
+      <Filter>config\cmake</Filter>
+    </None>
+    <None Include=".\config\cmake\MFEMConfig.cmake.in">
+      <Filter>config\cmake</Filter>
+    </None>
+    <None Include=".\config\cmake\modules\CorrectWindowsPaths.cmake">
+      <Filter>config\cmake\modules</Filter>
+    </None>
+    <None Include=".\config\cmake\modules\FindADIOS2.cmake">
+      <Filter>config\cmake\modules</Filter>
+    </None>
+    <None Include=".\config\cmake\modules\FindAlgoim.cmake">
+      <Filter>config\cmake\modules</Filter>
+    </None>
+    <None Include=".\config\cmake\modules\FindAMGX.cmake">
+      <Filter>config\cmake\modules</Filter>
+    </None>
+    <None Include=".\config\cmake\modules\FindAxom.cmake">
+      <Filter>config\cmake\modules</Filter>
+    </None>
+    <None Include=".\config\cmake\modules\FindBenchmark.cmake">
+      <Filter>config\cmake\modules</Filter>
+    </None>
+    <None Include=".\config\cmake\modules\FindBlitz.cmake">
+      <Filter>config\cmake\modules</Filter>
+    </None>
+    <None Include=".\config\cmake\modules\FindCaliper.cmake">
+      <Filter>config\cmake\modules</Filter>
+    </None>
+    <None Include=".\config\cmake\modules\FindCODIPACK.cmake">
+      <Filter>config\cmake\modules</Filter>
+    </None>
+    <None Include=".\config\cmake\modules\FindConduit.cmake">
+      <Filter>config\cmake\modules</Filter>
+    </None>
+    <None Include=".\config\cmake\modules\FindCXXABIDemangle.cmake">
+      <Filter>config\cmake\modules</Filter>
+    </None>
+    <None Include=".\config\cmake\modules\FindENZYME.cmake">
+      <Filter>config\cmake\modules</Filter>
+    </None>
+    <None Include=".\config\cmake\modules\FindFMS.cmake">
+      <Filter>config\cmake\modules</Filter>
+    </None>
+    <None Include=".\config\cmake\modules\FindGSLIB.cmake">
+      <Filter>config\cmake\modules</Filter>
+    </None>
+    <None Include=".\config\cmake\modules\FindHDF5.cmake">
+      <Filter>config\cmake\modules</Filter>
+    </None>
+    <None Include=".\config\cmake\modules\FindHIOP.cmake">
+      <Filter>config\cmake\modules</Filter>
+    </None>
+    <None Include=".\config\cmake\modules\FindHYPRE.cmake">
+      <Filter>config\cmake\modules</Filter>
+    </None>
+    <None Include=".\config\cmake\modules\FindlibCEED.cmake">
+      <Filter>config\cmake\modules</Filter>
+    </None>
+    <None Include=".\config\cmake\modules\FindLIBDL.cmake">
+      <Filter>config\cmake\modules</Filter>
+    </None>
+    <None Include=".\config\cmake\modules\FindLibunwind.cmake">
+      <Filter>config\cmake\modules</Filter>
+    </None>
+    <None Include=".\config\cmake\modules\FindMAGMA.cmake">
+      <Filter>config\cmake\modules</Filter>
+    </None>
+    <None Include=".\config\cmake\modules\FindMETIS.cmake">
+      <Filter>config\cmake\modules</Filter>
+    </None>
+    <None Include=".\config\cmake\modules\FindMFEMBacktrace.cmake">
+      <Filter>config\cmake\modules</Filter>
+    </None>
+    <None Include=".\config\cmake\modules\FindMKL_CPARDISO.cmake">
+      <Filter>config\cmake\modules</Filter>
+    </None>
+    <None Include=".\config\cmake\modules\FindMKL_PARDISO.cmake">
+      <Filter>config\cmake\modules</Filter>
+    </None>
+    <None Include=".\config\cmake\modules\FindMPFR.cmake">
+      <Filter>config\cmake\modules</Filter>
+    </None>
+    <None Include=".\config\cmake\modules\FindMUMPS.cmake">
+      <Filter>config\cmake\modules</Filter>
+    </None>
+    <None Include=".\config\cmake\modules\FindNetCDF.cmake">
+      <Filter>config\cmake\modules</Filter>
+    </None>
+    <None Include=".\config\cmake\modules\FindOCCA.cmake">
+      <Filter>config\cmake\modules</Filter>
+    </None>
+    <None Include=".\config\cmake\modules\FindPackageMultipass.cmake">
+      <Filter>config\cmake\modules</Filter>
+    </None>
+    <None Include=".\config\cmake\modules\FindPARELAG.cmake">
+      <Filter>config\cmake\modules</Filter>
+    </None>
+    <None Include=".\config\cmake\modules\FindParMETIS.cmake">
+      <Filter>config\cmake\modules</Filter>
+    </None>
+    <None Include=".\config\cmake\modules\FindPETSc.cmake">
+      <Filter>config\cmake\modules</Filter>
+    </None>
+    <None Include=".\config\cmake\modules\FindPOSIXClocks.cmake">
+      <Filter>config\cmake\modules</Filter>
+    </None>
+    <None Include=".\config\cmake\modules\FindRAJA.cmake">
+      <Filter>config\cmake\modules</Filter>
+    </None>
+    <None Include=".\config\cmake\modules\FindScotch.cmake">
+      <Filter>config\cmake\modules</Filter>
+    </None>
+    <None Include=".\config\cmake\modules\FindSLEPc.cmake">
+      <Filter>config\cmake\modules</Filter>
+    </None>
+    <None Include=".\config\cmake\modules\FindSTRUMPACK.cmake">
+      <Filter>config\cmake\modules</Filter>
+    </None>
+    <None Include=".\config\cmake\modules\FindSuiteSparse.cmake">
+      <Filter>config\cmake\modules</Filter>
+    </None>
+    <None Include=".\config\cmake\modules\FindSUNDIALS.cmake">
+      <Filter>config\cmake\modules</Filter>
+    </None>
+    <None Include=".\config\cmake\modules\FindSuperLUDist.cmake">
+      <Filter>config\cmake\modules</Filter>
+    </None>
+    <None Include=".\config\cmake\modules\FindTribol.cmake">
+      <Filter>config\cmake\modules</Filter>
+    </None>
+    <None Include=".\config\cmake\modules\FindUMPIRE.cmake">
+      <Filter>config\cmake\modules</Filter>
+    </None>
+    <None Include=".\config\cmake\modules\Find_GnuTLS.cmake">
+      <Filter>config\cmake\modules</Filter>
+    </None>
+    <None Include=".\config\cmake\modules\MfemCmakeUtilities.cmake">
+      <Filter>config\cmake\modules</Filter>
+    </None>
+    <None Include=".\config\cmake\modules\ResolveCompilerPaths.cmake">
+      <Filter>config\cmake\modules</Filter>
+    </None>
+    <None Include=".\config\config.hpp">
+      <Filter>config</Filter>
+    </None>
+    <None Include=".\config\config.hpp.in">
+      <Filter>config</Filter>
+    </None>
+    <None Include=".\config\config.mk">
+      <Filter>config</Filter>
+    </None>
+    <None Include=".\config\config.mk.in">
+      <Filter>config</Filter>
+    </None>
+    <None Include=".\config\defaults.cmake">
+      <Filter>config</Filter>
+    </None>
+    <None Include=".\config\defaults.mk">
+      <Filter>config</Filter>
+    </None>
+    <None Include=".\config\docker\Dockerfile">
+      <Filter>config\docker</Filter>
+    </None>
+    <None Include=".\config\docker\Dockerfile.base">
+      <Filter>config\docker</Filter>
+    </None>
+    <None Include=".\config\docker\README.md">
+      <Filter>config\docker</Filter>
+    </None>
+    <None Include=".\config\docker\spack.yaml">
+      <Filter>config\docker</Filter>
+    </None>
+    <None Include=".\config\githooks\pre-commit">
+      <Filter>config\githooks</Filter>
+    </None>
+    <None Include=".\config\githooks\pre-push">
+      <Filter>config\githooks</Filter>
+    </None>
+    <None Include=".\config\githooks\README.md">
+      <Filter>config\githooks</Filter>
+    </None>
+    <None Include=".\config\makefile">
+      <Filter>config</Filter>
+    </None>
+    <None Include=".\config\mfem.astylerc">
+      <Filter>config</Filter>
+    </None>
+    <None Include=".\config\sample-runs.sh">
+      <Filter>config</Filter>
+    </None>
+    <None Include=".\config\tconfig.hpp">
+      <Filter>config</Filter>
+    </None>
+    <None Include=".\config\test.mk">
+      <Filter>config</Filter>
+    </None>
+    <None Include=".\config\user.mk">
+      <Filter>config</Filter>
+    </None>
+    <None Include=".\config\vcpkg\ports\metis-mfem\cmake4.patch">
+      <Filter>config\vcpkg\ports\metis-mfem</Filter>
+    </None>
+    <None Include=".\config\vcpkg\ports\metis-mfem\disable-programs.patch">
+      <Filter>config\vcpkg\ports\metis-mfem</Filter>
+    </None>
+    <None Include=".\config\vcpkg\ports\metis-mfem\enable-install.patch">
+      <Filter>config\vcpkg\ports\metis-mfem</Filter>
+    </None>
+    <None Include=".\config\vcpkg\ports\metis-mfem\fix-gklib-vs14-math.patch">
+      <Filter>config\vcpkg\ports\metis-mfem</Filter>
+    </None>
+    <None Include=".\config\vcpkg\ports\metis-mfem\fix-INT_MIN_define.patch">
+      <Filter>config\vcpkg\ports\metis-mfem</Filter>
+    </None>
+    <None Include=".\config\vcpkg\ports\metis-mfem\fix-linux-build-error.patch">
+      <Filter>config\vcpkg\ports\metis-mfem</Filter>
+    </None>
+    <None Include=".\config\vcpkg\ports\metis-mfem\fix-metis-vs14-math.patch">
+      <Filter>config\vcpkg\ports\metis-mfem</Filter>
+    </None>
+    <None Include=".\config\vcpkg\ports\metis-mfem\fix-runtime-install-destination.patch">
+      <Filter>config\vcpkg\ports\metis-mfem</Filter>
+    </None>
+    <None Include=".\config\vcpkg\ports\metis-mfem\install-metisConfig.patch">
+      <Filter>config\vcpkg\ports\metis-mfem</Filter>
+    </None>
+    <None Include=".\config\vcpkg\ports\metis-mfem\portfile.cmake">
+      <Filter>config\vcpkg\ports\metis-mfem</Filter>
+    </None>
+    <None Include=".\config\vcpkg\ports\metis-mfem\vcpkg.json">
+      <Filter>config\vcpkg\ports\metis-mfem</Filter>
+    </None>
+    <None Include=".\config\XSDKDefaults.cmake">
+      <Filter>config</Filter>
+    </None>
+    <None Include=".\config\_config.hpp">
+      <Filter>config</Filter>
+    </None>
+    <None Include=".\CONTRIBUTING.md" />
+    <None Include=".\data\amr-hex.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\amr-quad.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\ball-nurbs.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\beam-hex-nurbs.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\beam-hex.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\beam-hex.vtk">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\beam-quad-amr.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\beam-quad-nurbs-sf.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\beam-quad-nurbs.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\beam-quad.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\beam-quad.vtk">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\beam-tet.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\beam-tet.vtk">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\beam-tri.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\beam-tri.vtk">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\beam-wedge.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\beam-wedge.vtk">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\compass.geo">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\compass.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\compass.msh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\cube-nurbs.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\diag-segment-2d.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\diag-segment-3d.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\disc-nurbs.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\equilateral-pyramid.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\escher-p2.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\escher-p2.vtk">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\escher-p3.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\escher.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\escher.vtk">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\fichera-amr.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\fichera-mixed-16.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\fichera-mixed-p2.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\fichera-mixed-p2.vtk">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\fichera-mixed.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\fichera-q2.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\fichera-q2.vtk">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\fichera-q3.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\fichera-quad-mixed.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\fichera-quad.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\fichera.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\fichera.vtk">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\hexagon.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\inline-hex.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\inline-pyramid.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\inline-quad.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\inline-segment.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\inline-tet.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\inline-tri.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\inline-wedge.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\klein-bottle.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\klein-donut.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\l-shape.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\llnl-p3.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\mobius-strip.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\octahedron.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\periodic-annulus-sector.geo">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\periodic-annulus-sector.msh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\periodic-cube.geo">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\periodic-cube.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\periodic-cube.msh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\periodic-hexagon.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\periodic-segment.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\periodic-square.geo">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\periodic-square.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\periodic-square.msh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\periodic-torus-sector.geo">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\periodic-torus-sector.msh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\pipe-nurbs-2d.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\pipe-nurbs-log.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\pipe-nurbs.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\ref-cube.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\ref-prism.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\ref-pyramid.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\ref-segment.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\ref-square.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\ref-tetrahedron.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\ref-triangle.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\rt-2d-p4-tri.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\rt-2d-q3.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\segment-nurbs.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\square-disc-nurbs-patch.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\square-disc-nurbs.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\square-disc-p2.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\square-disc-p2.vtk">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\square-disc-p3.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\square-disc-surf.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\square-disc.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\square-disc.vtk">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\square-mixed.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\square-nurbs-pw.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\square-nurbs.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\star-hilbert.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\star-mixed-p2.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\star-mixed-p2.vtk">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\star-mixed.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\star-q2.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\star-q2.vtk">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\star-q3.fms">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\star-q3.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\star-surf.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\star.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\star.vtk">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\tinyzoo-3d.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\toroid-hex.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\data\toroid-wedge.mesh">
+      <Filter>data</Filter>
+    </None>
+    <None Include=".\doc\CodeDocumentation.conf.in">
+      <Filter>doc</Filter>
+    </None>
+    <None Include=".\doc\CodeDocumentation.dox">
+      <Filter>doc</Filter>
+    </None>
+    <None Include=".\doc\css\customization.css">
+      <Filter>doc\css</Filter>
+    </None>
+    <None Include=".\doc\css\doxygen-awesome.css">
+      <Filter>doc\css</Filter>
+    </None>
+    <None Include=".\doc\html\header.html">
+      <Filter>doc\html</Filter>
+    </None>
+    <None Include=".\doc\js\doxygen-awesome-darkmode-toggle.js">
+      <Filter>doc\js</Filter>
+    </None>
+    <None Include=".\doc\logo-small.png">
+      <Filter>doc</Filter>
+    </None>
+    <None Include=".\doc\makefile">
+      <Filter>doc</Filter>
+    </None>
+    <None Include=".\doc\README">
+      <Filter>doc</Filter>
+    </None>
+    <None Include=".\examples\amgx\amg_pcg.json">
+      <Filter>examples\amgx</Filter>
+    </None>
+    <None Include=".\examples\amgx\makefile">
+      <Filter>examples\amgx</Filter>
+    </None>
+    <None Include=".\examples\amgx\multi_gs.json">
+      <Filter>examples\amgx</Filter>
+    </None>
+    <None Include=".\examples\amgx\precon.json">
+      <Filter>examples\amgx</Filter>
+    </None>
+    <None Include=".\examples\amgx\README">
+      <Filter>examples\amgx</Filter>
+    </None>
+    <None Include=".\examples\caliper\makefile">
+      <Filter>examples\caliper</Filter>
+    </None>
+    <None Include=".\examples\caliper\README">
+      <Filter>examples\caliper</Filter>
+    </None>
+    <None Include=".\examples\ex18.hpp">
+      <Filter>examples</Filter>
+    </None>
+    <None Include=".\examples\ex33.hpp">
+      <Filter>examples</Filter>
+    </None>
+    <None Include=".\examples\ex37.hpp">
+      <Filter>examples</Filter>
+    </None>
+    <None Include=".\examples\ginkgo\makefile">
+      <Filter>examples\ginkgo</Filter>
+    </None>
+    <None Include=".\examples\ginkgo\README">
+      <Filter>examples\ginkgo</Filter>
+    </None>
+    <None Include=".\examples\hiop\makefile">
+      <Filter>examples\hiop</Filter>
+    </None>
+    <None Include=".\examples\hiop\README">
+      <Filter>examples\hiop</Filter>
+    </None>
+    <None Include=".\examples\jupyter\ex.ipynb">
+      <Filter>examples\jupyter</Filter>
+    </None>
+    <None Include=".\examples\jupyter\README.md">
+      <Filter>examples\jupyter</Filter>
+    </None>
+    <None Include=".\examples\makefile">
+      <Filter>examples</Filter>
+    </None>
+    <None Include=".\examples\moonolith\example_utils.hpp">
+      <Filter>examples\moonolith</Filter>
+    </None>
+    <None Include=".\examples\moonolith\makefile">
+      <Filter>examples\moonolith</Filter>
+    </None>
+    <None Include=".\examples\moonolith\README.md">
+      <Filter>examples\moonolith</Filter>
+    </None>
+    <None Include=".\examples\nanoflann.hpp">
+      <Filter>examples</Filter>
+    </None>
+    <None Include=".\examples\petsc\makefile">
+      <Filter>examples\petsc</Filter>
+    </None>
+    <None Include=".\examples\petsc\rc_ex10p">
+      <Filter>examples\petsc</Filter>
+    </None>
+    <None Include=".\examples\petsc\rc_ex10p_jfnk">
+      <Filter>examples\petsc</Filter>
+    </None>
+    <None Include=".\examples\petsc\rc_ex10p_mf">
+      <Filter>examples\petsc</Filter>
+    </None>
+    <None Include=".\examples\petsc\rc_ex10p_mfop">
+      <Filter>examples\petsc</Filter>
+    </None>
+    <None Include=".\examples\petsc\rc_ex11p_gd">
+      <Filter>examples\petsc</Filter>
+    </None>
+    <None Include=".\examples\petsc\rc_ex11p_lobpcg">
+      <Filter>examples\petsc</Filter>
+    </None>
+    <None Include=".\examples\petsc\rc_ex11p_lobpcg_device">
+      <Filter>examples\petsc</Filter>
+    </None>
+    <None Include=".\examples\petsc\rc_ex1p">
+      <Filter>examples\petsc</Filter>
+    </None>
+    <None Include=".\examples\petsc\rc_ex1p_device">
+      <Filter>examples\petsc</Filter>
+    </None>
+    <None Include=".\examples\petsc\rc_ex1p_deviceamg">
+      <Filter>examples\petsc</Filter>
+    </None>
+    <None Include=".\examples\petsc\rc_ex2p">
+      <Filter>examples\petsc</Filter>
+    </None>
+    <None Include=".\examples\petsc\rc_ex2p_asm">
+      <Filter>examples\petsc</Filter>
+    </None>
+    <None Include=".\examples\petsc\rc_ex2p_bddc">
+      <Filter>examples\petsc</Filter>
+    </None>
+    <None Include=".\examples\petsc\rc_ex3p">
+      <Filter>examples\petsc</Filter>
+    </None>
+    <None Include=".\examples\petsc\rc_ex3p_bddc">
+      <Filter>examples\petsc</Filter>
+    </None>
+    <None Include=".\examples\petsc\rc_ex4p">
+      <Filter>examples\petsc</Filter>
+    </None>
+    <None Include=".\examples\petsc\rc_ex4p_bddc">
+      <Filter>examples\petsc</Filter>
+    </None>
+    <None Include=".\examples\petsc\rc_ex5p_bddc">
+      <Filter>examples\petsc</Filter>
+    </None>
+    <None Include=".\examples\petsc\rc_ex5p_fieldsplit">
+      <Filter>examples\petsc</Filter>
+    </None>
+    <None Include=".\examples\petsc\rc_ex9p_expl">
+      <Filter>examples\petsc</Filter>
+    </None>
+    <None Include=".\examples\petsc\rc_ex9p_expl_device">
+      <Filter>examples\petsc</Filter>
+    </None>
+    <None Include=".\examples\petsc\rc_ex9p_impl">
+      <Filter>examples\petsc</Filter>
+    </None>
+    <None Include=".\examples\petsc\README">
+      <Filter>examples\petsc</Filter>
+    </None>
+    <None Include=".\examples\pumi\makefile">
+      <Filter>examples\pumi</Filter>
+    </None>
+    <None Include=".\examples\pumi\README">
+      <Filter>examples\pumi</Filter>
+    </None>
+    <None Include=".\examples\sundials\makefile">
+      <Filter>examples\sundials</Filter>
+    </None>
+    <None Include=".\examples\sundials\README">
+      <Filter>examples\sundials</Filter>
+    </None>
+    <None Include=".\examples\superlu\makefile">
+      <Filter>examples\superlu</Filter>
+    </None>
+    <None Include=".\fem\adios2datacollection.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\bilinearform.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\bilinearform_ext.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\bilininteg.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\ceed\integrators\convection\convection.hpp">
+      <Filter>fem\ceed\integrators\convection</Filter>
+    </None>
+    <None Include=".\fem\ceed\integrators\diffusion\diffusion.hpp">
+      <Filter>fem\ceed\integrators\diffusion</Filter>
+    </None>
+    <None Include=".\fem\ceed\integrators\mass\mass.hpp">
+      <Filter>fem\ceed\integrators\mass</Filter>
+    </None>
+    <None Include=".\fem\ceed\integrators\nlconvection\nlconvection.hpp">
+      <Filter>fem\ceed\integrators\nlconvection</Filter>
+    </None>
+    <None Include=".\fem\ceed\interface\basis.hpp">
+      <Filter>fem\ceed\interface</Filter>
+    </None>
+    <None Include=".\fem\ceed\interface\ceed.hpp">
+      <Filter>fem\ceed\interface</Filter>
+    </None>
+    <None Include=".\fem\ceed\interface\coefficient.hpp">
+      <Filter>fem\ceed\interface</Filter>
+    </None>
+    <None Include=".\fem\ceed\interface\integrator.hpp">
+      <Filter>fem\ceed\interface</Filter>
+    </None>
+    <None Include=".\fem\ceed\interface\interface.hpp">
+      <Filter>fem\ceed\interface</Filter>
+    </None>
+    <None Include=".\fem\ceed\interface\mixed_integrator.hpp">
+      <Filter>fem\ceed\interface</Filter>
+    </None>
+    <None Include=".\fem\ceed\interface\operator.hpp">
+      <Filter>fem\ceed\interface</Filter>
+    </None>
+    <None Include=".\fem\ceed\interface\restriction.hpp">
+      <Filter>fem\ceed\interface</Filter>
+    </None>
+    <None Include=".\fem\ceed\interface\util.hpp">
+      <Filter>fem\ceed\interface</Filter>
+    </None>
+    <None Include=".\fem\ceed\solvers\algebraic.hpp">
+      <Filter>fem\ceed\solvers</Filter>
+    </None>
+    <None Include=".\fem\ceed\solvers\full-assembly.hpp">
+      <Filter>fem\ceed\solvers</Filter>
+    </None>
+    <None Include=".\fem\ceed\solvers\solvers-atpmg.hpp">
+      <Filter>fem\ceed\solvers</Filter>
+    </None>
+    <None Include=".\fem\coefficient.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\complex_fem.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\conduitdatacollection.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\convergence.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\datacollection.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\dgmassinv.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\dgmassinv_kernels.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\doftrans.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\eltrans\eltrans_basis.hpp">
+      <Filter>fem\eltrans</Filter>
+    </None>
+    <None Include=".\fem\eltrans.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\estimators.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\fe\face_map_utils.hpp">
+      <Filter>fem\fe</Filter>
+    </None>
+    <None Include=".\fem\fe\fe_base.hpp">
+      <Filter>fem\fe</Filter>
+    </None>
+    <None Include=".\fem\fe\fe_fixed_order.hpp">
+      <Filter>fem\fe</Filter>
+    </None>
+    <None Include=".\fem\fe\fe_h1.hpp">
+      <Filter>fem\fe</Filter>
+    </None>
+    <None Include=".\fem\fe\fe_l2.hpp">
+      <Filter>fem\fe</Filter>
+    </None>
+    <None Include=".\fem\fe\fe_nd.hpp">
+      <Filter>fem\fe</Filter>
+    </None>
+    <None Include=".\fem\fe\fe_nurbs.hpp">
+      <Filter>fem\fe</Filter>
+    </None>
+    <None Include=".\fem\fe\fe_pos.hpp">
+      <Filter>fem\fe</Filter>
+    </None>
+    <None Include=".\fem\fe\fe_pyramid.hpp">
+      <Filter>fem\fe</Filter>
+    </None>
+    <None Include=".\fem\fe\fe_rt.hpp">
+      <Filter>fem\fe</Filter>
+    </None>
+    <None Include=".\fem\fe\fe_ser.hpp">
+      <Filter>fem\fe</Filter>
+    </None>
+    <None Include=".\fem\fe.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\fem.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\fespace.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\fespacehierarchy.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\fe_coll.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\fmsconvert.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\fmsdatacollection.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\geom.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\gridfunc.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\gslib.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\hybridization.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\hybridization_ext.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\hyperbolic.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\integ\bilininteg_diffusion_kernels.hpp">
+      <Filter>fem\integ</Filter>
+    </None>
+    <None Include=".\fem\integ\bilininteg_elasticity_kernels.hpp">
+      <Filter>fem\integ</Filter>
+    </None>
+    <None Include=".\fem\integ\bilininteg_hcurlhdiv_kernels.hpp">
+      <Filter>fem\integ</Filter>
+    </None>
+    <None Include=".\fem\integ\bilininteg_hcurl_kernels.hpp">
+      <Filter>fem\integ</Filter>
+    </None>
+    <None Include=".\fem\integ\bilininteg_hdiv_kernels.hpp">
+      <Filter>fem\integ</Filter>
+    </None>
+    <None Include=".\fem\integ\bilininteg_mass_kernels.hpp">
+      <Filter>fem\integ</Filter>
+    </None>
+    <None Include=".\fem\integrator.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\intrules.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\intrules_cut.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\kdtree.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\kernels.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\kernel_dispatch.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\kernel_reporter.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\linearform.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\linearform_ext.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\lininteg.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\lor\lor.hpp">
+      <Filter>fem\lor</Filter>
+    </None>
+    <None Include=".\fem\lor\lor_ads.hpp">
+      <Filter>fem\lor</Filter>
+    </None>
+    <None Include=".\fem\lor\lor_ams.hpp">
+      <Filter>fem\lor</Filter>
+    </None>
+    <None Include=".\fem\lor\lor_batched.hpp">
+      <Filter>fem\lor</Filter>
+    </None>
+    <None Include=".\fem\lor\lor_h1.hpp">
+      <Filter>fem\lor</Filter>
+    </None>
+    <None Include=".\fem\lor\lor_h1_impl.hpp">
+      <Filter>fem\lor</Filter>
+    </None>
+    <None Include=".\fem\lor\lor_nd.hpp">
+      <Filter>fem\lor</Filter>
+    </None>
+    <None Include=".\fem\lor\lor_nd_impl.hpp">
+      <Filter>fem\lor</Filter>
+    </None>
+    <None Include=".\fem\lor\lor_rt.hpp">
+      <Filter>fem\lor</Filter>
+    </None>
+    <None Include=".\fem\lor\lor_rt_impl.hpp">
+      <Filter>fem\lor</Filter>
+    </None>
+    <None Include=".\fem\lor\lor_util.hpp">
+      <Filter>fem\lor</Filter>
+    </None>
+    <None Include=".\fem\moonolith\cut.hpp">
+      <Filter>fem\moonolith</Filter>
+    </None>
+    <None Include=".\fem\moonolith\mortarassembler.hpp">
+      <Filter>fem\moonolith</Filter>
+    </None>
+    <None Include=".\fem\moonolith\mortarintegrator.hpp">
+      <Filter>fem\moonolith</Filter>
+    </None>
+    <None Include=".\fem\moonolith\pmortarassembler.hpp">
+      <Filter>fem\moonolith</Filter>
+    </None>
+    <None Include=".\fem\moonolith\transfer.hpp">
+      <Filter>fem\moonolith</Filter>
+    </None>
+    <None Include=".\fem\moonolith\transferutils.hpp">
+      <Filter>fem\moonolith</Filter>
+    </None>
+    <None Include=".\fem\multigrid.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\nonlinearform.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\nonlinearform_ext.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\nonlininteg.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\normal_deriv_restriction.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\occa.okl">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\pbilinearform.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\pfespace.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\pgridfunc.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\plinearform.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\pnonlinearform.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\prestriction.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\qfunction.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\qinterp\eval.hpp">
+      <Filter>fem\qinterp</Filter>
+    </None>
+    <None Include=".\fem\qinterp\eval_hdiv.hpp">
+      <Filter>fem\qinterp</Filter>
+    </None>
+    <None Include=".\fem\qinterp\grad.hpp">
+      <Filter>fem\qinterp</Filter>
+    </None>
+    <None Include=".\fem\qspace.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\quadinterpolator.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\quadinterpolator_face.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\restriction.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\sidredatacollection.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\staticcond.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\tbilinearform.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\tbilininteg.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\tcoefficient.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\teltrans.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\tevaluator.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\tfe.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\tfespace.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\tintrules.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\tmop\tmop_pa.hpp">
+      <Filter>fem\tmop</Filter>
+    </None>
+    <None Include=".\fem\tmop.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\tmop_amr.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\tmop_tools.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\fem\transfer.hpp">
+      <Filter>fem</Filter>
+    </None>
+    <None Include=".\general\adios2stream.hpp">
+      <Filter>general</Filter>
+    </None>
+    <None Include=".\general\annotation.hpp">
+      <Filter>general</Filter>
+    </None>
+    <None Include=".\general\array.hpp">
+      <Filter>general</Filter>
+    </None>
+    <None Include=".\general\arrays_by_name.hpp">
+      <Filter>general</Filter>
+    </None>
+    <None Include=".\general\backends.hpp">
+      <Filter>general</Filter>
+    </None>
+    <None Include=".\general\binaryio.hpp">
+      <Filter>general</Filter>
+    </None>
+    <None Include=".\general\communication.hpp">
+      <Filter>general</Filter>
+    </None>
+    <None Include=".\general\cuda.hpp">
+      <Filter>general</Filter>
+    </None>
+    <None Include=".\general\device.hpp">
+      <Filter>general</Filter>
+    </None>
+    <None Include=".\general\enzyme.hpp">
+      <Filter>general</Filter>
+    </None>
+    <None Include=".\general\error.hpp">
+      <Filter>general</Filter>
+    </None>
+    <None Include=".\general\forall.hpp">
+      <Filter>general</Filter>
+    </None>
+    <None Include=".\general\gecko.hpp">
+      <Filter>general</Filter>
+    </None>
+    <None Include=".\general\globals.hpp">
+      <Filter>general</Filter>
+    </None>
+    <None Include=".\general\hash.hpp">
+      <Filter>general</Filter>
+    </None>
+    <None Include=".\general\hip.hpp">
+      <Filter>general</Filter>
+    </None>
+    <None Include=".\general\isockstream.hpp">
+      <Filter>general</Filter>
+    </None>
+    <None Include=".\general\kdtree.hpp">
+      <Filter>general</Filter>
+    </None>
+    <None Include=".\general\mem_alloc.hpp">
+      <Filter>general</Filter>
+    </None>
+    <None Include=".\general\mem_manager.hpp">
+      <Filter>general</Filter>
+    </None>
+    <None Include=".\general\occa.hpp">
+      <Filter>general</Filter>
+    </None>
+    <None Include=".\general\optparser.hpp">
+      <Filter>general</Filter>
+    </None>
+    <None Include=".\general\osockstream.hpp">
+      <Filter>general</Filter>
+    </None>
+    <None Include=".\general\reducers.hpp">
+      <Filter>general</Filter>
+    </None>
+    <None Include=".\general\sets.hpp">
+      <Filter>general</Filter>
+    </None>
+    <None Include=".\general\socketstream.hpp">
+      <Filter>general</Filter>
+    </None>
+    <None Include=".\general\sort_pairs.hpp">
+      <Filter>general</Filter>
+    </None>
+    <None Include=".\general\stable3d.hpp">
+      <Filter>general</Filter>
+    </None>
+    <None Include=".\general\table.hpp">
+      <Filter>general</Filter>
+    </None>
+    <None Include=".\general\tassign.hpp">
+      <Filter>general</Filter>
+    </None>
+    <None Include=".\general\text.hpp">
+      <Filter>general</Filter>
+    </None>
+    <None Include=".\general\tic_toc.hpp">
+      <Filter>general</Filter>
+    </None>
+    <None Include=".\general\version.hpp">
+      <Filter>general</Filter>
+    </None>
+    <None Include=".\general\zstr.hpp">
+      <Filter>general</Filter>
+    </None>
+    <None Include=".\INSTALL" />
+    <None Include=".\LICENSE" />
+    <None Include=".\linalg\amgxsolver.hpp">
+      <Filter>linalg</Filter>
+    </None>
+    <None Include=".\linalg\auxiliary.hpp">
+      <Filter>linalg</Filter>
+    </None>
+    <None Include=".\linalg\batched\batched.hpp">
+      <Filter>linalg\batched</Filter>
+    </None>
+    <None Include=".\linalg\batched\gpu_blas.hpp">
+      <Filter>linalg\batched</Filter>
+    </None>
+    <None Include=".\linalg\batched\magma.hpp">
+      <Filter>linalg\batched</Filter>
+    </None>
+    <None Include=".\linalg\batched\native.hpp">
+      <Filter>linalg\batched</Filter>
+    </None>
+    <None Include=".\linalg\batched\solver.hpp">
+      <Filter>linalg\batched</Filter>
+    </None>
+    <None Include=".\linalg\blockmatrix.hpp">
+      <Filter>linalg</Filter>
+    </None>
+    <None Include=".\linalg\blockoperator.hpp">
+      <Filter>linalg</Filter>
+    </None>
+    <None Include=".\linalg\blockvector.hpp">
+      <Filter>linalg</Filter>
+    </None>
+    <None Include=".\linalg\complex_densemat.hpp">
+      <Filter>linalg</Filter>
+    </None>
+    <None Include=".\linalg\complex_operator.hpp">
+      <Filter>linalg</Filter>
+    </None>
+    <None Include=".\linalg\constraints.hpp">
+      <Filter>linalg</Filter>
+    </None>
+    <None Include=".\linalg\cpardiso.hpp">
+      <Filter>linalg</Filter>
+    </None>
+    <None Include=".\linalg\densemat.hpp">
+      <Filter>linalg</Filter>
+    </None>
+    <None Include=".\linalg\dinvariants.hpp">
+      <Filter>linalg</Filter>
+    </None>
+    <None Include=".\linalg\dtensor.hpp">
+      <Filter>linalg</Filter>
+    </None>
+    <None Include=".\linalg\dual.hpp">
+      <Filter>linalg</Filter>
+    </None>
+    <None Include=".\linalg\ginkgo.hpp">
+      <Filter>linalg</Filter>
+    </None>
+    <None Include=".\linalg\handle.hpp">
+      <Filter>linalg</Filter>
+    </None>
+    <None Include=".\linalg\hiop.hpp">
+      <Filter>linalg</Filter>
+    </None>
+    <None Include=".\linalg\hypre.hpp">
+      <Filter>linalg</Filter>
+    </None>
+    <None Include=".\linalg\hypre_parcsr.hpp">
+      <Filter>linalg</Filter>
+    </None>
+    <None Include=".\linalg\invariants.hpp">
+      <Filter>linalg</Filter>
+    </None>
+    <None Include=".\linalg\kernels.hpp">
+      <Filter>linalg</Filter>
+    </None>
+    <None Include=".\linalg\lapack.hpp">
+      <Filter>linalg</Filter>
+    </None>
+    <None Include=".\linalg\linalg.hpp">
+      <Filter>linalg</Filter>
+    </None>
+    <None Include=".\linalg\matrix.hpp">
+      <Filter>linalg</Filter>
+    </None>
+    <None Include=".\linalg\mma.hpp">
+      <Filter>linalg</Filter>
+    </None>
+    <None Include=".\linalg\mumps.hpp">
+      <Filter>linalg</Filter>
+    </None>
+    <None Include=".\linalg\ode.hpp">
+      <Filter>linalg</Filter>
+    </None>
+    <None Include=".\linalg\operator.hpp">
+      <Filter>linalg</Filter>
+    </None>
+    <None Include=".\linalg\pardiso.hpp">
+      <Filter>linalg</Filter>
+    </None>
+    <None Include=".\linalg\petsc.hpp">
+      <Filter>linalg</Filter>
+    </None>
+    <None Include=".\linalg\petscinternals.hpp">
+      <Filter>linalg</Filter>
+    </None>
+    <None Include=".\linalg\simd\auto.hpp">
+      <Filter>linalg\simd</Filter>
+    </None>
+    <None Include=".\linalg\simd\m128.hpp">
+      <Filter>linalg\simd</Filter>
+    </None>
+    <None Include=".\linalg\simd\m256.hpp">
+      <Filter>linalg\simd</Filter>
+    </None>
+    <None Include=".\linalg\simd\m512.hpp">
+      <Filter>linalg\simd</Filter>
+    </None>
+    <None Include=".\linalg\simd\qpx.hpp">
+      <Filter>linalg\simd</Filter>
+    </None>
+    <None Include=".\linalg\simd\qpx256.hpp">
+      <Filter>linalg\simd</Filter>
+    </None>
+    <None Include=".\linalg\simd\sve.hpp">
+      <Filter>linalg\simd</Filter>
+    </None>
+    <None Include=".\linalg\simd\vsx.hpp">
+      <Filter>linalg\simd</Filter>
+    </None>
+    <None Include=".\linalg\simd\vsx128.hpp">
+      <Filter>linalg\simd</Filter>
+    </None>
+    <None Include=".\linalg\simd\x86.hpp">
+      <Filter>linalg\simd</Filter>
+    </None>
+    <None Include=".\linalg\simd.hpp">
+      <Filter>linalg</Filter>
+    </None>
+    <None Include=".\linalg\slepc.hpp">
+      <Filter>linalg</Filter>
+    </None>
+    <None Include=".\linalg\solvers.hpp">
+      <Filter>linalg</Filter>
+    </None>
+    <None Include=".\linalg\sparsemat.hpp">
+      <Filter>linalg</Filter>
+    </None>
+    <None Include=".\linalg\sparsesmoothers.hpp">
+      <Filter>linalg</Filter>
+    </None>
+    <None Include=".\linalg\strumpack.hpp">
+      <Filter>linalg</Filter>
+    </None>
+    <None Include=".\linalg\sundials.hpp">
+      <Filter>linalg</Filter>
+    </None>
+    <None Include=".\linalg\superlu.hpp">
+      <Filter>linalg</Filter>
+    </None>
+    <None Include=".\linalg\symmat.hpp">
+      <Filter>linalg</Filter>
+    </None>
+    <None Include=".\linalg\tensor.hpp">
+      <Filter>linalg</Filter>
+    </None>
+    <None Include=".\linalg\tlayout.hpp">
+      <Filter>linalg</Filter>
+    </None>
+    <None Include=".\linalg\tmatrix.hpp">
+      <Filter>linalg</Filter>
+    </None>
+    <None Include=".\linalg\ttensor.hpp">
+      <Filter>linalg</Filter>
+    </None>
+    <None Include=".\linalg\vector.hpp">
+      <Filter>linalg</Filter>
+    </None>
+    <None Include=".\makefile" />
+    <None Include=".\mesh\attribute_sets.hpp">
+      <Filter>mesh</Filter>
+    </None>
+    <None Include=".\mesh\element.hpp">
+      <Filter>mesh</Filter>
+    </None>
+    <None Include=".\mesh\face_nbr_geom.hpp">
+      <Filter>mesh</Filter>
+    </None>
+    <None Include=".\mesh\gmsh.hpp">
+      <Filter>mesh</Filter>
+    </None>
+    <None Include=".\mesh\hexahedron.hpp">
+      <Filter>mesh</Filter>
+    </None>
+    <None Include=".\mesh\mesh.hpp">
+      <Filter>mesh</Filter>
+    </None>
+    <None Include=".\mesh\mesh_headers.hpp">
+      <Filter>mesh</Filter>
+    </None>
+    <None Include=".\mesh\mesh_operators.hpp">
+      <Filter>mesh</Filter>
+    </None>
+    <None Include=".\mesh\ncmesh.hpp">
+      <Filter>mesh</Filter>
+    </None>
+    <None Include=".\mesh\ncmesh_tables.hpp">
+      <Filter>mesh</Filter>
+    </None>
+    <None Include=".\mesh\nurbs.hpp">
+      <Filter>mesh</Filter>
+    </None>
+    <None Include=".\mesh\pmesh.hpp">
+      <Filter>mesh</Filter>
+    </None>
+    <None Include=".\mesh\pncmesh.hpp">
+      <Filter>mesh</Filter>
+    </None>
+    <None Include=".\mesh\point.hpp">
+      <Filter>mesh</Filter>
+    </None>
+    <None Include=".\mesh\pumi.hpp">
+      <Filter>mesh</Filter>
+    </None>
+    <None Include=".\mesh\pyramid.hpp">
+      <Filter>mesh</Filter>
+    </None>
+    <None Include=".\mesh\quadrilateral.hpp">
+      <Filter>mesh</Filter>
+    </None>
+    <None Include=".\mesh\segment.hpp">
+      <Filter>mesh</Filter>
+    </None>
+    <None Include=".\mesh\spacing.hpp">
+      <Filter>mesh</Filter>
+    </None>
+    <None Include=".\mesh\submesh\ncsubmesh.hpp">
+      <Filter>mesh\submesh</Filter>
+    </None>
+    <None Include=".\mesh\submesh\pncsubmesh.hpp">
+      <Filter>mesh\submesh</Filter>
+    </None>
+    <None Include=".\mesh\submesh\psubmesh.hpp">
+      <Filter>mesh\submesh</Filter>
+    </None>
+    <None Include=".\mesh\submesh\ptransfermap.hpp">
+      <Filter>mesh\submesh</Filter>
+    </None>
+    <None Include=".\mesh\submesh\submesh.hpp">
+      <Filter>mesh\submesh</Filter>
+    </None>
+    <None Include=".\mesh\submesh\submesh_utils.hpp">
+      <Filter>mesh\submesh</Filter>
+    </None>
+    <None Include=".\mesh\submesh\transfermap.hpp">
+      <Filter>mesh\submesh</Filter>
+    </None>
+    <None Include=".\mesh\submesh\transfer_category.hpp">
+      <Filter>mesh\submesh</Filter>
+    </None>
+    <None Include=".\mesh\tetrahedron.hpp">
+      <Filter>mesh</Filter>
+    </None>
+    <None Include=".\mesh\tmesh.hpp">
+      <Filter>mesh</Filter>
+    </None>
+    <None Include=".\mesh\triangle.hpp">
+      <Filter>mesh</Filter>
+    </None>
+    <None Include=".\mesh\vertex.hpp">
+      <Filter>mesh</Filter>
+    </None>
+    <None Include=".\mesh\vtk.hpp">
+      <Filter>mesh</Filter>
+    </None>
+    <None Include=".\mesh\wedge.hpp">
+      <Filter>mesh</Filter>
+    </None>
+    <None Include=".\mfem-performance.hpp" />
+    <None Include=".\mfem.hpp" />
+    <None Include=".\miniapps\adjoint\makefile">
+      <Filter>miniapps\adjoint</Filter>
+    </None>
+    <None Include=".\miniapps\autodiff\admfem.hpp">
+      <Filter>miniapps\autodiff</Filter>
+    </None>
+    <None Include=".\miniapps\autodiff\example.hpp">
+      <Filter>miniapps\autodiff</Filter>
+    </None>
+    <None Include=".\miniapps\autodiff\makefile">
+      <Filter>miniapps\autodiff</Filter>
+    </None>
+    <None Include=".\miniapps\autodiff\taddensemat.hpp">
+      <Filter>miniapps\autodiff</Filter>
+    </None>
+    <None Include=".\miniapps\autodiff\tadvector.hpp">
+      <Filter>miniapps\autodiff</Filter>
+    </None>
+    <None Include=".\miniapps\common\dist_solver.hpp">
+      <Filter>miniapps\common</Filter>
+    </None>
+    <None Include=".\miniapps\common\fem_extras.hpp">
+      <Filter>miniapps\common</Filter>
+    </None>
+    <None Include=".\miniapps\common\makefile">
+      <Filter>miniapps\common</Filter>
+    </None>
+    <None Include=".\miniapps\common\mesh_extras.hpp">
+      <Filter>miniapps\common</Filter>
+    </None>
+    <None Include=".\miniapps\common\mfem-common.hpp">
+      <Filter>miniapps\common</Filter>
+    </None>
+    <None Include=".\miniapps\common\pfem_extras.hpp">
+      <Filter>miniapps\common</Filter>
+    </None>
+    <None Include=".\miniapps\dpg\makefile">
+      <Filter>miniapps\dpg</Filter>
+    </None>
+    <None Include=".\miniapps\dpg\meshes\fichera-waveguide.mesh">
+      <Filter>miniapps\dpg\meshes</Filter>
+    </None>
+    <None Include=".\miniapps\dpg\meshes\scatter.mesh">
+      <Filter>miniapps\dpg\meshes</Filter>
+    </None>
+    <None Include=".\miniapps\dpg\util\blockstaticcond.hpp">
+      <Filter>miniapps\dpg\util</Filter>
+    </None>
+    <None Include=".\miniapps\dpg\util\complexstaticcond.hpp">
+      <Filter>miniapps\dpg\util</Filter>
+    </None>
+    <None Include=".\miniapps\dpg\util\complexweakform.hpp">
+      <Filter>miniapps\dpg\util</Filter>
+    </None>
+    <None Include=".\miniapps\dpg\util\pcomplexweakform.hpp">
+      <Filter>miniapps\dpg\util</Filter>
+    </None>
+    <None Include=".\miniapps\dpg\util\pml.hpp">
+      <Filter>miniapps\dpg\util</Filter>
+    </None>
+    <None Include=".\miniapps\dpg\util\pweakform.hpp">
+      <Filter>miniapps\dpg\util</Filter>
+    </None>
+    <None Include=".\miniapps\dpg\util\weakform.hpp">
+      <Filter>miniapps\dpg\util</Filter>
+    </None>
+    <None Include=".\miniapps\electromagnetics\cylinder-hex-q2.gen">
+      <Filter>miniapps\electromagnetics</Filter>
+    </None>
+    <None Include=".\miniapps\electromagnetics\cylinder-hex.mesh">
+      <Filter>miniapps\electromagnetics</Filter>
+    </None>
+    <None Include=".\miniapps\electromagnetics\cylinder-tet-p2.gen">
+      <Filter>miniapps\electromagnetics</Filter>
+    </None>
+    <None Include=".\miniapps\electromagnetics\cylinder-tet.mesh">
+      <Filter>miniapps\electromagnetics</Filter>
+    </None>
+    <None Include=".\miniapps\electromagnetics\electromagnetics.hpp">
+      <Filter>miniapps\electromagnetics</Filter>
+    </None>
+    <None Include=".\miniapps\electromagnetics\joule_solver.hpp">
+      <Filter>miniapps\electromagnetics</Filter>
+    </None>
+    <None Include=".\miniapps\electromagnetics\llnl.mesh">
+      <Filter>miniapps\electromagnetics</Filter>
+    </None>
+    <None Include=".\miniapps\electromagnetics\makefile">
+      <Filter>miniapps\electromagnetics</Filter>
+    </None>
+    <None Include=".\miniapps\electromagnetics\maxwell_solver.hpp">
+      <Filter>miniapps\electromagnetics</Filter>
+    </None>
+    <None Include=".\miniapps\electromagnetics\square-angled-pipe.mesh">
+      <Filter>miniapps\electromagnetics</Filter>
+    </None>
+    <None Include=".\miniapps\electromagnetics\tesla_solver.hpp">
+      <Filter>miniapps\electromagnetics</Filter>
+    </None>
+    <None Include=".\miniapps\electromagnetics\volta_solver.hpp">
+      <Filter>miniapps\electromagnetics</Filter>
+    </None>
+    <None Include=".\miniapps\gslib\makefile">
+      <Filter>miniapps\gslib</Filter>
+    </None>
+    <None Include=".\miniapps\gslib\triple-pt-1.gf">
+      <Filter>miniapps\gslib</Filter>
+    </None>
+    <None Include=".\miniapps\gslib\triple-pt-1.mesh">
+      <Filter>miniapps\gslib</Filter>
+    </None>
+    <None Include=".\miniapps\gslib\triple-pt-2.gf">
+      <Filter>miniapps\gslib</Filter>
+    </None>
+    <None Include=".\miniapps\gslib\triple-pt-2.mesh">
+      <Filter>miniapps\gslib</Filter>
+    </None>
+    <None Include=".\miniapps\hdiv-linear-solver\change_basis.hpp">
+      <Filter>miniapps\hdiv-linear-solver</Filter>
+    </None>
+    <None Include=".\miniapps\hdiv-linear-solver\discrete_divergence.hpp">
+      <Filter>miniapps\hdiv-linear-solver</Filter>
+    </None>
+    <None Include=".\miniapps\hdiv-linear-solver\hdiv_linear_solver.hpp">
+      <Filter>miniapps\hdiv-linear-solver</Filter>
+    </None>
+    <None Include=".\miniapps\hdiv-linear-solver\makefile">
+      <Filter>miniapps\hdiv-linear-solver</Filter>
+    </None>
+    <None Include=".\miniapps\hooke\kernels\elasticity_kernels.hpp">
+      <Filter>miniapps\hooke\kernels</Filter>
+    </None>
+    <None Include=".\miniapps\hooke\kernels\kernel_helpers.hpp">
+      <Filter>miniapps\hooke\kernels</Filter>
+    </None>
+    <None Include=".\miniapps\hooke\makefile">
+      <Filter>miniapps\hooke</Filter>
+    </None>
+    <None Include=".\miniapps\hooke\materials\gradient_type.hpp">
+      <Filter>miniapps\hooke\materials</Filter>
+    </None>
+    <None Include=".\miniapps\hooke\materials\linear_elastic.hpp">
+      <Filter>miniapps\hooke\materials</Filter>
+    </None>
+    <None Include=".\miniapps\hooke\materials\neohookean.hpp">
+      <Filter>miniapps\hooke\materials</Filter>
+    </None>
+    <None Include=".\miniapps\hooke\operators\elasticity_gradient_operator.hpp">
+      <Filter>miniapps\hooke\operators</Filter>
+    </None>
+    <None Include=".\miniapps\hooke\operators\elasticity_operator.hpp">
+      <Filter>miniapps\hooke\operators</Filter>
+    </None>
+    <None Include=".\miniapps\hooke\preconditioners\diagonal_preconditioner.hpp">
+      <Filter>miniapps\hooke\preconditioners</Filter>
+    </None>
+    <None Include=".\miniapps\meshing\amr-quad-q2.mesh">
+      <Filter>miniapps\meshing</Filter>
+    </None>
+    <None Include=".\miniapps\meshing\blade.mesh">
+      <Filter>miniapps\meshing</Filter>
+    </None>
+    <None Include=".\miniapps\meshing\cube-tet.mesh">
+      <Filter>miniapps\meshing</Filter>
+    </None>
+    <None Include=".\miniapps\meshing\cube.mesh">
+      <Filter>miniapps\meshing</Filter>
+    </None>
+    <None Include=".\miniapps\meshing\icf.mesh">
+      <Filter>miniapps\meshing</Filter>
+    </None>
+    <None Include=".\miniapps\meshing\jagged.mesh">
+      <Filter>miniapps\meshing</Filter>
+    </None>
+    <None Include=".\miniapps\meshing\makefile">
+      <Filter>miniapps\meshing</Filter>
+    </None>
+    <None Include=".\miniapps\meshing\mesh-fitting.hpp">
+      <Filter>miniapps\meshing</Filter>
+    </None>
+    <None Include=".\miniapps\meshing\mesh-optimizer.hpp">
+      <Filter>miniapps\meshing</Filter>
+    </None>
+    <None Include=".\miniapps\meshing\periodic-cube.mesh">
+      <Filter>miniapps\meshing</Filter>
+    </None>
+    <None Include=".\miniapps\meshing\periodic-tri.mesh">
+      <Filter>miniapps\meshing</Filter>
+    </None>
+    <None Include=".\miniapps\meshing\square01-tri.mesh">
+      <Filter>miniapps\meshing</Filter>
+    </None>
+    <None Include=".\miniapps\meshing\square01.mesh">
+      <Filter>miniapps\meshing</Filter>
+    </None>
+    <None Include=".\miniapps\meshing\stretched2D.mesh">
+      <Filter>miniapps\meshing</Filter>
+    </None>
+    <None Include=".\miniapps\mtop\makefile">
+      <Filter>miniapps\mtop</Filter>
+    </None>
+    <None Include=".\miniapps\mtop\mtop_integrators.hpp">
+      <Filter>miniapps\mtop</Filter>
+    </None>
+    <None Include=".\miniapps\mtop\paramnonlinearform.hpp">
+      <Filter>miniapps\mtop</Filter>
+    </None>
+    <None Include=".\miniapps\mtop\pparamnonlinearform.hpp">
+      <Filter>miniapps\mtop</Filter>
+    </None>
+    <None Include=".\miniapps\multidomain\makefile">
+      <Filter>miniapps\multidomain</Filter>
+    </None>
+    <None Include=".\miniapps\multidomain\multidomain-hex.mesh">
+      <Filter>miniapps\multidomain</Filter>
+    </None>
+    <None Include=".\miniapps\navier\box-cylinder.mesh">
+      <Filter>miniapps\navier</Filter>
+    </None>
+    <None Include=".\miniapps\navier\fluid-cht.mesh">
+      <Filter>miniapps\navier</Filter>
+    </None>
+    <None Include=".\miniapps\navier\makefile">
+      <Filter>miniapps\navier</Filter>
+    </None>
+    <None Include=".\miniapps\navier\navier_solver.hpp">
+      <Filter>miniapps\navier</Filter>
+    </None>
+    <None Include=".\miniapps\navier\solid-cht.mesh">
+      <Filter>miniapps\navier</Filter>
+    </None>
+    <None Include=".\miniapps\nurbs\makefile">
+      <Filter>miniapps\nurbs</Filter>
+    </None>
+    <None Include=".\miniapps\nurbs\meshes\cube-nurbs.mesh">
+      <Filter>miniapps\nurbs\meshes</Filter>
+    </None>
+    <None Include=".\miniapps\nurbs\meshes\cube.ref">
+      <Filter>miniapps\nurbs\meshes</Filter>
+    </None>
+    <None Include=".\miniapps\nurbs\meshes\square-nurbs.mesh">
+      <Filter>miniapps\nurbs\meshes</Filter>
+    </None>
+    <None Include=".\miniapps\nurbs\meshes\two-cubes-nurbs-autoedge.mesh">
+      <Filter>miniapps\nurbs\meshes</Filter>
+    </None>
+    <None Include=".\miniapps\nurbs\meshes\two-cubes-nurbs-rot.mesh">
+      <Filter>miniapps\nurbs\meshes</Filter>
+    </None>
+    <None Include=".\miniapps\nurbs\meshes\two-cubes-nurbs.mesh">
+      <Filter>miniapps\nurbs\meshes</Filter>
+    </None>
+    <None Include=".\miniapps\nurbs\meshes\two-cubes.ref">
+      <Filter>miniapps\nurbs\meshes</Filter>
+    </None>
+    <None Include=".\miniapps\nurbs\meshes\two-squares-nurbs-autoedge.mesh">
+      <Filter>miniapps\nurbs\meshes</Filter>
+    </None>
+    <None Include=".\miniapps\nurbs\meshes\two-squares-nurbs-rot.mesh">
+      <Filter>miniapps\nurbs\meshes</Filter>
+    </None>
+    <None Include=".\miniapps\nurbs\meshes\two-squares-nurbs.mesh">
+      <Filter>miniapps\nurbs\meshes</Filter>
+    </None>
+    <None Include=".\miniapps\nurbs\meshes\two-squares.ref">
+      <Filter>miniapps\nurbs\meshes</Filter>
+    </None>
+    <None Include=".\miniapps\parelag\makefile">
+      <Filter>miniapps\parelag</Filter>
+    </None>
+    <None Include=".\miniapps\parelag\MultilevelHcurlSolver_cube_example_parameters.xml">
+      <Filter>miniapps\parelag</Filter>
+    </None>
+    <None Include=".\miniapps\parelag\MultilevelHcurlSolver_pipe_example_parameters.xml">
+      <Filter>miniapps\parelag</Filter>
+    </None>
+    <None Include=".\miniapps\parelag\MultilevelHdivSolver_cube_example_parameters.xml">
+      <Filter>miniapps\parelag</Filter>
+    </None>
+    <None Include=".\miniapps\parelag\MultilevelHdivSolver_pipe_example_parameters.xml">
+      <Filter>miniapps\parelag</Filter>
+    </None>
+    <None Include=".\miniapps\parelag\README">
+      <Filter>miniapps\parelag</Filter>
+    </None>
+    <None Include=".\miniapps\performance\makefile">
+      <Filter>miniapps\performance</Filter>
+    </None>
+    <None Include=".\miniapps\shifted\corners.mesh">
+      <Filter>miniapps\shifted</Filter>
+    </None>
+    <None Include=".\miniapps\shifted\extrapolator.hpp">
+      <Filter>miniapps\shifted</Filter>
+    </None>
+    <None Include=".\miniapps\shifted\makefile">
+      <Filter>miniapps\shifted</Filter>
+    </None>
+    <None Include=".\miniapps\shifted\marking.hpp">
+      <Filter>miniapps\shifted</Filter>
+    </None>
+    <None Include=".\miniapps\shifted\sbm_aux.hpp">
+      <Filter>miniapps\shifted</Filter>
+    </None>
+    <None Include=".\miniapps\shifted\sbm_solver.hpp">
+      <Filter>miniapps\shifted</Filter>
+    </None>
+    <None Include=".\miniapps\solvers\anisotropic.bdr">
+      <Filter>miniapps\solvers</Filter>
+    </None>
+    <None Include=".\miniapps\solvers\anisotropic.coeff">
+      <Filter>miniapps\solvers</Filter>
+    </None>
+    <None Include=".\miniapps\solvers\anisotropic.mesh">
+      <Filter>miniapps\solvers</Filter>
+    </None>
+    <None Include=".\miniapps\solvers\block_fespace_operator.hpp">
+      <Filter>miniapps\solvers</Filter>
+    </None>
+    <None Include=".\miniapps\solvers\bramble_pasciak.hpp">
+      <Filter>miniapps\solvers</Filter>
+    </None>
+    <None Include=".\miniapps\solvers\darcy_solver.hpp">
+      <Filter>miniapps\solvers</Filter>
+    </None>
+    <None Include=".\miniapps\solvers\div_free_solver.hpp">
+      <Filter>miniapps\solvers</Filter>
+    </None>
+    <None Include=".\miniapps\solvers\lor_docs.md">
+      <Filter>miniapps\solvers</Filter>
+    </None>
+    <None Include=".\miniapps\solvers\lor_mms.hpp">
+      <Filter>miniapps\solvers</Filter>
+    </None>
+    <None Include=".\miniapps\solvers\makefile">
+      <Filter>miniapps\solvers</Filter>
+    </None>
+    <None Include=".\miniapps\solvers\README">
+      <Filter>miniapps\solvers</Filter>
+    </None>
+    <None Include=".\miniapps\spde\makefile">
+      <Filter>miniapps\spde</Filter>
+    </None>
+    <None Include=".\miniapps\spde\material_metrics.hpp">
+      <Filter>miniapps\spde</Filter>
+    </None>
+    <None Include=".\miniapps\spde\README.md">
+      <Filter>miniapps\spde</Filter>
+    </None>
+    <None Include=".\miniapps\spde\spde_solver.hpp">
+      <Filter>miniapps\spde</Filter>
+    </None>
+    <None Include=".\miniapps\spde\transformation.hpp">
+      <Filter>miniapps\spde</Filter>
+    </None>
+    <None Include=".\miniapps\spde\util.hpp">
+      <Filter>miniapps\spde</Filter>
+    </None>
+    <None Include=".\miniapps\spde\visualizer.hpp">
+      <Filter>miniapps\spde</Filter>
+    </None>
+    <None Include=".\miniapps\tools\makefile">
+      <Filter>miniapps\tools</Filter>
+    </None>
+    <None Include=".\miniapps\toys\australia.pgm">
+      <Filter>miniapps\toys</Filter>
+    </None>
+    <None Include=".\miniapps\toys\makefile">
+      <Filter>miniapps\toys</Filter>
+    </None>
+    <None Include=".\miniapps\tribol\axom-gcc-notpl.cmake">
+      <Filter>miniapps\tribol</Filter>
+    </None>
+    <None Include=".\miniapps\tribol\makefile">
+      <Filter>miniapps\tribol</Filter>
+    </None>
+    <None Include=".\miniapps\tribol\README.md">
+      <Filter>miniapps\tribol</Filter>
+    </None>
+    <None Include=".\miniapps\tribol\tribol-gcc-basictpl.cmake">
+      <Filter>miniapps\tribol</Filter>
+    </None>
+    <None Include=".\miniapps\tribol\two-hex.mesh">
+      <Filter>miniapps\tribol</Filter>
+    </None>
+    <None Include=".\NOTICE" />
+    <None Include=".\README.md" />
+    <None Include=".\spack_patch\package.py">
+      <Filter>spack_patch</Filter>
+    </None>
+    <None Include=".\tests\benchmarks\bench.hpp">
+      <Filter>tests\benchmarks</Filter>
+    </None>
+    <None Include=".\tests\benchmarks\makefile">
+      <Filter>tests\benchmarks</Filter>
+    </None>
+    <None Include=".\tests\convergence\makefile">
+      <Filter>tests\convergence</Filter>
+    </None>
+    <None Include=".\tests\gitlab\build_and_test">
+      <Filter>tests\gitlab</Filter>
+    </None>
+    <None Include=".\tests\gitlab\generate_spack_upstream">
+      <Filter>tests\gitlab</Filter>
+    </None>
+    <None Include=".\tests\gitlab\get_mfem_uberenv">
+      <Filter>tests\gitlab</Filter>
+    </None>
+    <None Include=".\tests\gitlab\README.md">
+      <Filter>tests\gitlab</Filter>
+    </None>
+    <None Include=".\tests\gitlab\reproduce-ci-jobs-interactively.md">
+      <Filter>tests\gitlab</Filter>
+    </None>
+    <None Include=".\tests\mem_manager\makefile">
+      <Filter>tests\mem_manager</Filter>
+    </None>
+    <None Include=".\tests\par-mesh-format\makefile">
+      <Filter>tests\par-mesh-format</Filter>
+    </None>
+    <None Include=".\tests\scripts\branch-history">
+      <Filter>tests\scripts</Filter>
+    </None>
+    <None Include=".\tests\scripts\code-style">
+      <Filter>tests\scripts</Filter>
+    </None>
+    <None Include=".\tests\scripts\documentation">
+      <Filter>tests\scripts</Filter>
+    </None>
+    <None Include=".\tests\scripts\gitignore">
+      <Filter>tests\scripts</Filter>
+    </None>
+    <None Include=".\tests\scripts\README">
+      <Filter>tests\scripts</Filter>
+    </None>
+    <None Include=".\tests\scripts\runtest">
+      <Filter>tests\scripts</Filter>
+    </None>
+    <None Include=".\tests\unit\catch.hpp">
+      <Filter>tests\unit</Filter>
+    </None>
+    <None Include=".\tests\unit\data\holes.mesh">
+      <Filter>tests\unit\data</Filter>
+    </None>
+    <None Include=".\tests\unit\data\quad-spiral-q20.mesh">
+      <Filter>tests\unit\data</Filter>
+    </None>
+    <None Include=".\tests\unit\data\quad_append_b64.vtu">
+      <Filter>tests\unit\data</Filter>
+    </None>
+    <None Include=".\tests\unit\data\quad_append_b64_compress.vtu">
+      <Filter>tests\unit\data</Filter>
+    </None>
+    <None Include=".\tests\unit\data\quad_append_raw.vtu">
+      <Filter>tests\unit\data</Filter>
+    </None>
+    <None Include=".\tests\unit\data\quad_append_raw_compress.vtu">
+      <Filter>tests\unit\data</Filter>
+    </None>
+    <None Include=".\tests\unit\data\quad_ascii.vtu">
+      <Filter>tests\unit\data</Filter>
+    </None>
+    <None Include=".\tests\unit\data\quad_attribute.vtu">
+      <Filter>tests\unit\data</Filter>
+    </None>
+    <None Include=".\tests\unit\data\quad_binary.vtu">
+      <Filter>tests\unit\data</Filter>
+    </None>
+    <None Include=".\tests\unit\data\quad_binary_compress.vtu">
+      <Filter>tests\unit\data</Filter>
+    </None>
+    <None Include=".\tests\unit\data\quad_material_attribute.vtu">
+      <Filter>tests\unit\data</Filter>
+    </None>
+    <None Include=".\tests\unit\data\spiral_3D_p9.mesh">
+      <Filter>tests\unit\data</Filter>
+    </None>
+    <None Include=".\tests\unit\makefile">
+      <Filter>tests\unit</Filter>
+    </None>
+    <None Include=".\tests\unit\mesh\mesh_test_utils.hpp">
+      <Filter>tests\unit\mesh</Filter>
+    </None>
+    <None Include=".\tests\unit\README.md">
+      <Filter>tests\unit</Filter>
+    </None>
+    <None Include=".\tests\unit\run_unit_tests.hpp">
+      <Filter>tests\unit</Filter>
+    </None>
+    <None Include=".\tests\unit\unit_tests.hpp">
+      <Filter>tests\unit</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include=".\CMakeLists.txt" />
+    <Text Include=".\config\CMakeLists.txt">
+      <Filter>config</Filter>
+    </Text>
+    <Text Include=".\doc\CMakeLists.txt">
+      <Filter>doc</Filter>
+    </Text>
+    <Text Include=".\examples\amgx\CMakeLists.txt">
+      <Filter>examples\amgx</Filter>
+    </Text>
+    <Text Include=".\examples\caliper\CMakeLists.txt">
+      <Filter>examples\caliper</Filter>
+    </Text>
+    <Text Include=".\examples\CMakeLists.txt">
+      <Filter>examples</Filter>
+    </Text>
+    <Text Include=".\examples\ginkgo\CMakeLists.txt">
+      <Filter>examples\ginkgo</Filter>
+    </Text>
+    <Text Include=".\examples\hiop\CMakeLists.txt">
+      <Filter>examples\hiop</Filter>
+    </Text>
+    <Text Include=".\examples\moonolith\CMakeLists.txt">
+      <Filter>examples\moonolith</Filter>
+    </Text>
+    <Text Include=".\examples\petsc\CMakeLists.txt">
+      <Filter>examples\petsc</Filter>
+    </Text>
+    <Text Include=".\examples\pumi\CMakeLists.txt">
+      <Filter>examples\pumi</Filter>
+    </Text>
+    <Text Include=".\examples\sundials\CMakeLists.txt">
+      <Filter>examples\sundials</Filter>
+    </Text>
+    <Text Include=".\examples\superlu\CMakeLists.txt">
+      <Filter>examples\superlu</Filter>
+    </Text>
+    <Text Include=".\fem\CMakeLists.txt">
+      <Filter>fem</Filter>
+    </Text>
+    <Text Include=".\fem\moonolith\CMakeLists.txt">
+      <Filter>fem\moonolith</Filter>
+    </Text>
+    <Text Include=".\general\CMakeLists.txt">
+      <Filter>general</Filter>
+    </Text>
+    <Text Include=".\linalg\CMakeLists.txt">
+      <Filter>linalg</Filter>
+    </Text>
+    <Text Include=".\mesh\CMakeLists.txt">
+      <Filter>mesh</Filter>
+    </Text>
+    <Text Include=".\miniapps\adjoint\CMakeLists.txt">
+      <Filter>miniapps\adjoint</Filter>
+    </Text>
+    <Text Include=".\miniapps\autodiff\CMakeLists.txt">
+      <Filter>miniapps\autodiff</Filter>
+    </Text>
+    <Text Include=".\miniapps\CMakeLists.txt">
+      <Filter>miniapps</Filter>
+    </Text>
+    <Text Include=".\miniapps\common\CMakeLists.txt">
+      <Filter>miniapps\common</Filter>
+    </Text>
+    <Text Include=".\miniapps\dpg\CMakeLists.txt">
+      <Filter>miniapps\dpg</Filter>
+    </Text>
+    <Text Include=".\miniapps\electromagnetics\CMakeLists.txt">
+      <Filter>miniapps\electromagnetics</Filter>
+    </Text>
+    <Text Include=".\miniapps\gslib\CMakeLists.txt">
+      <Filter>miniapps\gslib</Filter>
+    </Text>
+    <Text Include=".\miniapps\hdiv-linear-solver\CMakeLists.txt">
+      <Filter>miniapps\hdiv-linear-solver</Filter>
+    </Text>
+    <Text Include=".\miniapps\hooke\CMakeLists.txt">
+      <Filter>miniapps\hooke</Filter>
+    </Text>
+    <Text Include=".\miniapps\meshing\CMakeLists.txt">
+      <Filter>miniapps\meshing</Filter>
+    </Text>
+    <Text Include=".\miniapps\mtop\CMakeLists.txt">
+      <Filter>miniapps\mtop</Filter>
+    </Text>
+    <Text Include=".\miniapps\multidomain\CMakeLists.txt">
+      <Filter>miniapps\multidomain</Filter>
+    </Text>
+    <Text Include=".\miniapps\navier\CMakeLists.txt">
+      <Filter>miniapps\navier</Filter>
+    </Text>
+    <Text Include=".\miniapps\nurbs\CMakeLists.txt">
+      <Filter>miniapps\nurbs</Filter>
+    </Text>
+    <Text Include=".\miniapps\parelag\CMakeLists.txt">
+      <Filter>miniapps\parelag</Filter>
+    </Text>
+    <Text Include=".\miniapps\performance\CMakeLists.txt">
+      <Filter>miniapps\performance</Filter>
+    </Text>
+    <Text Include=".\miniapps\shifted\CMakeLists.txt">
+      <Filter>miniapps\shifted</Filter>
+    </Text>
+    <Text Include=".\miniapps\solvers\CMakeLists.txt">
+      <Filter>miniapps\solvers</Filter>
+    </Text>
+    <Text Include=".\miniapps\spde\CMakeLists.txt">
+      <Filter>miniapps\spde</Filter>
+    </Text>
+    <Text Include=".\miniapps\tools\CMakeLists.txt">
+      <Filter>miniapps\tools</Filter>
+    </Text>
+    <Text Include=".\miniapps\toys\CMakeLists.txt">
+      <Filter>miniapps\toys</Filter>
+    </Text>
+    <Text Include=".\miniapps\tribol\CMakeLists.txt">
+      <Filter>miniapps\tribol</Filter>
+    </Text>
+    <Text Include=".\tests\benchmarks\CMakeLists.txt">
+      <Filter>tests\benchmarks</Filter>
+    </Text>
+    <Text Include=".\tests\CMakeLists.txt">
+      <Filter>tests</Filter>
+    </Text>
+    <Text Include=".\tests\unit\CMakeLists.txt">
+      <Filter>tests\unit</Filter>
+    </Text>
+    <Text Include=".\tests\unit\LICENSE_1_0.txt">
+      <Filter>tests\unit</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include=".\config\get_hypre_version.cpp">
+      <Filter>config</Filter>
+    </ClCompile>
+    <ClCompile Include=".\config\get_mumps_version.cpp">
+      <Filter>config</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\amgx\ex1.cpp">
+      <Filter>examples\amgx</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\amgx\ex1p.cpp">
+      <Filter>examples\amgx</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\caliper\ex1.cpp">
+      <Filter>examples\caliper</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\caliper\ex1p.cpp">
+      <Filter>examples\caliper</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex0">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex0.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex0p.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex0p_szeng.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex0_classprox.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex0_szeng.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex0_testcase.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex1.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex10.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex10p.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex11p.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex12p.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex13p.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex14.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex14p.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex15.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex15p.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex16.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex16p.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex17.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex17p.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex18.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex18p.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex19.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex19p.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex1p.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex2.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex20.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex20p.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex21.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex21p.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex22.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex22p.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex23.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex24.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex24p.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex25.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex25p.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex26.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex26p.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex26_szeng.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex26_szeng_amg.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex27.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex27p.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex28.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex28p.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex29.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex29p.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex2p.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex3.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex30.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex30p.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex31.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex31p.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex32p.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex33.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex33p.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex34.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex34p.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex35p.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex36.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex36p.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex37.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex37p.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex38.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex39.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex39p.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex3p.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex4.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex40.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex40p.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex4p.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex5.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex5p.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex6.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex6p.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex7.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex7p.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex8.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex8p.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex9.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ex9p.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\ginkgo\ex1.cpp">
+      <Filter>examples\ginkgo</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\hiop\ex9.cpp">
+      <Filter>examples\hiop</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\hiop\ex9p.cpp">
+      <Filter>examples\hiop</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\microstrip_issue_mod.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\moonolith\ex1.cpp">
+      <Filter>examples\moonolith</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\moonolith\ex1p.cpp">
+      <Filter>examples\moonolith</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\moonolith\ex2p.cpp">
+      <Filter>examples\moonolith</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\petsc\ex10p.cpp">
+      <Filter>examples\petsc</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\petsc\ex11p.cpp">
+      <Filter>examples\petsc</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\petsc\ex1p.cpp">
+      <Filter>examples\petsc</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\petsc\ex2p.cpp">
+      <Filter>examples\petsc</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\petsc\ex3p.cpp">
+      <Filter>examples\petsc</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\petsc\ex4p.cpp">
+      <Filter>examples\petsc</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\petsc\ex5p.cpp">
+      <Filter>examples\petsc</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\petsc\ex6p.cpp">
+      <Filter>examples\petsc</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\petsc\ex9p.cpp">
+      <Filter>examples\petsc</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\proximity3d.cpp">
+      <Filter>examples</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\pumi\ex1.cpp">
+      <Filter>examples\pumi</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\pumi\ex1p.cpp">
+      <Filter>examples\pumi</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\pumi\ex2.cpp">
+      <Filter>examples\pumi</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\pumi\ex6p.cpp">
+      <Filter>examples\pumi</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\sundials\ex10.cpp">
+      <Filter>examples\sundials</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\sundials\ex10p.cpp">
+      <Filter>examples\sundials</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\sundials\ex16.cpp">
+      <Filter>examples\sundials</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\sundials\ex16p.cpp">
+      <Filter>examples\sundials</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\sundials\ex9.cpp">
+      <Filter>examples\sundials</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\sundials\ex9p.cpp">
+      <Filter>examples\sundials</Filter>
+    </ClCompile>
+    <ClCompile Include=".\examples\superlu\ex1p.cpp">
+      <Filter>examples\superlu</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\adios2datacollection.cpp">
+      <Filter>fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\batchitrans.cpp">
+      <Filter>fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\bilinearform.cpp">
+      <Filter>fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\bilinearform_ext.cpp">
+      <Filter>fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\bilininteg.cpp">
+      <Filter>fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\ceed\integrators\convection\convection.cpp">
+      <Filter>fem\ceed\integrators\convection</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\ceed\integrators\diffusion\diffusion.cpp">
+      <Filter>fem\ceed\integrators\diffusion</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\ceed\integrators\mass\mass.cpp">
+      <Filter>fem\ceed\integrators\mass</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\ceed\integrators\nlconvection\nlconvection.cpp">
+      <Filter>fem\ceed\integrators\nlconvection</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\ceed\interface\basis.cpp">
+      <Filter>fem\ceed\interface</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\ceed\interface\operator.cpp">
+      <Filter>fem\ceed\interface</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\ceed\interface\restriction.cpp">
+      <Filter>fem\ceed\interface</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\ceed\interface\util.cpp">
+      <Filter>fem\ceed\interface</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\ceed\solvers\algebraic.cpp">
+      <Filter>fem\ceed\solvers</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\ceed\solvers\full-assembly.cpp">
+      <Filter>fem\ceed\solvers</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\ceed\solvers\solvers-atpmg.cpp">
+      <Filter>fem\ceed\solvers</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\coefficient.cpp">
+      <Filter>fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\complex_fem.cpp">
+      <Filter>fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\conduitdatacollection.cpp">
+      <Filter>fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\convergence.cpp">
+      <Filter>fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\datacollection.cpp">
+      <Filter>fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\dgmassinv.cpp">
+      <Filter>fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\doftrans.cpp">
+      <Filter>fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\eltrans.cpp">
+      <Filter>fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\estimators.cpp">
+      <Filter>fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\fe\face_map_utils.cpp">
+      <Filter>fem\fe</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\fe\fe_base.cpp">
+      <Filter>fem\fe</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\fe\fe_fixed_order.cpp">
+      <Filter>fem\fe</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\fe\fe_h1.cpp">
+      <Filter>fem\fe</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\fe\fe_l2.cpp">
+      <Filter>fem\fe</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\fe\fe_nd.cpp">
+      <Filter>fem\fe</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\fe\fe_nurbs.cpp">
+      <Filter>fem\fe</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\fe\fe_pos.cpp">
+      <Filter>fem\fe</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\fe\fe_pyramid.cpp">
+      <Filter>fem\fe</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\fe\fe_rt.cpp">
+      <Filter>fem\fe</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\fe\fe_ser.cpp">
+      <Filter>fem\fe</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\fe.cpp">
+      <Filter>fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\fespace.cpp">
+      <Filter>fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\fespacehierarchy.cpp">
+      <Filter>fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\fe_coll.cpp">
+      <Filter>fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\fmsconvert.cpp">
+      <Filter>fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\fmsdatacollection.cpp">
+      <Filter>fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\geom.cpp">
+      <Filter>fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\gridfunc.cpp">
+      <Filter>fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\gslib\findpts_local_2.cpp">
+      <Filter>fem\gslib</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\gslib\findpts_local_3.cpp">
+      <Filter>fem\gslib</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\gslib\interpolate_local_2.cpp">
+      <Filter>fem\gslib</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\gslib\interpolate_local_3.cpp">
+      <Filter>fem\gslib</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\gslib.cpp">
+      <Filter>fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\hybridization.cpp">
+      <Filter>fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\hybridization_ext.cpp">
+      <Filter>fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\hyperbolic.cpp">
+      <Filter>fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\integ\bilininteg_br2.cpp">
+      <Filter>fem\integ</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\integ\bilininteg_convection_ea.cpp">
+      <Filter>fem\integ</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\integ\bilininteg_convection_mf.cpp">
+      <Filter>fem\integ</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\integ\bilininteg_convection_pa.cpp">
+      <Filter>fem\integ</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\integ\bilininteg_curlcurl_pa.cpp">
+      <Filter>fem\integ</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\integ\bilininteg_dgdiffusion_pa.cpp">
+      <Filter>fem\integ</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\integ\bilininteg_dgtrace_ea.cpp">
+      <Filter>fem\integ</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\integ\bilininteg_dgtrace_pa.cpp">
+      <Filter>fem\integ</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\integ\bilininteg_diffusion_ea.cpp">
+      <Filter>fem\integ</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\integ\bilininteg_diffusion_kernels.cpp">
+      <Filter>fem\integ</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\integ\bilininteg_diffusion_mf.cpp">
+      <Filter>fem\integ</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\integ\bilininteg_diffusion_pa.cpp">
+      <Filter>fem\integ</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\integ\bilininteg_diffusion_patch.cpp">
+      <Filter>fem\integ</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\integ\bilininteg_divdiv_pa.cpp">
+      <Filter>fem\integ</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\integ\bilininteg_elasticity_ea.cpp">
+      <Filter>fem\integ</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\integ\bilininteg_elasticity_kernels.cpp">
+      <Filter>fem\integ</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\integ\bilininteg_elasticity_pa.cpp">
+      <Filter>fem\integ</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\integ\bilininteg_gradient_pa.cpp">
+      <Filter>fem\integ</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\integ\bilininteg_hcurlhdiv_kernels.cpp">
+      <Filter>fem\integ</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\integ\bilininteg_hcurl_kernels.cpp">
+      <Filter>fem\integ</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\integ\bilininteg_hdiv_ea.cpp">
+      <Filter>fem\integ</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\integ\bilininteg_hdiv_kernels.cpp">
+      <Filter>fem\integ</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\integ\bilininteg_interp_pa.cpp">
+      <Filter>fem\integ</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\integ\bilininteg_mass_ea.cpp">
+      <Filter>fem\integ</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\integ\bilininteg_mass_kernels.cpp">
+      <Filter>fem\integ</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\integ\bilininteg_mass_mf.cpp">
+      <Filter>fem\integ</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\integ\bilininteg_mass_pa.cpp">
+      <Filter>fem\integ</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\integ\bilininteg_mixedcurl_pa.cpp">
+      <Filter>fem\integ</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\integ\bilininteg_mixedvecgrad_pa.cpp">
+      <Filter>fem\integ</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\integ\bilininteg_trace_jump_ea.cpp">
+      <Filter>fem\integ</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\integ\bilininteg_transpose_ea.cpp">
+      <Filter>fem\integ</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\integ\bilininteg_vecdiffusion_mf.cpp">
+      <Filter>fem\integ</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\integ\bilininteg_vecdiffusion_pa.cpp">
+      <Filter>fem\integ</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\integ\bilininteg_vecdiv_pa.cpp">
+      <Filter>fem\integ</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\integ\bilininteg_vecmass_mf.cpp">
+      <Filter>fem\integ</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\integ\bilininteg_vecmass_pa.cpp">
+      <Filter>fem\integ</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\integ\bilininteg_vectorfediv_pa.cpp">
+      <Filter>fem\integ</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\integ\bilininteg_vectorfemass_pa.cpp">
+      <Filter>fem\integ</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\integ\lininteg_boundary.cpp">
+      <Filter>fem\integ</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\integ\lininteg_boundary_flux.cpp">
+      <Filter>fem\integ</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\integ\lininteg_domain.cpp">
+      <Filter>fem\integ</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\integ\lininteg_domain_grad.cpp">
+      <Filter>fem\integ</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\integ\lininteg_domain_vectorfe.cpp">
+      <Filter>fem\integ</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\integ\nonlininteg_vecconvection_mf.cpp">
+      <Filter>fem\integ</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\integ\nonlininteg_vecconvection_pa.cpp">
+      <Filter>fem\integ</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\integrator.cpp">
+      <Filter>fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\intrules.cpp">
+      <Filter>fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\intrules_cut.cpp">
+      <Filter>fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\kdtree.cpp">
+      <Filter>fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\linearform.cpp">
+      <Filter>fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\linearform_ext.cpp">
+      <Filter>fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\lininteg.cpp">
+      <Filter>fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\lor\lor.cpp">
+      <Filter>fem\lor</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\lor\lor_ads.cpp">
+      <Filter>fem\lor</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\lor\lor_ams.cpp">
+      <Filter>fem\lor</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\lor\lor_batched.cpp">
+      <Filter>fem\lor</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\moonolith\cut.cpp">
+      <Filter>fem\moonolith</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\moonolith\mortarassembler.cpp">
+      <Filter>fem\moonolith</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\moonolith\mortarintegrator.cpp">
+      <Filter>fem\moonolith</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\moonolith\pmortarassembler.cpp">
+      <Filter>fem\moonolith</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\moonolith\transfer.cpp">
+      <Filter>fem\moonolith</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\moonolith\transferutils.cpp">
+      <Filter>fem\moonolith</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\multigrid.cpp">
+      <Filter>fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\nonlinearform.cpp">
+      <Filter>fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\nonlinearform_ext.cpp">
+      <Filter>fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\nonlininteg.cpp">
+      <Filter>fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\normal_deriv_restriction.cpp">
+      <Filter>fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\pbilinearform.cpp">
+      <Filter>fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\pfespace.cpp">
+      <Filter>fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\pgridfunc.cpp">
+      <Filter>fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\plinearform.cpp">
+      <Filter>fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\pnonlinearform.cpp">
+      <Filter>fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\prestriction.cpp">
+      <Filter>fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\qfunction.cpp">
+      <Filter>fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\qinterp\det.cpp">
+      <Filter>fem\qinterp</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\qinterp\eval_by_nodes.cpp">
+      <Filter>fem\qinterp</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\qinterp\eval_by_vdim.cpp">
+      <Filter>fem\qinterp</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\qinterp\eval_hdiv.cpp">
+      <Filter>fem\qinterp</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\qinterp\grad_by_nodes.cpp">
+      <Filter>fem\qinterp</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\qinterp\grad_by_vdim.cpp">
+      <Filter>fem\qinterp</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\qspace.cpp">
+      <Filter>fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\quadinterpolator.cpp">
+      <Filter>fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\quadinterpolator_face.cpp">
+      <Filter>fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\restriction.cpp">
+      <Filter>fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\sidredatacollection.cpp">
+      <Filter>fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\staticcond.cpp">
+      <Filter>fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\tmop\tmop_pa.cpp">
+      <Filter>fem\tmop</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\tmop\tmop_pa_da3.cpp">
+      <Filter>fem\tmop</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\tmop\tmop_pa_h2d.cpp">
+      <Filter>fem\tmop</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\tmop\tmop_pa_h2d_c0.cpp">
+      <Filter>fem\tmop</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\tmop\tmop_pa_h2m.cpp">
+      <Filter>fem\tmop</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\tmop\tmop_pa_h2m_c0.cpp">
+      <Filter>fem\tmop</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\tmop\tmop_pa_h2s.cpp">
+      <Filter>fem\tmop</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\tmop\tmop_pa_h2s_c0.cpp">
+      <Filter>fem\tmop</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\tmop\tmop_pa_h3d.cpp">
+      <Filter>fem\tmop</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\tmop\tmop_pa_h3d_c0.cpp">
+      <Filter>fem\tmop</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\tmop\tmop_pa_h3m.cpp">
+      <Filter>fem\tmop</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\tmop\tmop_pa_h3m_c0.cpp">
+      <Filter>fem\tmop</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\tmop\tmop_pa_h3s.cpp">
+      <Filter>fem\tmop</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\tmop\tmop_pa_h3s_c0.cpp">
+      <Filter>fem\tmop</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\tmop\tmop_pa_jp2.cpp">
+      <Filter>fem\tmop</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\tmop\tmop_pa_jp3.cpp">
+      <Filter>fem\tmop</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\tmop\tmop_pa_p2.cpp">
+      <Filter>fem\tmop</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\tmop\tmop_pa_p2_c0.cpp">
+      <Filter>fem\tmop</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\tmop\tmop_pa_p3.cpp">
+      <Filter>fem\tmop</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\tmop\tmop_pa_p3_c0.cpp">
+      <Filter>fem\tmop</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\tmop\tmop_pa_tc2.cpp">
+      <Filter>fem\tmop</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\tmop\tmop_pa_tc3.cpp">
+      <Filter>fem\tmop</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\tmop\tmop_pa_w2.cpp">
+      <Filter>fem\tmop</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\tmop\tmop_pa_w2_c0.cpp">
+      <Filter>fem\tmop</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\tmop\tmop_pa_w3.cpp">
+      <Filter>fem\tmop</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\tmop\tmop_pa_w3_c0.cpp">
+      <Filter>fem\tmop</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\tmop.cpp">
+      <Filter>fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\tmop_amr.cpp">
+      <Filter>fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\tmop_tools.cpp">
+      <Filter>fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\fem\transfer.cpp">
+      <Filter>fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\general\adios2stream.cpp">
+      <Filter>general</Filter>
+    </ClCompile>
+    <ClCompile Include=".\general\array.cpp">
+      <Filter>general</Filter>
+    </ClCompile>
+    <ClCompile Include=".\general\binaryio.cpp">
+      <Filter>general</Filter>
+    </ClCompile>
+    <ClCompile Include=".\general\communication.cpp">
+      <Filter>general</Filter>
+    </ClCompile>
+    <ClCompile Include=".\general\cuda.cpp">
+      <Filter>general</Filter>
+    </ClCompile>
+    <ClCompile Include=".\general\device.cpp">
+      <Filter>general</Filter>
+    </ClCompile>
+    <ClCompile Include=".\general\error.cpp">
+      <Filter>general</Filter>
+    </ClCompile>
+    <ClCompile Include=".\general\gecko.cpp">
+      <Filter>general</Filter>
+    </ClCompile>
+    <ClCompile Include=".\general\globals.cpp">
+      <Filter>general</Filter>
+    </ClCompile>
+    <ClCompile Include=".\general\hash.cpp">
+      <Filter>general</Filter>
+    </ClCompile>
+    <ClCompile Include=".\general\hip.cpp">
+      <Filter>general</Filter>
+    </ClCompile>
+    <ClCompile Include=".\general\isockstream.cpp">
+      <Filter>general</Filter>
+    </ClCompile>
+    <ClCompile Include=".\general\mem_manager.cpp">
+      <Filter>general</Filter>
+    </ClCompile>
+    <ClCompile Include=".\general\occa.cpp">
+      <Filter>general</Filter>
+    </ClCompile>
+    <ClCompile Include=".\general\optparser.cpp">
+      <Filter>general</Filter>
+    </ClCompile>
+    <ClCompile Include=".\general\osockstream.cpp">
+      <Filter>general</Filter>
+    </ClCompile>
+    <ClCompile Include=".\general\sets.cpp">
+      <Filter>general</Filter>
+    </ClCompile>
+    <ClCompile Include=".\general\socketstream.cpp">
+      <Filter>general</Filter>
+    </ClCompile>
+    <ClCompile Include=".\general\stable3d.cpp">
+      <Filter>general</Filter>
+    </ClCompile>
+    <ClCompile Include=".\general\table.cpp">
+      <Filter>general</Filter>
+    </ClCompile>
+    <ClCompile Include=".\general\tic_toc.cpp">
+      <Filter>general</Filter>
+    </ClCompile>
+    <ClCompile Include=".\general\tinyxml2.cpp">
+      <Filter>general</Filter>
+    </ClCompile>
+    <ClCompile Include=".\general\version.cpp">
+      <Filter>general</Filter>
+    </ClCompile>
+    <ClCompile Include=".\linalg\amgxsolver.cpp">
+      <Filter>linalg</Filter>
+    </ClCompile>
+    <ClCompile Include=".\linalg\auxiliary.cpp">
+      <Filter>linalg</Filter>
+    </ClCompile>
+    <ClCompile Include=".\linalg\batched\batched.cpp">
+      <Filter>linalg\batched</Filter>
+    </ClCompile>
+    <ClCompile Include=".\linalg\batched\gpu_blas.cpp">
+      <Filter>linalg\batched</Filter>
+    </ClCompile>
+    <ClCompile Include=".\linalg\batched\magma.cpp">
+      <Filter>linalg\batched</Filter>
+    </ClCompile>
+    <ClCompile Include=".\linalg\batched\native.cpp">
+      <Filter>linalg\batched</Filter>
+    </ClCompile>
+    <ClCompile Include=".\linalg\batched\solver.cpp">
+      <Filter>linalg\batched</Filter>
+    </ClCompile>
+    <ClCompile Include=".\linalg\blockmatrix.cpp">
+      <Filter>linalg</Filter>
+    </ClCompile>
+    <ClCompile Include=".\linalg\blockoperator.cpp">
+      <Filter>linalg</Filter>
+    </ClCompile>
+    <ClCompile Include=".\linalg\blockvector.cpp">
+      <Filter>linalg</Filter>
+    </ClCompile>
+    <ClCompile Include=".\linalg\complex_densemat.cpp">
+      <Filter>linalg</Filter>
+    </ClCompile>
+    <ClCompile Include=".\linalg\complex_operator.cpp">
+      <Filter>linalg</Filter>
+    </ClCompile>
+    <ClCompile Include=".\linalg\constraints.cpp">
+      <Filter>linalg</Filter>
+    </ClCompile>
+    <ClCompile Include=".\linalg\cpardiso.cpp">
+      <Filter>linalg</Filter>
+    </ClCompile>
+    <ClCompile Include=".\linalg\densemat.cpp">
+      <Filter>linalg</Filter>
+    </ClCompile>
+    <ClCompile Include=".\linalg\ginkgo.cpp">
+      <Filter>linalg</Filter>
+    </ClCompile>
+    <ClCompile Include=".\linalg\handle.cpp">
+      <Filter>linalg</Filter>
+    </ClCompile>
+    <ClCompile Include=".\linalg\hiop.cpp">
+      <Filter>linalg</Filter>
+    </ClCompile>
+    <ClCompile Include=".\linalg\hypre.cpp">
+      <Filter>linalg</Filter>
+    </ClCompile>
+    <ClCompile Include=".\linalg\hypre_parcsr.cpp">
+      <Filter>linalg</Filter>
+    </ClCompile>
+    <ClCompile Include=".\linalg\matrix.cpp">
+      <Filter>linalg</Filter>
+    </ClCompile>
+    <ClCompile Include=".\linalg\mma.cpp">
+      <Filter>linalg</Filter>
+    </ClCompile>
+    <ClCompile Include=".\linalg\mumps.cpp">
+      <Filter>linalg</Filter>
+    </ClCompile>
+    <ClCompile Include=".\linalg\ode.cpp">
+      <Filter>linalg</Filter>
+    </ClCompile>
+    <ClCompile Include=".\linalg\operator.cpp">
+      <Filter>linalg</Filter>
+    </ClCompile>
+    <ClCompile Include=".\linalg\pardiso.cpp">
+      <Filter>linalg</Filter>
+    </ClCompile>
+    <ClCompile Include=".\linalg\petsc.cpp">
+      <Filter>linalg</Filter>
+    </ClCompile>
+    <ClCompile Include=".\linalg\slepc.cpp">
+      <Filter>linalg</Filter>
+    </ClCompile>
+    <ClCompile Include=".\linalg\solvers.cpp">
+      <Filter>linalg</Filter>
+    </ClCompile>
+    <ClCompile Include=".\linalg\sparsemat.cpp">
+      <Filter>linalg</Filter>
+    </ClCompile>
+    <ClCompile Include=".\linalg\sparsesmoothers.cpp">
+      <Filter>linalg</Filter>
+    </ClCompile>
+    <ClCompile Include=".\linalg\strumpack.cpp">
+      <Filter>linalg</Filter>
+    </ClCompile>
+    <ClCompile Include=".\linalg\sundials.cpp">
+      <Filter>linalg</Filter>
+    </ClCompile>
+    <ClCompile Include=".\linalg\superlu.cpp">
+      <Filter>linalg</Filter>
+    </ClCompile>
+    <ClCompile Include=".\linalg\symmat.cpp">
+      <Filter>linalg</Filter>
+    </ClCompile>
+    <ClCompile Include=".\linalg\vector.cpp">
+      <Filter>linalg</Filter>
+    </ClCompile>
+    <ClCompile Include=".\mesh\attribute_sets.cpp">
+      <Filter>mesh</Filter>
+    </ClCompile>
+    <ClCompile Include=".\mesh\element.cpp">
+      <Filter>mesh</Filter>
+    </ClCompile>
+    <ClCompile Include=".\mesh\exodus_writer.cpp">
+      <Filter>mesh</Filter>
+    </ClCompile>
+    <ClCompile Include=".\mesh\face_nbr_geom.cpp">
+      <Filter>mesh</Filter>
+    </ClCompile>
+    <ClCompile Include=".\mesh\gmsh.cpp">
+      <Filter>mesh</Filter>
+    </ClCompile>
+    <ClCompile Include=".\mesh\hexahedron.cpp">
+      <Filter>mesh</Filter>
+    </ClCompile>
+    <ClCompile Include=".\mesh\mesh.cpp">
+      <Filter>mesh</Filter>
+    </ClCompile>
+    <ClCompile Include=".\mesh\mesh_operators.cpp">
+      <Filter>mesh</Filter>
+    </ClCompile>
+    <ClCompile Include=".\mesh\mesh_readers.cpp">
+      <Filter>mesh</Filter>
+    </ClCompile>
+    <ClCompile Include=".\mesh\ncmesh.cpp">
+      <Filter>mesh</Filter>
+    </ClCompile>
+    <ClCompile Include=".\mesh\nurbs.cpp">
+      <Filter>mesh</Filter>
+    </ClCompile>
+    <ClCompile Include=".\mesh\pmesh.cpp">
+      <Filter>mesh</Filter>
+    </ClCompile>
+    <ClCompile Include=".\mesh\pncmesh.cpp">
+      <Filter>mesh</Filter>
+    </ClCompile>
+    <ClCompile Include=".\mesh\point.cpp">
+      <Filter>mesh</Filter>
+    </ClCompile>
+    <ClCompile Include=".\mesh\pumi.cpp">
+      <Filter>mesh</Filter>
+    </ClCompile>
+    <ClCompile Include=".\mesh\pyramid.cpp">
+      <Filter>mesh</Filter>
+    </ClCompile>
+    <ClCompile Include=".\mesh\quadrilateral.cpp">
+      <Filter>mesh</Filter>
+    </ClCompile>
+    <ClCompile Include=".\mesh\segment.cpp">
+      <Filter>mesh</Filter>
+    </ClCompile>
+    <ClCompile Include=".\mesh\spacing.cpp">
+      <Filter>mesh</Filter>
+    </ClCompile>
+    <ClCompile Include=".\mesh\submesh\ncsubmesh.cpp">
+      <Filter>mesh\submesh</Filter>
+    </ClCompile>
+    <ClCompile Include=".\mesh\submesh\pncsubmesh.cpp">
+      <Filter>mesh\submesh</Filter>
+    </ClCompile>
+    <ClCompile Include=".\mesh\submesh\psubmesh.cpp">
+      <Filter>mesh\submesh</Filter>
+    </ClCompile>
+    <ClCompile Include=".\mesh\submesh\ptransfermap.cpp">
+      <Filter>mesh\submesh</Filter>
+    </ClCompile>
+    <ClCompile Include=".\mesh\submesh\submesh.cpp">
+      <Filter>mesh\submesh</Filter>
+    </ClCompile>
+    <ClCompile Include=".\mesh\submesh\submesh_utils.cpp">
+      <Filter>mesh\submesh</Filter>
+    </ClCompile>
+    <ClCompile Include=".\mesh\submesh\transfermap.cpp">
+      <Filter>mesh\submesh</Filter>
+    </ClCompile>
+    <ClCompile Include=".\mesh\tetrahedron.cpp">
+      <Filter>mesh</Filter>
+    </ClCompile>
+    <ClCompile Include=".\mesh\triangle.cpp">
+      <Filter>mesh</Filter>
+    </ClCompile>
+    <ClCompile Include=".\mesh\vertex.cpp">
+      <Filter>mesh</Filter>
+    </ClCompile>
+    <ClCompile Include=".\mesh\vtk.cpp">
+      <Filter>mesh</Filter>
+    </ClCompile>
+    <ClCompile Include=".\mesh\wedge.cpp">
+      <Filter>mesh</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\adjoint\adjoint_advection_diffusion.cpp">
+      <Filter>miniapps\adjoint</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\adjoint\cvsRoberts_ASAi_dns.cpp">
+      <Filter>miniapps\adjoint</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\autodiff\par_example.cpp">
+      <Filter>miniapps\autodiff</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\autodiff\seq_example.cpp">
+      <Filter>miniapps\autodiff</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\autodiff\seq_test.cpp">
+      <Filter>miniapps\autodiff</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\common\dist_solver.cpp">
+      <Filter>miniapps\common</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\common\fem_extras.cpp">
+      <Filter>miniapps\common</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\common\mesh_extras.cpp">
+      <Filter>miniapps\common</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\common\pfem_extras.cpp">
+      <Filter>miniapps\common</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\dpg\acoustics.cpp">
+      <Filter>miniapps\dpg</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\dpg\convection-diffusion.cpp">
+      <Filter>miniapps\dpg</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\dpg\diffusion.cpp">
+      <Filter>miniapps\dpg</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\dpg\maxwell.cpp">
+      <Filter>miniapps\dpg</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\dpg\pacoustics.cpp">
+      <Filter>miniapps\dpg</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\dpg\pconvection-diffusion.cpp">
+      <Filter>miniapps\dpg</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\dpg\pdiffusion.cpp">
+      <Filter>miniapps\dpg</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\dpg\pmaxwell.cpp">
+      <Filter>miniapps\dpg</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\dpg\util\blockstaticcond.cpp">
+      <Filter>miniapps\dpg\util</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\dpg\util\complexstaticcond.cpp">
+      <Filter>miniapps\dpg\util</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\dpg\util\complexweakform.cpp">
+      <Filter>miniapps\dpg\util</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\dpg\util\pcomplexweakform.cpp">
+      <Filter>miniapps\dpg\util</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\dpg\util\pml.cpp">
+      <Filter>miniapps\dpg\util</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\dpg\util\pweakform.cpp">
+      <Filter>miniapps\dpg\util</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\dpg\util\weakform.cpp">
+      <Filter>miniapps\dpg\util</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\electromagnetics\joule.cpp">
+      <Filter>miniapps\electromagnetics</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\electromagnetics\joule_solver.cpp">
+      <Filter>miniapps\electromagnetics</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\electromagnetics\maxwell.cpp">
+      <Filter>miniapps\electromagnetics</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\electromagnetics\maxwell_solver.cpp">
+      <Filter>miniapps\electromagnetics</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\electromagnetics\tesla.cpp">
+      <Filter>miniapps\electromagnetics</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\electromagnetics\tesla_solver.cpp">
+      <Filter>miniapps\electromagnetics</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\electromagnetics\volta.cpp">
+      <Filter>miniapps\electromagnetics</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\electromagnetics\volta_solver.cpp">
+      <Filter>miniapps\electromagnetics</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\gslib\field-diff.cpp">
+      <Filter>miniapps\gslib</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\gslib\field-interp.cpp">
+      <Filter>miniapps\gslib</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\gslib\findpts.cpp">
+      <Filter>miniapps\gslib</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\gslib\pfindpts.cpp">
+      <Filter>miniapps\gslib</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\gslib\schwarz_ex1.cpp">
+      <Filter>miniapps\gslib</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\gslib\schwarz_ex1p.cpp">
+      <Filter>miniapps\gslib</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\hdiv-linear-solver\change_basis.cpp">
+      <Filter>miniapps\hdiv-linear-solver</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\hdiv-linear-solver\darcy.cpp">
+      <Filter>miniapps\hdiv-linear-solver</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\hdiv-linear-solver\discrete_divergence.cpp">
+      <Filter>miniapps\hdiv-linear-solver</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\hdiv-linear-solver\grad_div.cpp">
+      <Filter>miniapps\hdiv-linear-solver</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\hdiv-linear-solver\hdiv_linear_solver.cpp">
+      <Filter>miniapps\hdiv-linear-solver</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\hooke\hooke.cpp">
+      <Filter>miniapps\hooke</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\hooke\operators\elasticity_gradient_operator.cpp">
+      <Filter>miniapps\hooke\operators</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\hooke\operators\elasticity_operator.cpp">
+      <Filter>miniapps\hooke\operators</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\hooke\preconditioners\diagonal_preconditioner.cpp">
+      <Filter>miniapps\hooke\preconditioners</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\meshing\extruder.cpp">
+      <Filter>miniapps\meshing</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\meshing\fit-node-position.cpp">
+      <Filter>miniapps\meshing</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\meshing\hpref.cpp">
+      <Filter>miniapps\meshing</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\meshing\klein-bottle.cpp">
+      <Filter>miniapps\meshing</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\meshing\mesh-explorer.cpp">
+      <Filter>miniapps\meshing</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\meshing\mesh-optimizer.cpp">
+      <Filter>miniapps\meshing</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\meshing\mesh-quality.cpp">
+      <Filter>miniapps\meshing</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\meshing\minimal-surface.cpp">
+      <Filter>miniapps\meshing</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\meshing\mobius-strip.cpp">
+      <Filter>miniapps\meshing</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\meshing\phpref.cpp">
+      <Filter>miniapps\meshing</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\meshing\pmesh-fitting.cpp">
+      <Filter>miniapps\meshing</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\meshing\pmesh-optimizer.cpp">
+      <Filter>miniapps\meshing</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\meshing\pminimal-surface.cpp">
+      <Filter>miniapps\meshing</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\meshing\polar-nc.cpp">
+      <Filter>miniapps\meshing</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\meshing\ref321.cpp">
+      <Filter>miniapps\meshing</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\meshing\reflector.cpp">
+      <Filter>miniapps\meshing</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\meshing\shaper.cpp">
+      <Filter>miniapps\meshing</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\meshing\toroid.cpp">
+      <Filter>miniapps\meshing</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\meshing\trimmer.cpp">
+      <Filter>miniapps\meshing</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\meshing\twist.cpp">
+      <Filter>miniapps\meshing</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\mtop\mtop_integrators.cpp">
+      <Filter>miniapps\mtop</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\mtop\paramnonlinearform.cpp">
+      <Filter>miniapps\mtop</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\mtop\parheat.cpp">
+      <Filter>miniapps\mtop</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\mtop\pparamnonlinearform.cpp">
+      <Filter>miniapps\mtop</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\mtop\seqheat.cpp">
+      <Filter>miniapps\mtop</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\multidomain\multidomain.cpp">
+      <Filter>miniapps\multidomain</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\multidomain\multidomain_nd.cpp">
+      <Filter>miniapps\multidomain</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\multidomain\multidomain_rt.cpp">
+      <Filter>miniapps\multidomain</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\navier\navier_3dfoc.cpp">
+      <Filter>miniapps\navier</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\navier\navier_cht.cpp">
+      <Filter>miniapps\navier</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\navier\navier_kovasznay.cpp">
+      <Filter>miniapps\navier</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\navier\navier_kovasznay_vs.cpp">
+      <Filter>miniapps\navier</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\navier\navier_mms.cpp">
+      <Filter>miniapps\navier</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\navier\navier_shear.cpp">
+      <Filter>miniapps\navier</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\navier\navier_solver.cpp">
+      <Filter>miniapps\navier</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\navier\navier_tgv.cpp">
+      <Filter>miniapps\navier</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\navier\navier_turbchan.cpp">
+      <Filter>miniapps\navier</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\nurbs\nurbs_curveint.cpp">
+      <Filter>miniapps\nurbs</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\nurbs\nurbs_ex1.cpp">
+      <Filter>miniapps\nurbs</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\nurbs\nurbs_ex11p.cpp">
+      <Filter>miniapps\nurbs</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\nurbs\nurbs_ex1p.cpp">
+      <Filter>miniapps\nurbs</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\nurbs\nurbs_ex24.cpp">
+      <Filter>miniapps\nurbs</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\nurbs\nurbs_ex3.cpp">
+      <Filter>miniapps\nurbs</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\nurbs\nurbs_ex5.cpp">
+      <Filter>miniapps\nurbs</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\nurbs\nurbs_naca_cmesh.cpp">
+      <Filter>miniapps\nurbs</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\nurbs\nurbs_patch_ex1.cpp">
+      <Filter>miniapps\nurbs</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\nurbs\nurbs_printfunc.cpp">
+      <Filter>miniapps\nurbs</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\nurbs\nurbs_solenoidal.cpp">
+      <Filter>miniapps\nurbs</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\parelag\MultilevelHcurlHdivSolver.cpp">
+      <Filter>miniapps\parelag</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\performance\ex1.cpp">
+      <Filter>miniapps\performance</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\performance\ex1p.cpp">
+      <Filter>miniapps\performance</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\shifted\diffusion.cpp">
+      <Filter>miniapps\shifted</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\shifted\distance.cpp">
+      <Filter>miniapps\shifted</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\shifted\extrapolate.cpp">
+      <Filter>miniapps\shifted</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\shifted\extrapolator.cpp">
+      <Filter>miniapps\shifted</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\shifted\lsf_integral.cpp">
+      <Filter>miniapps\shifted</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\shifted\marking.cpp">
+      <Filter>miniapps\shifted</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\shifted\sbm_solver.cpp">
+      <Filter>miniapps\shifted</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\solvers\block-solvers.cpp">
+      <Filter>miniapps\solvers</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\solvers\block_fespace_operator.cpp">
+      <Filter>miniapps\solvers</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\solvers\bramble_pasciak.cpp">
+      <Filter>miniapps\solvers</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\solvers\darcy_solver.cpp">
+      <Filter>miniapps\solvers</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\solvers\div_free_solver.cpp">
+      <Filter>miniapps\solvers</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\solvers\lor_elast.cpp">
+      <Filter>miniapps\solvers</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\solvers\lor_solvers.cpp">
+      <Filter>miniapps\solvers</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\solvers\plor_solvers.cpp">
+      <Filter>miniapps\solvers</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\spde\generate_random_field.cpp">
+      <Filter>miniapps\spde</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\spde\material_metrics.cpp">
+      <Filter>miniapps\spde</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\spde\spde_solver.cpp">
+      <Filter>miniapps\spde</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\spde\transformation.cpp">
+      <Filter>miniapps\spde</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\spde\util.cpp">
+      <Filter>miniapps\spde</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\spde\visualizer.cpp">
+      <Filter>miniapps\spde</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\tools\convert-dc.cpp">
+      <Filter>miniapps\tools</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\tools\display-basis.cpp">
+      <Filter>miniapps\tools</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\tools\get-values.cpp">
+      <Filter>miniapps\tools</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\tools\load-dc.cpp">
+      <Filter>miniapps\tools</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\tools\lor-transfer.cpp">
+      <Filter>miniapps\tools</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\tools\nodal-transfer.cpp">
+      <Filter>miniapps\tools</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\tools\plor-transfer.cpp">
+      <Filter>miniapps\tools</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\tools\tmop-check-metric.cpp">
+      <Filter>miniapps\tools</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\tools\tmop-metric-magnitude.cpp">
+      <Filter>miniapps\tools</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\toys\automata.cpp">
+      <Filter>miniapps\toys</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\toys\life.cpp">
+      <Filter>miniapps\toys</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\toys\lissajous.cpp">
+      <Filter>miniapps\toys</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\toys\mandel.cpp">
+      <Filter>miniapps\toys</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\toys\mondrian.cpp">
+      <Filter>miniapps\toys</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\toys\rubik.cpp">
+      <Filter>miniapps\toys</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\toys\snake.cpp">
+      <Filter>miniapps\toys</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\toys\spiral.cpp">
+      <Filter>miniapps\toys</Filter>
+    </ClCompile>
+    <ClCompile Include=".\miniapps\tribol\contact-patch-test.cpp">
+      <Filter>miniapps\tribol</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\benchmarks\bench_assembly_levels.cpp">
+      <Filter>tests\benchmarks</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\benchmarks\bench_ceed.cpp">
+      <Filter>tests\benchmarks</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\benchmarks\bench_dg_amr.cpp">
+      <Filter>tests\benchmarks</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\benchmarks\bench_elasticity.cpp">
+      <Filter>tests\benchmarks</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\benchmarks\bench_tmop.cpp">
+      <Filter>tests\benchmarks</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\benchmarks\bench_vector.cpp">
+      <Filter>tests\benchmarks</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\benchmarks\bench_virtuals.cpp">
+      <Filter>tests\benchmarks</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\convergence\prates.cpp">
+      <Filter>tests\convergence</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\convergence\rates.cpp">
+      <Filter>tests\convergence</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\mem_manager\dangling-aliases.cpp">
+      <Filter>tests\mem_manager</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\par-mesh-format\ex1p.cpp">
+      <Filter>tests\par-mesh-format</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\ceed\test_ceed.cpp">
+      <Filter>tests\unit\ceed</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\ceed\test_ceed_main.cpp">
+      <Filter>tests\unit\ceed</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\cunit_test_main.cpp">
+      <Filter>tests\unit</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\enzyme\compatibility.cpp">
+      <Filter>tests\unit\enzyme</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_1d_bilininteg.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_2d_bilininteg.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_3d_bilininteg.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_assemblediagonalpa.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_assembly_levels.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_bilinearform.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_blocknonlinearform.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_block_operators.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_build_dof_to_arrays.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_calccurlshape.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_calcdivshape.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_calcdshape.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_calcshape.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_calcvshape.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_coefficient.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_col_lag_der.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_datacollection.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_derefine.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_dgmassinv.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_doftrans.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_domain_int.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_eigs.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_estimator.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_face_elem_trans.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_face_permutation.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_face_restriction.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_fa_determinism.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_fe.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_fe_compatibility.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_fe_fixed.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_fe_symmetry.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_getderivative.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_getgradient.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_get_value.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_gslib.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_hp_transfer.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_intrules.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_intruletypes.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_inversetransform.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_lexicographic_ordering.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_linearform_ext.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_linear_fes.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_lin_interp.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_lor.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_lor_batched.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_nonlinearform.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_operatorjacobismoother.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_oscillation.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_pa_coeff.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_pa_grad.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_pa_idinterp.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_pa_kernels.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_pgridfunc_save_serial.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_poly1d.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_project_bdr.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_project_bdr_par.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_quadf_coef.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_quadinterpolator.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_quadraturefunc.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_r1d_bilininteg.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_r2d_bilininteg.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_sparse_matrix.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_sum_bilin.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_surf_blf.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_tet_reorder.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_transfer.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_var_order.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\fem\test_white_noise.cpp">
+      <Filter>tests\unit\fem</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\general\test_array.cpp">
+      <Filter>tests\unit\general</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\general\test_arrays_by_name.cpp">
+      <Filter>tests\unit\general</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\general\test_error.cpp">
+      <Filter>tests\unit\general</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\general\test_mem.cpp">
+      <Filter>tests\unit\general</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\general\test_reduction.cpp">
+      <Filter>tests\unit\general</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\general\test_text.cpp">
+      <Filter>tests\unit\general</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\general\test_umpire_mem.cpp">
+      <Filter>tests\unit\general</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\general\test_zlib.cpp">
+      <Filter>tests\unit\general</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\linalg\test_cg_indefinite.cpp">
+      <Filter>tests\unit\linalg</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\linalg\test_chebyshev.cpp">
+      <Filter>tests\unit\linalg</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\linalg\test_complex_dense_matrix.cpp">
+      <Filter>tests\unit\linalg</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\linalg\test_complex_operator.cpp">
+      <Filter>tests\unit\linalg</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\linalg\test_constrainedsolver.cpp">
+      <Filter>tests\unit\linalg</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\linalg\test_direct_solvers.cpp">
+      <Filter>tests\unit\linalg</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\linalg\test_hypre_ilu.cpp">
+      <Filter>tests\unit\linalg</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\linalg\test_hypre_prec.cpp">
+      <Filter>tests\unit\linalg</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\linalg\test_hypre_vector.cpp">
+      <Filter>tests\unit\linalg</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\linalg\test_ilu.cpp">
+      <Filter>tests\unit\linalg</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\linalg\test_matrix_block.cpp">
+      <Filter>tests\unit\linalg</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\linalg\test_matrix_dense.cpp">
+      <Filter>tests\unit\linalg</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\linalg\test_matrix_hypre.cpp">
+      <Filter>tests\unit\linalg</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\linalg\test_matrix_rectangular.cpp">
+      <Filter>tests\unit\linalg</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\linalg\test_matrix_sparse.cpp">
+      <Filter>tests\unit\linalg</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\linalg\test_matrix_square.cpp">
+      <Filter>tests\unit\linalg</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\linalg\test_mma.cpp">
+      <Filter>tests\unit\linalg</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\linalg\test_ode.cpp">
+      <Filter>tests\unit\linalg</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\linalg\test_ode2.cpp">
+      <Filter>tests\unit\linalg</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\linalg\test_operator.cpp">
+      <Filter>tests\unit\linalg</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\linalg\test_vector.cpp">
+      <Filter>tests\unit\linalg</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\mesh\mesh_test_utils.cpp">
+      <Filter>tests\unit\mesh</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\mesh\test_exodus_reader.cpp">
+      <Filter>tests\unit\mesh</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\mesh\test_exodus_writer.cpp">
+      <Filter>tests\unit\mesh</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\mesh\test_face_orientations.cpp">
+      <Filter>tests\unit\mesh</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\mesh\test_fms.cpp">
+      <Filter>tests\unit\mesh</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\mesh\test_geometric_factors.cpp">
+      <Filter>tests\unit\mesh</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\mesh\test_mesh.cpp">
+      <Filter>tests\unit\mesh</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\mesh\test_ncmesh.cpp">
+      <Filter>tests\unit\mesh</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\mesh\test_nurbs.cpp">
+      <Filter>tests\unit\mesh</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\mesh\test_periodic_mesh.cpp">
+      <Filter>tests\unit\mesh</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\mesh\test_pmesh.cpp">
+      <Filter>tests\unit\mesh</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\mesh\test_psubmesh.cpp">
+      <Filter>tests\unit\mesh</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\mesh\test_submesh.cpp">
+      <Filter>tests\unit\mesh</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\mesh\test_vtu.cpp">
+      <Filter>tests\unit\mesh</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\miniapps\test_debug_device.cpp">
+      <Filter>tests\unit\miniapps</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\miniapps\test_sedov.cpp">
+      <Filter>tests\unit\miniapps</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\miniapps\test_tmop_pa.cpp">
+      <Filter>tests\unit\miniapps</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\pcunit_test_main.cpp">
+      <Filter>tests\unit</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\punit_test_main.cpp">
+      <Filter>tests\unit</Filter>
+    </ClCompile>
+    <ClCompile Include=".\tests\unit\unit_test_main.cpp">
+      <Filter>tests\unit</Filter>
+    </ClCompile>
+    <ClCompile Include="copy.cpp\copy.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="\fem\ceed\integrators\convection\convection_qf.h" />
+    <ClInclude Include="\fem\ceed\integrators\diffusion\diffusion_qf.h" />
+    <ClInclude Include="\fem\ceed\integrators\mass\mass_qf.h" />
+    <ClInclude Include="\fem\ceed\integrators\nlconvection\nlconvection_qf.h" />
+    <ClInclude Include="\fem\picojson.h" />
+    <ClInclude Include="\general\tinyxml2.h" />
+  </ItemGroup>
+</Project>

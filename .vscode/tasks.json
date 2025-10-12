@@ -1,0 +1,33 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build-ex0",
+      "type": "shell",
+      "command": "make",
+      "args": ["ex0"],
+      "options": {
+        "cwd": "${workspaceFolder}/examples"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "run-debug-script",
+      "type": "shell",
+      "command": "./debug_examples.sh",
+      "args": [],
+      "options": {
+        "cwd": "${workspaceFolder}/examples"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "prep-ex0",   // 👈 aggregate task
+      "dependsOn": [
+        "run-debug-script",
+        "build-ex0"
+      ],
+      "dependsOrder": "sequence"   // run them one after another
+    }
+  ]
+}

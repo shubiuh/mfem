@@ -19,6 +19,7 @@
 
 #include "mkl_cluster_sparse_solver.h"
 #include "operator.hpp"
+#include "densemat.hpp"
 
 namespace mfem
 {
@@ -33,15 +34,24 @@ public:
    enum MatType
    {
       REAL_STRUCTURE_SYMMETRIC = 1,
-      REAL_NONSYMMETRIC = 11
+      REAL_SYMMETRIC_POSITIVE_DEFINITE = 2,
+      REAL_SYMMETRIC_INDEFINITE = -2,
+      REAL_NONSYMMETRIC = 11,
+
+      COMPLEX_STRUCTURALLY_SYMMETRIC = 3,      ///< Complex structurally symmetric
+      COMPLEX_HERMITIAN_POSITIVE_DEFINITE = 4, ///< Complex Hermitian positive definite
+      COMPLEX_HERMITIAN_INDEFINITE = -4,       ///< Complex Hermitian indefinite
+      COMPLEX_SYMMETRIC = 6,                   ///< Complex symmetric
+      COMPLEX_NONSYMMETRIC = 13                ///< Complex nonsymmetric
    };
 
    /**
     * @brief Construct a new CPardisoSolver object
     *
     * @param comm MPI Communicator
+    * @param nrhs_ Number of right hand sides, default is 1
     */
-   CPardisoSolver(MPI_Comm comm);
+   CPardisoSolver(MPI_Comm comm, int nrhs_ = 1);
 
    /**
     * @brief Set the Operator object and perform factorization
@@ -62,6 +72,14 @@ public:
    void Mult(const Vector &b, Vector &x) const override;
 
    /**
+    * @brief Solve for multiple right-hand sides
+    *
+    * @param B RHS matrix
+    * @param X Solution matrix
+    */
+   void Mult(const DenseMatrix &B, DenseMatrix &X) const;
+
+   /**
     * @brief Set the print level for MKL CPardiso
     *
     * Prints statistics after the factorization and after each solve.
@@ -69,6 +87,13 @@ public:
     * @param print_lvl Print level
     */
    void SetPrintLevel(int print_lvl);
+
+   /**
+    * @brief Set the number of right-hand sides
+    *
+    * @param nrhs_ Number of right-hand sides
+    */
+   void setRHSCount(int nrhs_);
 
    /**
     * @brief Set the matrix type
