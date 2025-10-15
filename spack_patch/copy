@@ -1,0 +1,14 @@
+# replace the default `package.py for MFEM in /home/<user>/spack/var/spack/repos/builtin/packages/mfem/package.py
+# the updated version added mklcpardiso and mklpardiso variants
+cp package.py /home/shubin/.spack/package_repos/fncqgg4/repos/spack_repo/builtin/packages/mfem/package.py # on lab-v100
+
+# build with cuda and mpi, static
+
+spack -d install --keep-stage mfem@4.8.1+amgx~conduit+cuda~debug+examples+exceptions+fms~ginkgo+gnutls+gslib~hiop~lapack+libceed~libunwind+metis+miniapps+mpfr+mpi+mumps+netcdf~occa~openmp+petsc~pumi~raja~rocm~shared+slepc+static~strumpack+suite-sparse+sundials~superlu-dist~threadsafe~umpire+zlib+mklpardiso+mklcpardiso build_system=generic cuda_arch=80 cxxstd=auto precision=double timer=auto ^hypre+cuda
+
+# build with mpi only, shared
+spack -d install --keep-stage mfem@4.8.1+amgx~conduit~cuda~debug+examples+exceptions~fms~ginkgo~gnutls~gslib~hiop~lapack+libceed~libunwind+metis+miniapps~mpfr+mpi+mumps+netcdf~occa~openmp+petsc~pumi~raja~rocm+shared+slepc~static~strumpack~suite-sparse+sundials~superlu-dist~threadsafe~umpire+zlib+mklpardiso+mklcpardiso build_system=generic cxxstd=auto precision=double timer=auto
+
+# build example (miniapp not pass)
+# Error: pconvection-diffusion.cpp(848): error: "beta" is ambiguous
+spack install mfem@4.8.1+amgx~conduit+cuda~debug+examples+exceptions~fms~ginkgo~gnutls~gslib~hiop+lapack+libceed~libunwind+metis~miniapps~mpfr+mpi+mumps+netcdf~occa~openmp~petsc~pumi~raja~rocm+shared~slepc~static~strumpack~suite-sparse+sundials~superlu-dist~threadsafe~umpire+zlib+mklcpardiso+mklpardiso build_system=generic cuda_arch=80 cxxstd=17 precision=double timer=auto ^hypre+cuda

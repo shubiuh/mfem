@@ -52,21 +52,7 @@ class Mfem(Package, CudaPackage, ROCmPackage):
     # 'develop' is a special version that is always larger (or newer) than any
     # other version.
     version("develop", branch="master")
-    
-    version(
-        "4.8.2",
-        sha256="f226d1eafd6e1d0173d1d2ac85927e69278bd70f0fd82fd2c9eadbd682b45502",
-        url="https://github.com/shubiuh/mfem/archive/refs/tags/v4.8.2.tar.gz",
-        extension="",
-    )
-    
-    version(
-        "4.8.1",
-        sha256="2c744085b9eaef075ae30b2a8446197b34168d65b6bcbfcdb7fdc7e0492ece30",
-        url="https://github.com/shubiuh/mfem/archive/refs/tags/v4.8.1.tar.gz",
-        extension="",
-    )
-    
+
     version(
         "4.8.0",
         sha256="49bd2a076b0d87863092cb55f8524b5292d9afb2e48c19f80222ada367819016",
@@ -188,10 +174,9 @@ class Mfem(Package, CudaPackage, ROCmPackage):
     # Can we make the default value for "metis" to depend on the "mpi" value?
     variant("metis", default=True, sticky=True, description="Enable METIS support")
     variant("openmp", default=False, description="Enable OpenMP parallelism")
-    variant("legacy-openmp", default=False, description="Enable legacy OpenMP parallelism")
     # Note: "+cuda" and "cuda_arch" variants are added by the CudaPackage
     # Note: "+rocm" and "amdgpu_target" variants are added by the ROCmPackage
-    variant("occa", default=True, description="Enable OCCA backend")
+    variant("occa", default=False, description="Enable OCCA backend")
     variant("raja", default=False, description="Enable RAJA backend")
     variant("libceed", default=False, description="Enable libCEED backend")
     variant("umpire", default=False, description="Enable Umpire support")
@@ -208,26 +193,24 @@ class Mfem(Package, CudaPackage, ROCmPackage):
         "superlu-dist", default=False, description="Enable MPI parallel, sparse direct solvers"
     )
     variant("strumpack", default=False, description="Enable support for STRUMPACK")
-    variant("suite-sparse", default=True, description="Enable serial, sparse direct solvers")
-    variant("petsc", default=True, description="Enable PETSc solvers, preconditioners, etc.")
-    variant("mumps", default=True, description="Enable MUMPS solver.")
-    variant("mklpardiso", default=True, description="Enable MKL Double Pardiso solver.")
-    variant("mklcpardiso", default=False, description="Enable MKL Complex Pardiso solver.")
+    variant("suite-sparse", default=False, description="Enable serial, sparse direct solvers")
+    variant("petsc", default=False, description="Enable PETSc solvers, preconditioners, etc.")
+    variant("mumps", default=False, description="Enable MUMPS solver.")
     variant("slepc", default=False, description="Enable SLEPc integration")
     variant("sundials", default=False, description="Enable Sundials time integrators")
     variant("pumi", default=False, description="Enable functionality based on PUMI")
-    variant("gslib", default=True, description="Enable functionality based on GSLIB")
+    variant("gslib", default=False, description="Enable functionality based on GSLIB")
     variant("mpfr", default=False, description="Enable precise, 1D quadrature rules")
     variant("lapack", default=False, description="Use external blas/lapack routines")
     variant("debug", default=False, description="Build debug instead of optimized version")
-    variant("netcdf", default=True, description="Enable Cubit/Genesis reader")
+    variant("netcdf", default=False, description="Enable Cubit/Genesis reader")
     variant("conduit", default=False, description="Enable binary data I/O using Conduit")
     variant("zlib", default=True, description="Support zip'd streams for I/O")
     variant("gnutls", default=False, description="Enable secure sockets using GnuTLS")
     variant(
         "libunwind", default=False, description="Enable backtrace on error support using Libunwind"
     )
-    variant("fms", default=True, when="@4.3.0:", description="Enable FMS I/O support")
+    variant("fms", default=False, when="@4.3.0:", description="Enable FMS I/O support")
     variant("ginkgo", default=False, when="@4.3.0:", description="Enable Ginkgo support")
     variant("hiop", default=False, when="@4.4.0:", description="Enable HiOp support")
     variant("enzyme", default=False, when="@4.9.0:", description="Enable Enzyme support")
@@ -238,8 +221,8 @@ class Mfem(Package, CudaPackage, ROCmPackage):
         values=("auto", "std", "posix", "mac", "mpi"),
         description="Timing functions to use in mfem::StopWatch",
     )
-    variant("examples", default=True, description="Build and install examples")
-    variant("miniapps", default=True, description="Build and install miniapps")
+    variant("examples", default=False, description="Build and install examples")
+    variant("miniapps", default=False, description="Build and install miniapps")
     variant("exceptions", default=False, description="Enable the use of exceptions")
     variant(
         "precision",
@@ -251,12 +234,12 @@ class Mfem(Package, CudaPackage, ROCmPackage):
     )
     variant(
         "cxxstd",
-        default="17",
+        default="auto",
         values=(
             "auto",
             conditional("98", when="@:3"),
-            conditional("11", when="@:3.8"),
-            conditional("14", when="@:3.8"),
+            conditional("11", when="@:4.8"),
+            conditional("14", when="@:4.8"),
             "17",
             "20",
             "23",
@@ -347,7 +330,7 @@ class Mfem(Package, CudaPackage, ROCmPackage):
     depends_on("sundials@5.0.0:6.7.0+mpi+hypre", when="@4.5.0:4.6+sundials+mpi")
     depends_on("sundials@5.0.0:", when="@4.7.0:+sundials~mpi")
     depends_on("sundials@5.0.0:+mpi+hypre", when="@4.7.0:+sundials+mpi")
-    conflicts("cxxstd=17", when="^sundials@6.4.0:")
+    conflicts("cxxstd=11", when="^sundials@6.4.0:")
     for sm_ in CudaPackage.cuda_arch_values:
         depends_on(
             "sundials@5.4.0:+cuda cuda_arch={0}".format(sm_),
@@ -398,7 +381,7 @@ class Mfem(Package, CudaPackage, ROCmPackage):
     # with MUMPS is not strictly required, so we do not require it here.
     depends_on("petsc@3.8:+mpi+hypre", when="+petsc")
     # rocPRIM is a dependency when using petsc+rocm and requires C++14 or newer:
-    conflicts("cxxstd=17", when="^rocprim@5.5.0:")
+    conflicts("cxxstd=11", when="^rocprim@5.5.0:")
     depends_on("slepc@3.8.0:", when="+slepc")
     # If petsc is built with +cuda, propagate cuda_arch to petsc and slepc
     for sm_ in CudaPackage.cuda_arch_values:
@@ -413,8 +396,6 @@ class Mfem(Package, CudaPackage, ROCmPackage):
             f"slepc+rocm amdgpu_target={gfx}", when=f"+rocm+slepc amdgpu_target={gfx} ^petsc+rocm"
         )
     depends_on("mumps@5.1.1:", when="+mumps")
-    depends_on('intel-oneapi-mkl', when='+mklcpardiso')
-    depends_on('intel-oneapi-mkl', when='+mklpardiso')
     depends_on("mpfr", when="+mpfr")
     depends_on("netcdf-c@4.1.3:", when="+netcdf")
     depends_on("unwind", when="+libunwind")
@@ -425,8 +406,8 @@ class Mfem(Package, CudaPackage, ROCmPackage):
     depends_on("libfms@0.2.0:", when="+fms")
     depends_on("ginkgo@1.4.0:1.8", when="@:4.7+ginkgo")
     depends_on("ginkgo@1.9.0:", when="@4.8:+ginkgo")
-    conflicts("cxxstd=17", when="^ginkgo")
-    conflicts("cxxstd=17", when="^ginkgo@1.9:")
+    conflicts("cxxstd=11", when="^ginkgo")
+    conflicts("cxxstd=14", when="^ginkgo@1.9:")
     for sm_ in CudaPackage.cuda_arch_values:
         depends_on(
             "ginkgo+cuda cuda_arch={0}".format(sm_), when="+ginkgo+cuda cuda_arch={0}".format(sm_)
@@ -468,7 +449,7 @@ class Mfem(Package, CudaPackage, ROCmPackage):
     depends_on("raja@0.13.0", when="@4.3.0+raja")
     depends_on("raja@0.14.0:2022.03", when="@4.4.0:4.5.0+raja")
     depends_on("raja@2022.10.3:", when="@4.5.2:+raja")
-    conflicts("cxxstd=17", when="^raja@2022.03.0:")
+    conflicts("cxxstd=11", when="^raja@2022.03.0:")
     for sm_ in CudaPackage.cuda_arch_values:
         depends_on(
             "raja+cuda cuda_arch={0}".format(sm_), when="+raja+cuda cuda_arch={0}".format(sm_)
@@ -496,7 +477,7 @@ class Mfem(Package, CudaPackage, ROCmPackage):
 
     depends_on("umpire@2.0.0:2.1.0", when="@:4.3.0+umpire")
     depends_on("umpire@3.0.0:", when="@4.4.0:+umpire")
-    conflicts("cxxstd=17", when="^umpire@2022.03.0:")
+    conflicts("cxxstd=11", when="^umpire@2022.03.0:")
     for sm_ in CudaPackage.cuda_arch_values:
         depends_on(
             "umpire+cuda cuda_arch={0}".format(sm_), when="+umpire+cuda cuda_arch={0}".format(sm_)
@@ -653,7 +634,6 @@ class Mfem(Package, CudaPackage, ROCmPackage):
             "MFEM_USE_MPFR=%s" % yes_no("+mpfr"),
             "MFEM_USE_GNUTLS=%s" % yes_no("+gnutls"),
             "MFEM_USE_OPENMP=%s" % yes_no("+openmp"),
-            "MFEM_USE_LEGACY_OPENMP=%s" % yes_no("+legacy-openmp"),
             "MFEM_USE_CONDUIT=%s" % yes_no("+conduit"),
             "MFEM_USE_CUDA=%s" % yes_no("+cuda"),
             "MFEM_USE_HIP=%s" % yes_no("+rocm"),
@@ -670,8 +650,6 @@ class Mfem(Package, CudaPackage, ROCmPackage):
             "MFEM_MPIEXEC_NP=%s" % mfem_mpiexec_np,
             "MFEM_USE_EXCEPTIONS=%s" % yes_no("+exceptions"),
             "MFEM_USE_MUMPS=%s" % yes_no("+mumps"),
-            "MFEM_USE_MKL_PARDISO=%s" % yes_no("+mklpardiso"),
-            "MFEM_USE_MKL_CPARDISO=%s" % yes_no("+mklcpardiso"),
         ]
         if spec.satisfies("@4.7.0:"):
             options += ["MFEM_PRECISION=%s" % spec.variants["precision"].value]
@@ -679,7 +657,7 @@ class Mfem(Package, CudaPackage, ROCmPackage):
         # Determine C++ standard to use:
         cxxstd = None
         if self.spec.satisfies("@4.0.0:"):
-            cxxstd = "17"
+            cxxstd = "11"
         if self.spec.satisfies("^raja@2022.03.0:"):
             cxxstd = "14"
         if self.spec.satisfies("^umpire@2022.03.0:"):
@@ -1258,59 +1236,6 @@ class Mfem(Package, CudaPackage, ROCmPackage):
 
         if "+enzyme" in spec:
             options += ["ENZYME_DIR=%s" % spec["enzyme"].prefix]
-            
-        if "+mklcpardiso" in spec:
-            mklroot = join_path(spec['intel-oneapi-mkl'].prefix,'mkl/latest')
-            mkl_cpardiso_dir = mklroot
-            mkl_library_subdir = 'lib/intel64'
-            mkl_mpi_wrapper = 'mkl_blacs_intelmpi_lp64'
-            mkl_libs = [
-                "$(XLINKER)-rpath,%s/%s" % (mkl_cpardiso_dir, mkl_library_subdir),
-                "-L%s/%s" % (mkl_cpardiso_dir, mkl_library_subdir),
-                "-l%s" % mkl_mpi_wrapper,
-                "-lmkl_intel_lp64",
-                "-lmkl_sequential",
-                "-lmkl_core",
-                "-lpthread",
-                "-lm",
-                "-ldl",
-            ]
-
-            mkl_flags = [
-                "-I%s/include" % mklroot,  # Include MKL headers
-            ]
-            
-            options += [
-                "MKL_CPARDISO_OPT=%s" % " ".join(mkl_flags),
-                "MKL_CPARDISO_LIB=%s" % " ".join(mkl_libs),
-            ]
-            
-        if "+mklpardiso" in spec:
-            mklroot = join_path(spec['intel-oneapi-mkl'].prefix,'mkl/latest')
-            mkl_library_subdir = 'lib/intel64'
-            mkl_compiler_dir = join_path(spec['intel-oneapi-mkl'].prefix,'compiler/latest')
-            mkl_comp_library_subdir = 'lib'
-            mkl_libs = [
-                "$(XLINKER)-rpath,%s/%s" % (mklroot, mkl_library_subdir),
-                "-L%s/%s" % (mklroot, mkl_library_subdir),
-                "-lmkl_intel_lp64",
-                "-lmkl_intel_thread",
-                "-lmkl_core",
-                "-L%s/%s" % (mkl_compiler_dir, mkl_comp_library_subdir),
-                "-liomp5",
-                "-lpthread",
-                "-lm",
-                "-ldl",
-            ]
-
-            mkl_flags = [
-                "-I%s/include" % mklroot,  # Include MKL headers
-            ]
-            
-            options += [
-                "MKL_PARDISO_OPT=%s" % " ".join(mkl_flags),
-                "MKL_PARDISO_LIB=%s" % " ".join(mkl_libs),
-            ]
 
         return options
 
