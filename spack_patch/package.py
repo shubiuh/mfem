@@ -633,7 +633,7 @@ class Mfem(Package, CudaPackage, ROCmPackage):
             "MFEM_DEBUG=%s" % yes_no("+debug"),
             # NOTE: env["CXX"] is the spack c++ compiler wrapper. The real
             # compiler is defined by env["SPACK_CXX"].
-            "CXX=%s" % env["CXX"],
+            "CXX=%s" % env.get("CXX", env.get("SPACK_CXX", self.compiler.cxx)),
             "MFEM_USE_LIBUNWIND=%s" % yes_no("+libunwind"),
             "%s=%s" % (zlib_var, yes_no("+zlib")),
             "MFEM_USE_METIS=%s" % yes_no("+metis"),
