@@ -61,6 +61,28 @@ RUN python -m pip install -U \
       mpi4py \
       glvis
 
+# --- Install Spack -------------------------------------------------------------
+RUN mkdir -p /home/pymfem/opt && \
+    git clone -c feature.manyFiles=true https://github.com/spack/spack.git /home/pymfem/opt/spack && \
+    echo 'export SPACK_ROOT="/home/pymfem/opt/spack"' >> ~/.bashrc && \
+    echo 'source $SPACK_ROOT/share/spack/setup-env.sh' >> ~/.bashrc
+
+# --- Add custom MFEM package.py ------------------------------------------------
+# (make sure package.py exists next to this Dockerfile)
+ADD package.py /home/pymfem/package.py
+RUN mkdir -p /home/pymfem/.spack/package_repos/fncqgg4/repos/spack_repo/builtin/packages/mfem && \
+    cp /home/pymfem/package.py /home/pymfem/.spack/package_repos/fncqgg4/repos/spack_repo/builtin/packages/mfem/package.py
+
+# --- Install Intel OneAPI components with Spack -------------------------------
+RUN source /home/pymfem/opt/spack/share/spack/setup-env.sh && \
+    spack install intel-oneapi-compilers@2025.2.1 && \
+    spack install intel-oneapi-mkl@2024.2.2 && \
+    spack install intel-oneapi-mpi@2021.16.1
+
+# --- Install MFEM with Spack ---------------------------------------------------
+RUN source /home/pymfem/opt/spack/share/spack/setup-env.sh && \
+    spack install mfem@4.8.1~amgx~conduit+cuda~debug+examples+exceptions+fms~ginkgo~gnutls+gslib~hiop~lapack~legacy-openmp+libceed~libunwind+metis~miniapps~mklcpardiso+mklpardiso+mpfr+mpi+mumps+netcdf~occa~openmp+petsc~pumi~raja~rocm+shared~slepc~static~strumpack+suite-sparse~sundials~superlu-dist~threadsafe~umpire+zlib build_system=generic cuda_arch=70 cxxstd=17 precision=double timer=auto
+
 # --- Build & install PyMFEM (parallel) ----------------------------------------
 RUN git clone https://github.com/mfem/PyMFEM.git && \
     cd PyMFEM && \
@@ -73,3 +95,5 @@ RUN chmod +x /home/pymfem/script.sh
 
 # Default shell
 SHELL ["/bin/bash","-lc"]
+
+
