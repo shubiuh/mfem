@@ -16,7 +16,7 @@
 
 if(NOT MKL_LIBRARY_DIR)
   message(WARNING "Using default MKL library path. Double check the variable MKL_LIBRARY_DIR")
-  set(MKL_LIBRARY_DIR "lib/intel64")
+  set(MKL_LIBRARY_DIR "mkl/latest/lib")
   message(STATUS "MKL_LIBRARY_DIR set to ${MKL_LIBRARY_DIR}")
 else()
   message(STATUS "MKL_LIBRARY_DIR set to ${MKL_LIBRARY_DIR}")
@@ -44,20 +44,19 @@ include(MfemCmakeUtilities)
 
 if(WIN32) # Windows
   mfem_find_package(MKL_PARDISO MKL_PARDISO
-    MKL_PARDISO_DIR "include" mkl_pardiso.h ${MKL_LIBRARY_DIR} mkl_core_dll
+    MKL_PARDISO_DIR "mkl/latest/include" mkl_pardiso.h ${MKL_LIBRARY_DIR} mkl_core_dll
     "Paths to headers required by MKL Pardiso." "Libraries required by MKL PARDISO."
 
     # LP64 interface
-    ADD_COMPONENT MKL_LP64 "include" "" ${MKL_LIBRARY_DIR} mkl_intel_lp64_dll
-
+    ADD_COMPONENT MKL_LP64 "mkl/latest/include" "" ${MKL_LIBRARY_DIR} mkl_intel_lp64_dll
     # Threaded OpenMP version (remove sequential)
-    ADD_COMPONENT MKL_OMP "include" "" ${MKL_LIBRARY_DIR} mkl_intel_thread_dll
+    ADD_COMPONENT MKL_OMP "mkl/latest/include" "" ${MKL_LIBRARY_DIR} mkl_intel_thread_dll
 
     # MKL core
-    ADD_COMPONENT MKL_CORE "include" "" ${MKL_LIBRARY_DIR} mkl_core_dll
+    ADD_COMPONENT MKL_CORE "mkl/latest/include" "" ${MKL_LIBRARY_DIR} mkl_core_dll
 
     # OpenMP runtime
-    ADD_COMPONENT MKL_OMP_RUNTIME "include" "" ${MKL_COMPILER_DIR} libiomp5md
+    ADD_COMPONENT MKL_OMP_RUNTIME "compiler/latest/include" "" ${MKL_COMPILER_DIR} libiomp5md
   )
 else() # Linux, macOS, etc.
   mfem_find_package(MKL_PARDISO MKL_PARDISO
