@@ -87,19 +87,23 @@ class PlaneWaveFunction {
     Complex k_[2], abcd_[2][4];
 };
 
-void forward() {
+void forward(bool visualization, int num_procs) {
+    std::cout << "DEBUG: Inside forward, creating serial mesh" << std::endl;
     // Create a simple half-space model with two cells
     double cell_size = 50000.0;
-    mfem::Mesh serial_mesh = mfem::Mesh::MakeCartesian3D(1, 1, 2, mfem::Element::HEXAHEDRON,
+    mfem::Mesh serial_mesh = mfem::Mesh::MakeCartesian3D(40, 40, 80, mfem::Element::HEXAHEDRON,
                                                          cell_size, cell_size, 2 * cell_size);
 
+    std::cout << "DEBUG: Serial mesh created. Setting curvature." << std::endl;
     // Set mesh order for curved elements if needed, then call Mesh::Transform to
     // apply the true geometry
     int mesh_order = 1;
     serial_mesh.SetCurvature(mesh_order);
 
+    std::cout << "DEBUG: Creating ParMesh" << std::endl;
     // Create the parallel mesh
     mfem::ParMesh mesh(MPI_COMM_WORLD, serial_mesh);
+    std::cout << "DEBUG: ParMesh created" << std::endl;
 
     int myid = mesh.GetMyRank();
 
@@ -116,9 +120,9 @@ void forward() {
 
     // Create the parallel finite element space
     mfem::ParFiniteElementSpace fespace(&mesh, &fec);
-
+    int size = fespace.GlobalTrueVSize();
     if (myid == 0) {
-        std::cout << "Number of DoFs: " << fespace.GlobalTrueVSize() << std::endl;
+        std::cout << "Number of DoFs: " << size << std::endl;
     }
 
     // Determine the list of essential boundary dofs
@@ -239,13 +243,61 @@ void forward() {
 
     e_yx.real().SaveAsOne("e_yx_re.gf");
     e_yx.imag().SaveAsOne("e_yx_im.gf");
+
+    // Send the solution by socket to a GLVis server.
+    if (visualization) {
+        char vishost[] = "localhost";
+        int visport = 19916;
+        {
+            mfem::socketstream sol_sock_re(vishost, visport);
+            sol_sock_re << "parallel " << num_procs << " " << myid << "\n";
+            sol_sock_re.precision(8);
+            sol_sock_re << "solution\n" << mesh << e_xy.real() << "window_title 'Solution real part'" << std::flush;
+            //MPI_Barrier(MPI_COMM_WORLD); // try to prevent streams from mixing
+        }
+
+        //{
+        //    mfem::socketstream sol_sock_im(vishost, visport);
+        //    sol_sock_im << "parallel " << num_procs << " " << myid << "\n";
+        //    sol_sock_im.precision(8);
+        //    sol_sock_im << "solution\n" << mesh << e_xy.imag() << "window_title 'Solution imag part'" << std::flush;
+        //    //MPI_Barrier(MPI_COMM_WORLD); // try to prevent streams from mixing
+        //}
+    }
 }
 
-int main(int argc, char **argv) {
-    mfem::Mpi::Init(&argc, &argv);
+int main(int argc, char *argv[]) {
+    std::cout << "DEBUG: Entering main" << std::endl;
+    mfem::Mpi::Init();
+    std::cout << "DEBUG: MPI Initialized" << std::endl;
+    int num_procs = mfem::Mpi::WorldSize();
+    int myid = mfem::Mpi::WorldRank();
+    std::cout << "DEBUG: Rank " << myid << "/" << num_procs << std::endl;
+    
     mfem::Hypre::Init();
+    std::cout << "DEBUG: Hypre Initialized" << std::endl;
+    std::cout << "DEBUG: sizeof(HYPRE_Int) = " << sizeof(HYPRE_Int) << std::endl;
+    std::cout << "DEBUG: sizeof(HYPRE_BigInt) = " << sizeof(HYPRE_BigInt) << std::endl;
 
-    forward();
+    bool visualization = true;
+    mfem::OptionsParser args(argc, argv);
+    args.AddOption(&visualization, "-vis", "--visualization", "-no-vis", "--no-visualization",
+                   "Enable or disable GLVis visualization.");
+
+    args.Parse();
+    if (!args.Good()) {
+        if (myid == 0) {
+            args.PrintUsage(std::cout);
+        }
+        return 1;
+    }
+    if (myid == 0) {
+        args.PrintOptions(std::cout);
+    }
+
+    std::cout << "DEBUG: Calling forward()" << std::endl;
+    forward(visualization, num_procs);
+    std::cout << "DEBUG: Returned from forward()" << std::endl;
 
     return 0;
 }
