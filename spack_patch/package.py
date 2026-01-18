@@ -191,9 +191,9 @@ class Mfem(Package, CudaPackage, ROCmPackage):
     variant("legacy-openmp", default=False, description="Enable legacy OpenMP parallelism")
     # Note: "+cuda" and "cuda_arch" variants are added by the CudaPackage
     # Note: "+rocm" and "amdgpu_target" variants are added by the ROCmPackage
-    variant("occa", default=True, description="Enable OCCA backend")
+    variant("occa", default=False, description="Enable OCCA backend")
     variant("raja", default=False, description="Enable RAJA backend")
-    variant("libceed", default=False, description="Enable libCEED backend")
+    variant("libceed", default=True, description="Enable libCEED backend")
     variant("umpire", default=False, description="Enable Umpire support")
     variant("amgx", default=False, description="Enable NVIDIA AmgX solver support")
 
@@ -211,7 +211,7 @@ class Mfem(Package, CudaPackage, ROCmPackage):
     variant("suite-sparse", default=True, description="Enable serial, sparse direct solvers")
     variant("petsc", default=True, description="Enable PETSc solvers, preconditioners, etc.")
     variant("mumps", default=True, description="Enable MUMPS solver.")
-    variant("mklpardiso", default=True, description="Enable MKL Double Pardiso solver.")
+    variant("mklpardiso", default=False, description="Enable MKL Double Pardiso solver.")
     variant("mklcpardiso", default=False, description="Enable MKL Complex Pardiso solver.")
     variant("slepc", default=False, description="Enable SLEPc integration")
     variant("sundials", default=False, description="Enable Sundials time integrators")
@@ -459,7 +459,7 @@ class Mfem(Package, CudaPackage, ROCmPackage):
     conflicts("+strumpack ^strumpack+cuda", when="~cuda")
 
     depends_on("occa@1.0.8:", when="@:4.1+occa")
-    depends_on("occa@1.1.0", when="@4.2.0:+occa")
+    depends_on("occa@1.2.0", when="@4.2.0:+occa")
     depends_on("occa+cuda", when="+occa+cuda")
     # TODO: propagate "+rocm" variant to occa when it is supported
 

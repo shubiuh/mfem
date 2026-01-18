@@ -1,0 +1,28 @@
+spack:
+  specs:
+  - cmake
+  - dealii@master~adol-c~arborx~arpack~assimp~cgal+complex~cuda~doc~examples~ginkgo+gmsh+gsl~hdf5~int64~ipo+kokkos+metis+mpi+muparser~nanoflann~netcdf~opencascade~optflags+p4est+petsc+platform-introspection+python+scalapack+simplex+slepc~sundials~symengine+taskflow~threads~trilinos~vtk build_type=Release
+  - python@:3.10.99
+  - mumps+mpi+metis+parmetis
+  - mpich@:4.1.99 datatype-engine=dataloop
+  - petsc+hypre+mumps~hdf5
+  - slepc
+  - taskflow@master
+  - mfem@master+examples+miniapps
+  packages:
+    all:
+      target:
+      - x86_64
+      providers:
+        mpi: [mpich]
+  config:
+    install_tree:
+      root: /opt/software
+  view: 
+    mfem:
+      root: /opt/mfem-view 
+      link_type: copy
+  develop:
+    mfem:
+      path: /code
+      spec: mfem@master+examples+miniapps
