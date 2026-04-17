@@ -483,3 +483,6 @@ TAGS
 .vs
 obj
 *vcxproj.user
+
+cmbuild_par/
+cmbuild_ser/
