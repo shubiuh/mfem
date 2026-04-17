@@ -1,4 +1,4 @@
-# Copyright (c) 2010-2025, Lawrence Livermore National Security, LLC. Produced
+# Copyright (c) 2010-2026, Lawrence Livermore National Security, LLC. Produced
 # at the Lawrence Livermore National Laboratory. All Rights reserved. See files
 # LICENSE and NOTICE for details. LLNL-CODE-806117.
 #
@@ -20,13 +20,13 @@ endif()
 
 if(NOT MKL_LIBRARY_DIR)
   message(WARNING "Using default MKL library path. Double check the variable MKL_LIBRARY_DIR")
-  set(MKL_LIBRARY_DIR "lib")
+  set(MKL_LIBRARY_DIR "mkl/latest/lib")
 endif()
 
 include(MfemCmakeUtilities)
 mfem_find_package(MKL_CPARDISO MKL_CPARDISO
-    MKL_CPARDISO_DIR "include" mkl_cluster_sparse_solver.h ${MKL_LIBRARY_DIR} mkl_core
+    MKL_CPARDISO_DIR "mkl/latest/include" mkl_cluster_sparse_solver.h ${MKL_LIBRARY_DIR} mkl_core
   "Paths to headers required by MKL CPardiso." "Libraries required by MKL CPARDISO."
-  ADD_COMPONENT MKL_LP64 "include" "" ${MKL_LIBRARY_DIR} mkl_intel_lp64
-  ADD_COMPONENT MKL_SEQUENTIAL "include" "" ${MKL_LIBRARY_DIR} mkl_sequential
-  ADD_COMPONENT MKL_MPI_WRAPPER "include" "" ${MKL_LIBRARY_DIR} ${MKL_MPI_WRAPPER_LIB})
+  ADD_COMPONENT MKL_LP64 "mkl/latest/include" "" ${MKL_LIBRARY_DIR} mkl_intel_lp64
+  ADD_COMPONENT MKL_SEQUENTIAL "mkl/latest/include" "" ${MKL_LIBRARY_DIR} mkl_sequential
+  ADD_COMPONENT MKL_MPI_WRAPPER "mkl/latest/include" "" ${MKL_LIBRARY_DIR} ${MKL_MPI_WRAPPER_LIB})

@@ -1,4 +1,4 @@
-# Copyright (c) 2010-2025, Lawrence Livermore National Security, LLC. Produced
+# Copyright (c) 2010-2026, Lawrence Livermore National Security, LLC. Produced
 # at the Lawrence Livermore National Laboratory. All Rights reserved. See files
 # LICENSE and NOTICE for details. LLNL-CODE-806117.
 #
@@ -146,6 +146,12 @@ endif()
 if (MFEM_USE_MKL_PARDISO)
   list(APPEND SRCS pardiso.cpp)
   list(APPEND HDRS pardiso.hpp)
+endif()
+
+# cudss solver
+if (MFEM_USE_CUDSS)
+  list(APPEND SRCS cudss.cpp)
+  list(APPEND HDRS cudss.hpp)
 endif()
 
 convert_filenames_to_full_paths(SRCS)

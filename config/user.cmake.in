@@ -33,10 +33,10 @@ option(MFEM_USE_OPENMP "Enable the OpenMP backend" OFF)
 option(MFEM_USE_LEGACY_OPENMP "Enable legacy OpenMP usage" OFF)
 option(MFEM_USE_MEMALLOC "Enable the internal MEMALLOC option." ON)
 option(MFEM_USE_SUNDIALS "Enable SUNDIALS usage" OFF)
-option(MFEM_USE_SUITESPARSE "Enable SuiteSparse usage" ON)
+option(MFEM_USE_SUITESPARSE "Enable SuiteSparse usage" OFF)
 option(MFEM_USE_SUPERLU "Enable SuperLU_DIST usage" OFF)
 option(MFEM_USE_SUPERLU5 "Use the old SuperLU_DIST 5.1 version" OFF)
-option(MFEM_USE_MUMPS "Enable MUMPS usage" ON)
+option(MFEM_USE_MUMPS "Enable MUMPS usage" OFF)
 option(MFEM_USE_STRUMPACK "Enable STRUMPACK usage" OFF)
 option(MFEM_USE_GINKGO "Enable Ginkgo usage" OFF)
 option(MFEM_USE_AMGX "Enable AmgX usage" OFF)
@@ -52,7 +52,7 @@ option(MFEM_USE_SIDRE "Enable Axom/Sidre usage" OFF)
 option(MFEM_USE_FMS "Enable FMS usage" OFF)
 option(MFEM_USE_CONDUIT "Enable Conduit usage" OFF)
 option(MFEM_USE_PUMI "Enable PUMI" OFF)
-option(MFEM_USE_HIOP "Enable HiOp" ON)
+option(MFEM_USE_HIOP "Enable HiOp" OFF)
 option(MFEM_USE_CUDA "Enable CUDA" OFF)
 option(MFEM_USE_HIP "Enable HIP" OFF)
 option(MFEM_USE_OCCA "Enable OCCA" OFF)
@@ -91,9 +91,10 @@ option(MFEM_ENABLE_BENCHMARKS "Build all of the benchmarks" OFF)
 
 # Allow a user to specify fetching of certain third-party libraries instead of
 # searching for existing installations.
-option(FETCH_TPLS "Enable fetching of all supported third-party libraries" OFF)
-option(HYPRE_FETCH "Enable fetching of hypre" OFF)
-option(METIS_FETCH "Enable fetching of METIS" OFF)
+option(MFEM_FETCH_TPLS "Enable fetching of all supported third-party libraries" OFF)
+option(MFEM_FETCH_GSLIB "Enable fetching of GSLIB" OFF)
+option(MFEM_FETCH_HYPRE "Enable fetching of hypre" OFF)
+option(MFEM_FETCH_METIS "Enable fetching of METIS" OFF)
 
 # Setting CXX/MPICXX on the command line or in user.cmake will overwrite the
 # autodetected C++ compiler.
@@ -112,10 +113,8 @@ set(MFEM_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 # headers and library. If these fail, then standard cmake search is performed.
 # Note: if the variables are already in the cache, they are not overwritten.
 
-set(HYPRE_DIR "/home/pymfem/opt/spack/opt/spack/linux-skylake/hypre-2.33.0-acvrhlh7jeso2abfj62x7zegzcf4aani" CACHE PATH
+set(HYPRE_DIR "${MFEM_DIR}/../hypre/hypre" CACHE PATH
     "Path to the hypre library.")
-# set(HYPRE_DIR "/home/pymfem/opt/spack/opt/spack/linux-skylake/hypre-2.33.0-ehireesjjq26i43hocqattg6pvckpghu" CACHE PATH
-#     "Path to the hypre library.")
 # If hypre was compiled to depend on BLAS and LAPACK:
 # set(HYPRE_REQUIRED_PACKAGES "BLAS" "LAPACK" CACHE STRING
 #     "Packages that HYPRE depends on.")
