@@ -23,10 +23,20 @@ if(NOT MKL_LIBRARY_DIR)
   set(MKL_LIBRARY_DIR "lib")
 endif()
 
+# Pre-cache the include dir to MKL_CPARDISO_DIR/include so the find_path probe
+# inside mfem_find_component uses the local oneMKL headers.
+if(MKL_CPARDISO_DIR AND NOT MKL_CPARDISO_INCLUDE_DIR)
+  set(MKL_CPARDISO_INCLUDE_DIR "${MKL_CPARDISO_DIR}/include" CACHE PATH
+    "MKL CPardiso include directory" FORCE)
+  message(STATUS "MKL CPardiso: pre-cached include dir at ${MKL_CPARDISO_DIR}/include")
+endif()
+
 include(MfemCmakeUtilities)
+# LibSuffixes must be a relative PATH_SUFFIX appended to HINTS (MKL_CPARDISO_DIR).
+# Use "lib" so CMake searches MKL_CPARDISO_DIR/lib/ for all MKL shared libraries.
 mfem_find_package(MKL_CPARDISO MKL_CPARDISO
-    MKL_CPARDISO_DIR "include" mkl_cluster_sparse_solver.h ${MKL_LIBRARY_DIR} mkl_core
+    MKL_CPARDISO_DIR "include" mkl_cluster_sparse_solver.h "lib" mkl_core
   "Paths to headers required by MKL CPardiso." "Libraries required by MKL CPARDISO."
-  ADD_COMPONENT MKL_LP64 "include" "" ${MKL_LIBRARY_DIR} mkl_intel_lp64
-  ADD_COMPONENT MKL_SEQUENTIAL "include" "" ${MKL_LIBRARY_DIR} mkl_sequential
-  ADD_COMPONENT MKL_MPI_WRAPPER "include" "" ${MKL_LIBRARY_DIR} ${MKL_MPI_WRAPPER_LIB})
+  ADD_COMPONENT MKL_LP64 "include" "" "lib" mkl_gf_lp64
+  ADD_COMPONENT MKL_SEQUENTIAL "include" "" "lib" mkl_sequential
+  ADD_COMPONENT MKL_MPI_WRAPPER "include" "" "lib" ${MKL_MPI_WRAPPER_LIB})
