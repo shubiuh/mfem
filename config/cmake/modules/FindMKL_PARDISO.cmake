@@ -16,7 +16,11 @@
 
 if(NOT MKL_LIBRARY_DIR)
   message(WARNING "Using default MKL library path. Double check the variable MKL_LIBRARY_DIR")
-  set(MKL_LIBRARY_DIR "lib/intel64")
+  if(WIN32)
+    set(MKL_LIBRARY_DIR "lib/intel64")
+  elseif(UNIX)
+    set(MKL_LIBRARY_DIR "lib")
+  endif()
   message(STATUS "MKL_LIBRARY_DIR set to ${MKL_LIBRARY_DIR}")
 else()
   message(STATUS "MKL_LIBRARY_DIR set to ${MKL_LIBRARY_DIR}")
@@ -28,6 +32,34 @@ if(NOT MKL_COMPILER_DIR)
   message(STATUS "MKL_COMPILER_DIR set to ${MKL_COMPILER_DIR}")
 else()
   message(STATUS "MKL_COMPILER_DIR set to ${MKL_COMPILER_DIR}")
+endif()
+
+# Pre-cache the gomp library path so mfem_find_component's NO_DEFAULT_PATH
+# find_library probe can locate it. Use gcc explicitly (CMAKE_C_COMPILER may
+# be mpicc which does not support -print-file-name).
+if(NOT MKL_PARDISO_MKL_OMP_RUNTIME_LIBRARY)
+  find_program(_gcc_exe NAMES gcc)
+  if(_gcc_exe)
+    execute_process(
+      COMMAND ${_gcc_exe} -print-file-name=libgomp.so
+      OUTPUT_VARIABLE _mkl_gomp_path
+      OUTPUT_STRIP_TRAILING_WHITESPACE
+      ERROR_QUIET)
+    if(_mkl_gomp_path AND NOT _mkl_gomp_path STREQUAL "libgomp.so")
+      set(MKL_PARDISO_MKL_OMP_RUNTIME_LIBRARY "${_mkl_gomp_path}" CACHE FILEPATH
+        "gomp library for MKL Pardiso OMP runtime" FORCE)
+      message(STATUS "MKL Pardiso: pre-cached gomp at ${_mkl_gomp_path}")
+    endif()
+  endif()
+endif()
+
+# Pre-cache the include dir to MKL_PARDISO_DIR/include so the find_path probe
+# inside mfem_find_component uses the local oneMKL headers and not a stale
+# system path that resolves to include/mkl instead.
+if(MKL_PARDISO_DIR AND NOT MKL_PARDISO_INCLUDE_DIR)
+  set(MKL_PARDISO_INCLUDE_DIR "${MKL_PARDISO_DIR}/include" CACHE PATH
+    "MKL Pardiso include directory" FORCE)
+  message(STATUS "MKL Pardiso: pre-cached include dir at ${MKL_PARDISO_DIR}/include")
 endif()
 
 if(WIN32)
@@ -60,16 +92,21 @@ if(WIN32) # Windows
     ADD_COMPONENT MKL_OMP_RUNTIME "include" "" ${MKL_COMPILER_DIR} libiomp5md
   )
 else() # Linux, macOS, etc.
+  # LibSuffixes must be a relative PATH_SUFFIX appended to HINTS (MKL_PARDISO_DIR).
+  # Use "lib" so CMake searches MKL_PARDISO_DIR/lib/ for MKL shared libraries.
+  # gomp/pthread/m/dl are system libs: use "" suffix so the fallback system
+  # search finds them (or the pre-cached path is used directly).
   mfem_find_package(MKL_PARDISO MKL_PARDISO
-    MKL_PARDISO_DIR "include" mkl_pardiso.h ${MKL_LIBRARY_DIR} mkl_core
+    MKL_PARDISO_DIR "include" mkl_pardiso.h "lib" mkl_core
     "Paths to headers required by MKL Pardiso." "Libraries required by MKL PARDISO."
-    ADD_COMPONENT MKL_LP64 "include" "" ${MKL_LIBRARY_DIR} mkl_intel_lp64
-    # ADD_COMPONENT MKL_SEQUENTIAL "include" "" ${MKL_LIBRARY_DIR} mkl_sequential
-    ADD_COMPONENT MKL_OMP "include" "" ${MKL_LIBRARY_DIR} mkl_intel_thread
-    # OpenMP runtime
-    ADD_COMPONENT MKL_OMP_RUNTIME "include" "" ${MKL_COMPILER_DIR} iomp5
-    ADD_COMPONENT MKL_PTHREAD "include" "" ${MKL_LIBRARY_DIR} ${PLATFORM_PTHREAD}
-    ADD_COMPONENT MKL_M "include" "" ${MKL_LIBRARY_DIR} ${PLATFORM_M}
-    ADD_COMPONENT MKL_DL "include" "" ${MKL_LIBRARY_DIR} ${PLATFORM_DL}
+    ADD_COMPONENT MKL_LP64 "include" "" "lib" mkl_gf_lp64
+    ADD_COMPONENT MKL_OMP "include" "" "lib" mkl_gnu_thread
+    # OpenMP runtime: gomp lives in the GCC lib dir, pre-cached above.
+    ADD_COMPONENT MKL_OMP_RUNTIME "include" "" "" gomp
+    ADD_COMPONENT MKL_PTHREAD "include" "" "" ${PLATFORM_PTHREAD}
+    ADD_COMPONENT MKL_M "include" "" "" ${PLATFORM_M}
+    ADD_COMPONENT MKL_DL "include" "" "" ${PLATFORM_DL}
   )
+  set(MKL_PARDISO_INCLUDE_DIR ${MKL_PARDISO_DIR}/include)
+  set(MKL_PARDISO_INCLUDE_DIRS ${MKL_PARDISO_INCLUDE_DIR})
 endif()
