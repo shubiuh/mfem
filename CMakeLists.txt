@@ -417,8 +417,20 @@ endif()
 # MUMPS can only be enabled in parallel
 if (MFEM_USE_MUMPS)
   if (MFEM_USE_MPI)
-    find_package(MUMPS REQUIRED mumps_common pord)
+    find_package(MUMPS REQUIRED mumps_common pord OPTIONAL_COMPONENTS zmumps)
     set(MFEM_MUMPS_VERSION ${MUMPS_VERSION})
+    # Enable native complex MUMPS (ZMUMPS/CMUMPS) only when the complex
+    # precision library was found alongside the real one.
+    if (MUMPS_zmumps_LIBRARY)
+      set(MFEM_USE_COMPLEX_MUMPS ON CACHE BOOL
+          "Enable ComplexMUMPSSolver (requires libzmumps/libcmumps)." FORCE)
+      message(STATUS "MUMPS complex library found: ${MUMPS_zmumps_LIBRARY}")
+    else()
+      set(MFEM_USE_COMPLEX_MUMPS OFF CACHE BOOL
+          "Enable ComplexMUMPSSolver (requires libzmumps/libcmumps)." FORCE)
+      message(STATUS "MUMPS complex library (zmumps/cmumps) not found -- "
+                     "ComplexMUMPSSolver will not be available.")
+    endif()
   else()
     message(FATAL_ERROR " *** MUMPS requires that MPI be enabled.")
   endif()

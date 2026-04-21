@@ -21,9 +21,15 @@ include(MfemCmakeUtilities)
 if (MFEM_USE_DOUBLE)
   set(_mumps_header dmumps_c.h)
   set(_mumps_lib dmumps)
+  # Complex counterpart (double precision -> ZMUMPS)
+  set(_mumps_complex_header zmumps_c.h)
+  set(_mumps_complex_lib zmumps)
 elseif(MFEM_USE_SINGLE)
   set(_mumps_header smumps_c.h)
   set(_mumps_lib smumps)
+  # Complex counterpart (single precision -> CMUMPS)
+  set(_mumps_complex_header cmumps_c.h)
+  set(_mumps_complex_lib cmumps)
 endif()
 
 mfem_find_package(MUMPS MUMPS MUMPS_DIR
@@ -31,7 +37,8 @@ mfem_find_package(MUMPS MUMPS MUMPS_DIR
   "Paths to headers required by MUMPS."
   "Libraries required by MUMPS."
   ADD_COMPONENT mumps_common "include" ${_mumps_header} "lib" mumps_common
-  ADD_COMPONENT pord "include" ${_mumps_header} "lib" pord)
+  ADD_COMPONENT pord         "include" ${_mumps_header} "lib" pord
+  ADD_COMPONENT zmumps       "include" ${_mumps_complex_header} "lib" ${_mumps_complex_lib})
 
 if (MUMPS_FOUND AND (NOT MUMPS_VERSION))
   try_run(MUMPS_VERSION_RUN_RESULT MUMPS_VERSION_COMPILE_RESULT
