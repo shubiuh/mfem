@@ -185,16 +185,75 @@ public:
    void SetReorderingReuse(bool reuse);
 
    /**
-    * @brief Set the tolerance for activating block low-rank (BLR) approximate
-    * factorization
+    * @brief Set the BLR (Block Low-Rank) factorization mode (ICNTL(35)).
     *
-    * @param tol Tolerance
+    * 0 = standard (no BLR, default), 1 = auto, 2 = BLR in factorization and
+    * solution, 3 = BLR in factorization only.
     *
     * @note This method has to be called before SetOperator
     */
 #if MFEM_MUMPS_VERSION >= 510
+   void SetBLRMode(int mode);
+
+   /**
+    * @brief Set the tolerance for block low-rank (BLR) approximate
+    * factorization (CNTL(7)).
+    *
+    * @param tol Tolerance; only used when SetBLRMode > 0.
+    *
+    * @note This method has to be called before SetOperator
+    */
    void SetBLRTol(double tol);
+
+   /**
+    * @brief Set the BLR factorization variant (ICNTL(36)).
+    *
+    * 0 = UFSC (default), 1 = UCFS / low-rank update accumulation.
+    *
+    * @note This method has to be called before SetOperator
+    */
+   void SetBLRCompressionType(int type);
 #endif
+
+#if MFEM_MUMPS_VERSION >= 550
+   /**
+    * @brief Enable compression of BLR contribution blocks (ICNTL(37)).
+    *
+    * 0 = not compressed (default), 1 = compressed.
+    *
+    * @note This method has to be called before SetOperator
+    */
+   void SetBLRCBCompression(int mode);
+#endif
+
+   /**
+    * @brief Set MUMPS workspace relaxation percentage above its estimate
+    * (ICNTL(14)).
+    *
+    * Default is 20.  Increase (up to ~200) if MUMPS aborts with error -8/-9.
+    */
+   void SetMemRelaxation(int pct);
+
+   /**
+    * @brief Set number of OpenMP threads per MPI rank (ICNTL(16)).
+    *
+    * 0 (default) lets the OS / OpenMP runtime decide.
+    */
+   void SetNumThreads(int n);
+
+   /**
+    * @brief Set numerical pivoting threshold (CNTL(1)).
+    *
+    * Pass a negative value to keep the MUMPS default (0.01 for unsymmetric).
+    */
+   void SetPivotThreshold(double tol);
+
+   /**
+    * @brief Enable out-of-core factorization (ICNTL(22)).
+    *
+    * 0 = in-core (default), 1 = out-of-core.
+    */
+   void SetOutOfCore(int mode);
 
    // Destructor
    ~MUMPSSolver();
@@ -223,9 +282,18 @@ private:
    bool reorder_reuse;
 
 #if MFEM_MUMPS_VERSION >= 510
-   // Parameter controlling the Block Low-Rank (BLR) feature in MUMPS
-   double blr_tol;
+   int    blr_mode;             ///< ICNTL(35): 0=off, 1=auto, 2=fact+sol, 3=fact only
+   double blr_tol;              ///< CNTL(7):  BLR approximation tolerance
+   int    blr_compression_type; ///< ICNTL(36): 0=UFSC, 1=UCFS/LUA
 #endif
+#if MFEM_MUMPS_VERSION >= 550
+   int    blr_cb_compression;   ///< ICNTL(37): 0=CB not compressed, 1=CB compressed
+#endif
+
+   int    mem_relaxation;  ///< ICNTL(14): workspace % above estimate. Default 20.
+   int    num_threads;     ///< ICNTL(16): OpenMP threads per rank. Default 0.
+   double pivot_threshold; ///< CNTL(1):  pivot threshold (<0 = MUMPS default).
+   int    out_of_core;     ///< ICNTL(22): 0=in-core, 1=out-of-core.
 
    // Local row offsets
    int row_start;
@@ -269,6 +337,9 @@ private:
 
 
 #ifdef MFEM_USE_COMPLEX_MUMPS
+#if MFEM_MUMPS_VERSION < 550
+#error ComplexMUMPSSolver requires MUMPS >= 5.5.0
+#endif
 // ---------------------------------------------------------------------------
 // Portable helpers for native complex MUMPS (ZMUMPS/CMUMPS).
 // MUMPS defines ZMUMPS_COMPLEX as either a struct {double r, i;} or as the
@@ -349,6 +420,13 @@ public:
    /// b and x must each have size 2*N where N is the global problem size.
    void Mult(const Vector &b, Vector &x) const override;
 
+   /// @brief Solve multiple RHS in a single MUMPS solve call.
+   ///
+   /// Each element of @a X and @a Y is a 2*N block vector with layout
+   /// [real ; imag].  All solves share the same factorization.
+   void ArrayMult(const Array<const Vector *> &X,
+                  Array<Vector *> &Y) const override;
+
    /// Set MUMPS diagnostic verbosity (0 = silent, 2 = normal, 4 = full).
    /// Must be called before SetOperator.
    void SetPrintLevel(int print_lvl);
@@ -360,11 +438,50 @@ public:
    /// SetOperator.
    void SetReorderingStrategy(ReorderingStrategy method);
 
-#if MFEM_MUMPS_VERSION >= 510
-   /// Activate Block Low-Rank (BLR) approximate factorization.
-   /// Set @a tol > 0 to enable; must be called before SetOperator.
+   /// Control the BLR (Block Low-Rank) factorization mode (ICNTL(35)).
+   /// 0 = standard multifrontal, no BLR (default).
+   /// 1 = BLR enabled; software selects factorization/solution variant.
+   /// 2 = BLR during both factorization and solution phases (best memory gain).
+   /// 3 = BLR during factorization only; solution is full-rank.
+   /// Must be set to 1, 2, or 3 *before* the first SetOperator call so that
+   /// the BLR preprocessing is performed during the analysis phase.
+   void SetBLRMode(int mode);
+
+   /// Set BLR approximation tolerance (CNTL(7)).  Only used when BLR is
+   /// active (SetBLRMode > 0).  Smaller values give higher accuracy but
+   /// less compression.  Default: 0.0 (MUMPS picks its own default).
    void SetBLRTol(double tol);
-#endif
+
+   /// Set BLR factorization variant (ICNTL(36)); only effective when BLR is
+   /// active.  0 = UFSC (default), 1 = UCFS / low-rank update accumulation.
+   void SetBLRCompressionType(int type);
+
+   /// Enable compression of BLR contribution blocks (ICNTL(37)).  Only
+   /// effective when BLR is active.  0 = not compressed (default),
+   /// 1 = compressed (reduces memory; recommended together with ICNTL(36)=1).
+   void SetBLRCBCompression(int mode);
+
+   /// Set MUMPS workspace percentage above its internal estimate (ICNTL(14)).
+   /// Default is 20.  Increase (up to ~200) if MUMPS aborts with error -8/-9.
+   void SetMemRelaxation(int pct);
+
+   /// Set number of OpenMP threads per MPI rank (ICNTL(16)).
+   /// 0 (default) lets the OS / OpenMP runtime decide.
+   void SetNumThreads(int n);
+
+   /// Set numerical pivoting threshold (CNTL(1)).
+   /// Pass a negative value to keep the MUMPS default (0.01 for unsymmetric).
+   void SetPivotThreshold(double tol);
+
+   /// Enable out-of-core factorization (ICNTL(22)).
+   /// 0 = in-core (default), 1 = out-of-core.
+   void SetOutOfCore(int mode);
+
+   /// When true, the symbolic analysis (phase 1) from the first SetOperator
+   /// call is reused in subsequent calls (only the numeric factorization is
+   /// repeated).  Useful for AMR loops where the sparsity pattern changes
+   /// little between refinements.  Default is false.
+   void SetReorderingReuse(bool reuse);
 
 private:
    // ---- MPI state -------------------------------------------------------
@@ -375,9 +492,16 @@ private:
    int print_level;
    MatType mat_type;
    ReorderingStrategy reorder_method;
-#if MFEM_MUMPS_VERSION >= 510
-   double blr_tol;
-#endif
+   int  mem_relaxation;       ///< ICNTL(14): workspace % above estimate.
+   int  num_threads;          ///< ICNTL(16): OpenMP threads per rank.
+   double pivot_threshold;    ///< CNTL(1):  pivot threshold (<0 = MUMPS default).
+   int  out_of_core;          ///< ICNTL(22): 0=in-core, 1=out-of-core.
+   bool reorder_reuse;        ///< Skip analysis phase after first factorization.
+   bool analysis_done_;       ///< True after the first successful phase 1.
+   int    blr_mode;             ///< ICNTL(35): 0=off, 1=auto, 2=fact+sol, 3=fact only
+   double blr_tol;              ///< CNTL(7):  BLR approximation tolerance
+   int    blr_compression_type; ///< ICNTL(36): 0=UFSC, 1=UCFS/LUA
+   int    blr_cb_compression;   ///< ICNTL(37): 0=CB not compressed, 1=CB compressed
 
    // ---- Matrix partition info -------------------------------------------
    int row_start; ///< First global row on this rank (0-indexed).
@@ -399,22 +523,18 @@ private:
    // ---- Helpers ---------------------------------------------------------
    void Init(MPI_Comm comm_);
    void SetParameters();
+   void InitRhsSol(int nrhs) const; ///< Reallocate RHS/sol bufs when nrhs changes.
 
-#if MFEM_MUMPS_VERSION >= 530
-   // Distributed RHS / solution (MUMPS >= 5.3.0)
+   // Distributed RHS / solution
    Array<int> row_starts;         ///< First row index on each rank.
    int        lrhs_loc, lsol_loc; ///< Sizes of local RHS / solution arrays.
    int *irhs_loc, *isol_loc;      ///< Global index maps.
    mutable ComplexMumpsScalar *rhs_loc_buf, *sol_loc_buf;
+   mutable int nrhs_cur_;         ///< nrhs for which rhs/sol bufs are allocated.
 
    int  GetRowRank(int i, const Array<int> &row_starts_) const;
    void RedistributeSol(const int *rmap, const ComplexMumpsScalar *x,
                         int lx_loc, Vector &yr, Vector &yi) const;
-#else
-   // Centralized RHS / solution (MUMPS < 5.3.0)
-   int *recv_counts_arr, *displs_arr;
-   mutable ComplexMumpsScalar *rhs_glob_buf;
-#endif
 }; // mfem::ComplexMUMPSSolver
 
 #endif // MFEM_USE_COMPLEX_MUMPS
