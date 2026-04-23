@@ -20,6 +20,7 @@
 #include "mkl_cluster_sparse_solver.h"
 #include "operator.hpp"
 #include "densemat.hpp"
+#include "complex_operator.hpp"
 
 namespace mfem
 {
@@ -143,6 +144,129 @@ private:
    mutable int idum;
    mutable real_t ddum;
 };
+/// MKL complex scalar type (single or double precision).
+#ifdef MFEM_USE_SINGLE
+using CPardisoComplexScalar = MKL_Complex8;
+#else
+using CPardisoComplexScalar = MKL_Complex16;
+#endif
+
+/**
+ * @brief MKL Cluster Sparse Solver for complex-valued distributed systems.
+ *
+ * Solves  (A_r + i A_i)(x_r + i x_i) = (b_r + i b_i)  where the operator is
+ * provided as a ComplexHypreParMatrix.  Real and imaginary CSR blocks are
+ * merged into a single complex CSR and passed natively to cluster_sparse_solver
+ * using a complex mtype (no real 2x2 block expansion).
+ *
+ * Supported matrix types:
+ *   - COMPLEX_NONSYMMETRIC (default): full matrix assembled.
+ *   - COMPLEX_SYMMETRIC: lower triangular part only (A = A^T).
+ *   - COMPLEX_HERMITIAN_POSITIVE_DEFINITE: lower triangular (A = A^H, SPD).
+ *   - COMPLEX_HERMITIAN_INDEFINITE: lower triangular (A = A^H, indefinite).
+ */
+class ComplexCPardisoSolver : public Solver
+{
+public:
+   enum MatType
+   {
+      COMPLEX_HERMITIAN_POSITIVE_DEFINITE = 4,  ///< Complex Hermitian positive definite
+      COMPLEX_HERMITIAN_INDEFINITE        = -4, ///< Complex Hermitian indefinite
+      COMPLEX_SYMMETRIC                   = 6,  ///< Complex symmetric (A = A^T)
+      COMPLEX_NONSYMMETRIC                = 13  ///< Complex nonsymmetric (default)
+   };
+
+   /**
+    * @brief Construct a new ComplexCPardisoSolver.
+    *
+    * @param comm  MPI communicator
+    * @param nrhs_ Number of right-hand sides (default 1)
+    */
+   ComplexCPardisoSolver(MPI_Comm comm, int nrhs_ = 1);
+
+   /**
+    * @brief Set the operator and perform symbolic + numeric factorization.
+    *
+    * @a op must be of type ComplexHypreParMatrix.
+    */
+   void SetOperator(const Operator &op) override;
+
+   /// Overload accepting a ComplexHypreParMatrix directly.
+   void SetOperator(const ComplexHypreParMatrix &op);
+
+   /**
+    * @brief Solve  A (x_r + i x_i) = (b_r + i b_i)  with explicit real/imag
+    *        vectors.  Each vector has local size m_loc.
+    */
+   void Mult(const Vector &b_r, const Vector &b_i,
+             Vector &x_r, Vector &x_i) const;
+
+   /**
+    * @brief Solve using combined [real ; imag] block vectors of size 2*m_loc.
+    *
+    * Layout: b = [b_r_0 ... b_r_{m-1}  b_i_0 ... b_i_{m-1}].
+    */
+   void Mult(const Vector &b, Vector &x) const override;
+
+   /**
+    * @brief Set the print level for MKL CPardiso.
+    *
+    * @param print_lvl  Print level (0 = silent, 1 = statistics).
+    */
+   void SetPrintLevel(int print_lvl);
+
+   /**
+    * @brief Set the number of right-hand sides.
+    *
+    * @param nrhs_ Number of right-hand sides.
+    */
+   void setRHSCount(int nrhs_);
+
+   /**
+    * @brief Set the matrix type.
+    *
+    * Must be called before SetOperator.
+    *
+    * @param mat_type  One of the ComplexCPardisoSolver::MatType values.
+    */
+   void SetMatrixType(MatType mat_type);
+
+   ~ComplexCPardisoSolver();
+
+private:
+   MPI_Fint comm_;
+
+   /// Global number of rows.
+   int m;
+
+   /// First row index of the global matrix on this MPI rank (0-based).
+   int first_row;
+
+   /// Number of nonzeros in the local merged complex CSR.
+   int nnz_loc;
+
+   /// Number of local rows.
+   int m_loc;
+
+   /// CSR data for the local complex matrix.
+   int                    *csr_rowptr           = nullptr;
+   CPardisoComplexScalar  *reordered_csr_nzval  = nullptr;
+   int                    *reordered_csr_colind  = nullptr;
+
+   // Internal solver memory pointer (64 entries, see MKL docs).
+   mutable void *pt[64] = {0};
+
+   // Solver control parameters.
+   mutable int iparm[64] = {0};
+   mutable int maxfct, mnum, msglvl, phase, error;
+   int mtype;
+   int nrhs;
+
+   // Dummy variables used for unused b/x arguments during analysis/factorization.
+   mutable int                   idum;
+   mutable CPardisoComplexScalar ddum_cpx;
+};
+
 } // namespace mfem
 
 #endif
