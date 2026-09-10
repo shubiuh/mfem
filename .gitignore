@@ -34,6 +34,13 @@ CMakeFiles/
 # Typical build directory
 /build/
 
+# Locally built third-party dependencies.  Their build provenance is recorded
+# in third_party/manifest.cmake; source trees and installed binaries stay out
+# of the MFEM worktree.
+/third_party/src/
+/third_party/build/
+/third_party/install/
+
 # Generated files in main directory, config/ and docs/
 /deps.mk
 config/_config.hpp

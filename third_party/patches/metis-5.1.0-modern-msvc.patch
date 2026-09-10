@@ -1,0 +1,12 @@
+diff --git a/GKlib/gk_arch.h b/GKlib/gk_arch.h
+--- a/GKlib/gk_arch.h
++++ b/GKlib/gk_arch.h
+@@ -58,7 +58,7 @@ typedef ptrdiff_t ssize_t;
+ #define PTRDIFF_MAX  INT64_MAX
+ #endif
+ 
+-#ifdef __MSC__
++#if defined(__MSC__) && (!defined(_MSC_VER) || _MSC_VER < 1800)
+ /* MSC does not have rint() function */
+ #define rint(x) ((int)((x)+0.5))  
+ 

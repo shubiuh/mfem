@@ -95,6 +95,7 @@ if (MFEM_USE_MPI)
     ex40p.cpp
     ex41p.cpp
   )
+  set(UDAR_EXE_SRCS udar3p.cpp)
 endif()
 
 # Examples that return MFEM_SKIP_RETURN_VALUE in some cases:
@@ -114,6 +115,9 @@ include_directories(BEFORE ${PROJECT_BINARY_DIR})
 
 # Add one executable per cpp file
 add_mfem_examples(ALL_EXE_SRCS)
+if (MFEM_USE_MPI)
+  add_mfem_examples(UDAR_EXE_SRCS)
+endif()
 
 # Add a test for each example
 if (MFEM_ENABLE_TESTING)

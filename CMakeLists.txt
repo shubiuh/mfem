@@ -761,8 +761,16 @@ target_include_directories(mfem
   PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-    # The INSTALL_INTERFACE is handled below
-    ${TPL_INCLUDE_DIRS})
+    # The INSTALL_INTERFACE is handled below.
+    )
+# Keep third-party headers in the build interface: an external dependency
+# prefix may be located under the source tree, which CMake 4.x correctly
+# rejects in an installed export. Add each directory separately so a
+# list-valued generator expression is not interpreted as one path.
+foreach(TPL_INCLUDE_DIR IN LISTS TPL_INCLUDE_DIRS)
+  target_include_directories(mfem PUBLIC
+    $<BUILD_INTERFACE:${TPL_INCLUDE_DIR}>)
+endforeach()
 if (MFEM_USE_MPI)
   if (MPI_CXX_COMPILE_FLAGS)
     separate_arguments(MPI_CXX_COMPILE_ARGS UNIX_COMMAND

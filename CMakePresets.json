@@ -1,0 +1,42 @@
+{
+  "version": 6,
+  "configurePresets": [
+    {
+      "name": "oneapi-mpi-mumps",
+      "displayName": "oneAPI MPI + hypre + MUMPS",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/oneapi-mpi-mumps",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_C_COMPILER": "icx",
+        "CMAKE_CXX_COMPILER": "cl",
+        "CMAKE_Fortran_COMPILER": "ifx",
+        "CMAKE_PREFIX_PATH": "${sourceDir}/third_party/install/oneapi",
+        "HYPRE_DIR": "${sourceDir}/third_party/install/oneapi",
+        "MUMPS_DIR": "${sourceDir}/third_party/install/oneapi",
+        "METIS_DIR": "${sourceDir}/third_party/install/oneapi",
+        "MPI_CXX_WORKS": "TRUE",
+        "MPI_CXX_VERSION": "3.1",
+        "MPI_CXX_LIB_NAMES": "impi;impicxx",
+        "MPI_impi_LIBRARY": "C:/OPT/Intel/oneAPI/mpi/latest/lib/impi.lib",
+        "MPI_CXX_ADDITIONAL_INCLUDE_DIRS": "C:/OPT/Intel/oneAPI/mpi/latest/include",
+        "HYPRE_VERSION": "23300",
+        "MUMPS_VERSION": "50901",
+        "MUMPS_REQUIRED_PACKAGES": "MPI;MPI_Fortran;LAPACK;BLAS",
+        "MFEM_USE_MPI": "ON",
+        "MFEM_USE_MUMPS": "ON",
+        "MFEM_USE_METIS": "ON",
+        "MFEM_ENABLE_EXAMPLES": "ON",
+        "MFEM_ENABLE_MINIAPPS": "OFF",
+        "MFEM_ENABLE_TESTING": "OFF",
+        "MFEM_USE_HDF5": "OFF"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "oneapi-mpi-mumps",
+      "configurePreset": "oneapi-mpi-mumps"
+    }
+  ]
+}
