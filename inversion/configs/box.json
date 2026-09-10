@@ -1,0 +1,32 @@
+{
+  "forward": {
+    "executable": "../../build/oneapi-mpi-mumps/examples/udar3p.exe",
+    "mesh": "../../data/inline-hex.mesh",
+    "solver": "mumps",
+    "persistent": true,
+    "formation_model": 2,
+    "frequencies": [48000, 96000],
+    "spacings": [0.08, 0.16],
+    "stations": 3,
+    "sigma_background": 0.1,
+    "sigma_target": 0.1,
+    "box_minimum": [0.25, 0.25, 0.25],
+    "box_maximum": [0.75, 0.75, 0.75],
+    "boundary_condition": 0,
+    "timeout_seconds": 120
+  },
+  "parameters": [
+    {"name": "sigma_background", "initial": 0.1, "lower": 0.01, "upper": 2.0},
+    {"name": "sigma_target", "initial": 0.1, "lower": 0.01, "upper": 2.0}
+  ],
+  "channels": ["Hxx_imag", "Hyy_imag", "Hzz_imag"],
+  "noise": {"relative": 0.00001, "absolute": 0.00000001},
+  "optimizer": {
+    "max_iterations": 60,
+    "gradient_tolerance": 0.000001,
+    "step_tolerance": 0.0000000001,
+    "difference_step": 0.001,
+    "regularization": 0.0
+  },
+  "synthetic_truth": {"sigma_background": 0.2, "sigma_target": 0.05}
+}

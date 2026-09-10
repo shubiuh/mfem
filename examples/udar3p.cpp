@@ -29,6 +29,7 @@
 #include <algorithm>
 #include <cmath>
 #include <complex>
+#include <filesystem>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
@@ -48,9 +49,7 @@ const real_t mu0 = 4.0e-7 * M_PI;
 const real_t eps0 = 8.854187817e-12;
 
 real_t Dot3(const Vector &a, const Vector &b)
-{
-   return a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
-}
+{ return a[0] * b[0] + a[1] * b[1] + a[2] * b[2]; }
 
 void Cross3(const Vector &a, const Vector &b, Vector &c)
 {
@@ -126,16 +125,14 @@ void ParseTensor3(const char *text, DenseMatrix &tensor)
                "Conductivity tensor must be positive definite.");
 
    const real_t symmetry_tolerance =
-      100.0 * numeric_limits<real_t>::epsilon() * tensor_scale;
+       100.0 * numeric_limits<real_t>::epsilon() * tensor_scale;
    for (int i = 0; i < 3; i++)
    {
       for (int j = i + 1; j < 3; j++)
       {
-         MFEM_VERIFY(fabs(tensor(i, j) - tensor(j, i)) <=
-                     symmetry_tolerance,
+         MFEM_VERIFY(fabs(tensor(i, j) - tensor(j, i)) <= symmetry_tolerance,
                      "Conductivity tensor must be symmetric.");
-         const real_t symmetric_value =
-            0.5 * (tensor(i, j) + tensor(j, i));
+         const real_t symmetric_value = 0.5 * (tensor(i, j) + tensor(j, i));
          tensor(i, j) = tensor(j, i) = symmetric_value;
       }
    }
@@ -143,23 +140,22 @@ void ParseTensor3(const char *text, DenseMatrix &tensor)
    DenseMatrix normalized(tensor);
    normalized *= 1.0 / tensor_scale;
    const real_t leading_minor_1 = normalized(0, 0);
-   const real_t leading_minor_2 =
-      normalized(0, 0) * normalized(1, 1) -
-      normalized(0, 1) * normalized(1, 0);
+   const real_t leading_minor_2 = normalized(0, 0) * normalized(1, 1) -
+                                  normalized(0, 1) * normalized(1, 0);
    const real_t determinant =
-      normalized(0, 0) * (normalized(1, 1) * normalized(2, 2) -
-                          normalized(1, 2) * normalized(2, 1)) -
-      normalized(0, 1) * (normalized(1, 0) * normalized(2, 2) -
-                          normalized(1, 2) * normalized(2, 0)) +
-      normalized(0, 2) * (normalized(1, 0) * normalized(2, 1) -
-                          normalized(1, 1) * normalized(2, 0));
+       normalized(0, 0) * (normalized(1, 1) * normalized(2, 2) -
+                           normalized(1, 2) * normalized(2, 1)) -
+       normalized(0, 1) * (normalized(1, 0) * normalized(2, 2) -
+                           normalized(1, 2) * normalized(2, 0)) +
+       normalized(0, 2) * (normalized(1, 0) * normalized(2, 1) -
+                           normalized(1, 1) * normalized(2, 0));
    MFEM_VERIFY(leading_minor_1 > 0.0 && leading_minor_2 > 0.0 &&
-               determinant > 0.0,
+                   determinant > 0.0,
                "Conductivity tensor must be positive definite.");
 }
 
-void BuildToolFrame(const Vector &start, const Vector &end,
-                    const Vector &up, DenseMatrix &frame)
+void BuildToolFrame(const Vector &start, const Vector &end, const Vector &up,
+                    DenseMatrix &frame)
 {
    Vector z(end);
    z -= start;
@@ -196,7 +192,7 @@ void GetFrameAxis(const DenseMatrix &frame, int axis, Vector &v)
 
 class FormationSigmaCoefficient : public MatrixCoefficient
 {
-private:
+ private:
    int model;
    DenseMatrix background;
    DenseMatrix target;
@@ -207,20 +203,31 @@ private:
    Vector box_minimum;
    Vector box_maximum;
 
-public:
+ public:
    FormationSigmaCoefficient(int model_, const DenseMatrix &background_,
                              const DenseMatrix &target_,
                              const Vector &slab_normal_,
-                             const Vector &slab_center_,
-                             real_t slab_thickness_, real_t interface_width_,
+                             const Vector &slab_center_, real_t slab_thickness_,
+                             real_t interface_width_,
                              const Vector &box_minimum_,
                              const Vector &box_maximum_)
-      : MatrixCoefficient(3), model(model_), background(background_),
-        target(target_), slab_normal(slab_normal_), slab_center(slab_center_),
-        slab_thickness(slab_thickness_), interface_width(interface_width_),
-        box_minimum(box_minimum_), box_maximum(box_maximum_)
+       : MatrixCoefficient(3), model(model_), background(background_),
+         target(target_), slab_normal(slab_normal_), slab_center(slab_center_),
+         slab_thickness(slab_thickness_), interface_width(interface_width_),
+         box_minimum(box_minimum_), box_maximum(box_maximum_)
+   { Normalize3(slab_normal, "Slab normal"); }
+
+   /** @brief Replace the tensors returned by Eval().
+       @param background_ Symmetric positive-definite background tensor.
+       @param target_ Symmetric positive-definite target tensor.
+
+       The persistent server calls this between solves. The coefficient does
+       not retain references to either input matrix. */
+   void SetConductivities(const DenseMatrix &background_,
+                          const DenseMatrix &target_)
    {
-      Normalize3(slab_normal, "Slab normal");
+      background = background_;
+      target = target_;
    }
 
    void Eval(DenseMatrix &sigma, ElementTransformation &T,
@@ -238,16 +245,13 @@ public:
          if (interface_width > 0.0)
          {
             const real_t half_thickness = 0.5 * slab_thickness;
-            target_weight = 0.5 *
-                            (tanh((half_thickness + distance) /
-                                  interface_width) +
-                             tanh((half_thickness - distance) /
-                                  interface_width));
+            target_weight =
+                0.5 * (tanh((half_thickness + distance) / interface_width) +
+                       tanh((half_thickness - distance) / interface_width));
          }
          else
          {
-            target_weight =
-               fabs(distance) <= 0.5 * slab_thickness ? 1.0 : 0.0;
+            target_weight = fabs(distance) <= 0.5 * slab_thickness ? 1.0 : 0.0;
          }
       }
       else if (model == 2)
@@ -257,9 +261,9 @@ public:
          {
             for (int d = 0; d < 3; d++)
             {
-               target_weight *= 0.5 *
-                  (tanh((x[d] - box_minimum[d]) / interface_width) -
-                   tanh((x[d] - box_maximum[d]) / interface_width));
+               target_weight *=
+                   0.5 * (tanh((x[d] - box_minimum[d]) / interface_width) -
+                          tanh((x[d] - box_maximum[d]) / interface_width));
             }
          }
          else
@@ -267,8 +271,7 @@ public:
             for (int d = 0; d < 3; d++)
             {
                target_weight *=
-                  x[d] >= box_minimum[d] && x[d] <= box_maximum[d] ?
-                  1.0 : 0.0;
+                   x[d] >= box_minimum[d] && x[d] <= box_maximum[d] ? 1.0 : 0.0;
             }
          }
       }
@@ -287,13 +290,15 @@ public:
 
 class ScaledMatrixCoefficient : public MatrixCoefficient
 {
-private:
+ private:
    MatrixCoefficient &coefficient;
    real_t scale;
 
-public:
+ public:
    ScaledMatrixCoefficient(MatrixCoefficient &coefficient_, real_t scale_)
-      : MatrixCoefficient(3), coefficient(coefficient_), scale(scale_) { }
+       : MatrixCoefficient(3), coefficient(coefficient_), scale(scale_)
+   {
+   }
 
    void Eval(DenseMatrix &value, ElementTransformation &T,
              const IntegrationPoint &ip) override
@@ -303,20 +308,48 @@ public:
    }
 };
 
+/** @brief Scalar horizontal or vertical resistivity derived from conductivity.
+
+    The horizontal value is the mean of the xx and yy entries of the inverse
+    conductivity tensor; the vertical value is its zz entry. This convention
+    gives Rh = 1/sigma_h and Rv = 1/sigma_v for a transversely isotropic model
+    aligned with the global z axis. */
+class ResistivityCoefficient : public Coefficient
+{
+ private:
+   MatrixCoefficient &conductivity;
+   bool horizontal;
+
+ public:
+   ResistivityCoefficient(MatrixCoefficient &conductivity_, bool horizontal_)
+       : conductivity(conductivity_), horizontal(horizontal_)
+   {
+   }
+
+   real_t Eval(ElementTransformation &T, const IntegrationPoint &ip) override
+   {
+      DenseMatrix resistivity;
+      conductivity.Eval(resistivity, T, ip);
+      resistivity.Invert();
+      return horizontal ? 0.5 * (resistivity(0, 0) + resistivity(1, 1))
+                        : resistivity(2, 2);
+   }
+};
+
 class FiniteLoopCurrentCoefficient : public VectorCoefficient
 {
-private:
+ private:
    Vector center;
    Vector normal;
    real_t loop_radius;
    real_t wire_radius;
    real_t current_scale;
 
-public:
+ public:
    FiniteLoopCurrentCoefficient(const Vector &center_, const Vector &moment,
                                 real_t loop_radius_, real_t wire_radius_)
-      : VectorCoefficient(3), center(center_), normal(moment),
-        loop_radius(loop_radius_), wire_radius(wire_radius_)
+       : VectorCoefficient(3), center(center_), normal(moment),
+         loop_radius(loop_radius_), wire_radius(wire_radius_)
    {
       MFEM_VERIFY(loop_radius > 0.0 && wire_radius > 0.0,
                   "Loop and wire radii must be positive.");
@@ -324,7 +357,8 @@ public:
       MFEM_VERIFY(moment_magnitude > 0.0,
                   "Finite loop requires a nonzero magnetic moment.");
       normal /= moment_magnitude;
-      const real_t current = moment_magnitude / (M_PI * loop_radius * loop_radius);
+      const real_t current =
+          moment_magnitude / (M_PI * loop_radius * loop_radius);
       current_scale = current / (M_PI * wire_radius * wire_radius);
    }
 
@@ -346,9 +380,9 @@ public:
       Cross3(normal, radial, tangent);
       tangent /= radius;
       const real_t tube_distance2 =
-         (radius - loop_radius) * (radius - loop_radius) + axial * axial;
+          (radius - loop_radius) * (radius - loop_radius) + axial * axial;
       const real_t amplitude =
-         current_scale * exp(-tube_distance2 / (wire_radius * wire_radius));
+          current_scale * exp(-tube_distance2 / (wire_radius * wire_radius));
       current_density.Add(amplitude, tangent);
    }
 };
@@ -374,10 +408,10 @@ bool AddPointMagneticDipoleRHS(ParMesh &mesh, ParFiniteElementSpace &space,
    }
 
    const int no_owner = Mpi::WorldSize();
-   const int candidate_owner = (local_element >= 0) ? Mpi::WorldRank() : no_owner;
+   const int candidate_owner =
+       (local_element >= 0) ? Mpi::WorldRank() : no_owner;
    int owner = no_owner;
-   MPI_Allreduce(&candidate_owner, &owner, 1, MPI_INT, MPI_MIN,
-                 mesh.GetComm());
+   MPI_Allreduce(&candidate_owner, &owner, 1, MPI_INT, MPI_MIN, mesh.GetComm());
    if (owner == no_owner) { return false; }
 
    if (Mpi::WorldRank() == owner)
@@ -391,10 +425,7 @@ bool AddPointMagneticDipoleRHS(ParMesh &mesh, ParFiniteElementSpace &space,
       for (int i = 0; i < finite_element->GetDof(); i++)
       {
          real_t value = 0.0;
-         for (int d = 0; d < 3; d++)
-         {
-            value += moment[d] * curl_shape(i, d);
-         }
+         for (int d = 0; d < 3; d++) { value += moment[d] * curl_shape(i, d); }
          element_vector[i] = -omega * mu0 * value;
       }
       Array<int> vdofs;
@@ -413,9 +444,8 @@ bool PointIsInside(ParMesh &mesh, const Vector &point, real_t tolerance)
    {
       ElementTransformation *T = mesh.GetElementTransformation(element);
       IntegrationPoint ip;
-      local_found =
-         (T->TransformBack(point, ip, tolerance) ==
-          InverseElementTransformation::Inside);
+      local_found = (T->TransformBack(point, ip, tolerance) ==
+                     InverseElementTransformation::Inside);
    }
    int global_found = 0;
    MPI_Allreduce(&local_found, &global_found, 1, MPI_INT, MPI_MAX,
@@ -471,7 +501,7 @@ bool SampleMagneticField(ParMesh &mesh,
    for (int d = 0; d < 3; d++)
    {
       field_real[d] = -scale * curl_imag[d];
-      field_imag[d] =  scale * curl_real[d];
+      field_imag[d] = scale * curl_real[d];
    }
    return true;
 }
@@ -503,6 +533,78 @@ void WriteCSVHeader(ostream &output)
    output << '\n';
 }
 
+/** @brief Write the formation resistivity fields for one forward evaluation.
+    @param directory Root directory selected with @c -vtk.
+    @param evaluation_name Stem of the CSV response file.
+    @param mesh Parallel mesh containing the formation.
+    @param sigma Formation conductivity tensor.
+
+    The produced @c model.pvd can be opened directly in ParaView. Rh and Rv
+    are expressed in ohm m and follow the global x/y horizontal and z vertical
+    convention documented by ResistivityCoefficient. */
+void WriteVTKModel(const string &directory, const string &evaluation_name,
+                   ParMesh &mesh, MatrixCoefficient &sigma)
+{
+   if (directory.empty()) { return; }
+
+   ResistivityCoefficient rh(sigma, true);
+   ResistivityCoefficient rv(sigma, false);
+   ParaViewDataCollection collection("model", &mesh);
+   collection.SetPrefixPath(directory + "/" + evaluation_name + "/");
+   collection.SetDataFormat(VTKFormat::BINARY);
+   collection.SetHighOrderOutput(true);
+   collection.RegisterCoeffField("Rh_ohm_m", &rh);
+   collection.RegisterCoeffField("Rv_ohm_m", &rv);
+   collection.Save();
+}
+
+/** @brief Write complex E and H fields for one frequency and tool station.
+    @param directory Root directory selected with @c -vtk.
+    @param evaluation_name Stem of the CSV response file.
+    @param frequency_index Zero-based index in the requested frequency list.
+    @param station Zero-based transmitter station index.
+    @param frequency Frequency in Hz, stored as the ParaView time value.
+    @param mesh Parallel mesh.
+    @param electric_fields Three complex E fields for x, y, and z transmitters.
+    @param magnetic_real Real H fields in the RT space.
+    @param magnetic_imaginary Imaginary H fields in the RT space.
+
+    Field names use transmitter-axis suffixes: for example @c E_real_x and
+    @c H_imag_z. Values use the exp(+i omega t) phasor convention. */
+void WriteVTKFields(
+    const string &directory, const string &evaluation_name, int frequency_index,
+    int station, real_t frequency, ParMesh &mesh,
+    const vector<unique_ptr<ParComplexGridFunction>> &electric_fields,
+    const vector<unique_ptr<ParGridFunction>> &magnetic_real,
+    const vector<unique_ptr<ParGridFunction>> &magnetic_imaginary)
+{
+   if (directory.empty()) { return; }
+
+   ostringstream name;
+   name << "fields_f" << setw(3) << setfill('0') << frequency_index
+        << "_station" << setw(3) << station;
+   ParaViewDataCollection collection(name.str(), &mesh);
+   collection.SetPrefixPath(directory + "/" + evaluation_name + "/");
+   collection.SetDataFormat(VTKFormat::BINARY);
+   collection.SetHighOrderOutput(true);
+   collection.SetCycle(station);
+   collection.SetTime(frequency);
+   const char axis[3] = {'x', 'y', 'z'};
+   for (int transmitter_axis = 0; transmitter_axis < 3; transmitter_axis++)
+   {
+      const string suffix(1, axis[transmitter_axis]);
+      collection.RegisterField("E_real_" + suffix,
+                               &electric_fields[transmitter_axis]->real());
+      collection.RegisterField("E_imag_" + suffix,
+                               &electric_fields[transmitter_axis]->imag());
+      collection.RegisterField("H_real_" + suffix,
+                               magnetic_real[transmitter_axis].get());
+      collection.RegisterField("H_imag_" + suffix,
+                               magnetic_imaginary[transmitter_axis].get());
+   }
+   collection.Save();
+}
+
 } // namespace
 
 int main(int argc, char *argv[])
@@ -524,6 +626,8 @@ int main(int argc, char *argv[])
    const char *box_minimum_text = "";
    const char *box_maximum_text = "";
    const char *output_file = "udar_tensor.csv";
+   const char *server_directory = "";
+   const char *vtk_directory = "";
    const char *device_config = "cpu";
    int order = 1;
    int serial_refinements = 0;
@@ -556,8 +660,9 @@ int main(int argc, char *argv[])
                   "Number of parallel uniform refinements.");
    args.AddOption(&frequency_text, "-freq", "--frequencies",
                   "Comma-separated frequencies in Hz.");
-   args.AddOption(&spacing_text, "-sp", "--spacings",
-                  "Comma-separated transmitter-receiver spacings in mesh units.");
+   args.AddOption(
+       &spacing_text, "-sp", "--spacings",
+       "Comma-separated transmitter-receiver spacings in mesh units.");
    args.AddOption(&stations, "-ns", "--num-stations",
                   "Number of transmitter stations on the straight survey.");
    args.AddOption(&survey_start_text, "-p0", "--survey-start",
@@ -566,8 +671,9 @@ int main(int argc, char *argv[])
                   "Survey end x,y,z; default is based on the mesh bounds.");
    args.AddOption(&measured_depth_origin, "-md0", "--measured-depth-origin",
                   "Measured depth assigned to the first station.");
-   args.AddOption(&up_text, "-up", "--tool-up",
-                  "High-side reference vector used to construct the tool frame.");
+   args.AddOption(
+       &up_text, "-up", "--tool-up",
+       "High-side reference vector used to construct the tool frame.");
    args.AddOption(&transmitter_moment, "-mom", "--transmitter-moment",
                   "Magnetic dipole moment in A m^2.");
    args.AddOption(&source_type, "-src", "--source-type",
@@ -578,10 +684,12 @@ int main(int argc, char *argv[])
                   "Gaussian wire cross-section radius in mesh units.");
    args.AddOption(&formation_model, "-model", "--formation-model",
                   "0 uniform, 1 dipping slab, 2 bounded 3D geobody.");
-   args.AddOption(&sigma_background_text, "-sig-bg", "--sigma-background",
-                  "Background conductivity: 1, 3 diagonal, or 9 tensor values [S/m].");
-   args.AddOption(&sigma_target_text, "-sig-target", "--sigma-target",
-                  "Target conductivity: 1, 3 diagonal, or 9 tensor values [S/m].");
+   args.AddOption(
+       &sigma_background_text, "-sig-bg", "--sigma-background",
+       "Background conductivity: 1, 3 diagonal, or 9 tensor values [S/m].");
+   args.AddOption(
+       &sigma_target_text, "-sig-target", "--sigma-target",
+       "Target conductivity: 1, 3 diagonal, or 9 tensor values [S/m].");
    args.AddOption(&slab_center_text, "-slab-c", "--slab-center",
                   "Point on the center plane of the target slab.");
    args.AddOption(&slab_normal_text, "-slab-n", "--slab-normal",
@@ -613,6 +721,13 @@ int main(int argc, char *argv[])
    args.AddOption(&point_tolerance, "-ptol", "--point-tolerance",
                   "Physical point-location tolerance.");
    args.AddOption(&output_file, "-out", "--output", "Tensor CSV output file.");
+   args.AddOption(
+       &vtk_directory, "-vtk", "--vtk-directory",
+       "ParaView VTK output directory; empty disables field output.");
+   // Server mode receives rank-zero requests and writes one CSV per request.
+   args.AddOption(
+       &server_directory, "-server", "--server-directory",
+       "Persistent inversion server output directory; empty disables it.");
    args.AddOption(&device_config, "-d", "--device", "Device configuration.");
    args.Parse();
    if (!args.Good())
@@ -691,10 +806,8 @@ int main(int argc, char *argv[])
       }
       survey_start[0] = bounds_minimum[0] + 0.35 * span[0];
       survey_end[0] = bounds_minimum[0] + 0.73 * span[0];
-      survey_start[1] = survey_end[1] =
-         bounds_minimum[1] + 0.47 * span[1];
-      survey_start[2] = survey_end[2] =
-         bounds_minimum[2] + 0.53 * span[2];
+      survey_start[1] = survey_end[1] = bounds_minimum[1] + 0.47 * span[1];
+      survey_start[2] = survey_end[2] = bounds_minimum[2] + 0.53 * span[2];
    }
 
    Vector up(3);
@@ -737,10 +850,7 @@ int main(int argc, char *argv[])
    }
    if (loop_radius <= 0.0) { loop_radius = 0.03 * min_span; }
    if (wire_radius <= 0.0) { wire_radius = 0.20 * loop_radius; }
-   if (myid == 0)
-   {
-      cout << "UDAR unknowns: ";
-   }
+   if (myid == 0) { cout << "UDAR unknowns: "; }
    ND_FECollection finite_elements(order, 3);
    ParFiniteElementSpace space(&mesh, &finite_elements);
    if (myid == 0)
@@ -753,14 +863,20 @@ int main(int argc, char *argv[])
       for (real_t spacing : spacings) { cout << spacing << ' '; }
       cout << "mesh units\n";
       cout << "Source: "
-           << (source_type == 0 ? "point magnetic dipole" : "finite current loop")
+           << (source_type == 0 ? "point magnetic dipole"
+                                : "finite current loop")
            << '\n';
    }
 
-   FormationSigmaCoefficient sigma(formation_model, sigma_background,
-                                   sigma_target, slab_normal, slab_center,
-                                   slab_thickness, interface_width,
-                                   box_minimum, box_maximum);
+   FormationSigmaCoefficient sigma(
+       formation_model, sigma_background, sigma_target, slab_normal,
+       slab_center, slab_thickness, interface_width, box_minimum, box_maximum);
+
+   if (vtk_directory[0] && myid == 0)
+   {
+      filesystem::create_directories(vtk_directory);
+   }
+   MPI_Barrier(mesh.GetComm());
 
    Array<int> essential_tdofs;
    if (boundary_condition == 0 && mesh.bdr_attributes.Size())
@@ -770,280 +886,409 @@ int main(int argc, char *argv[])
       space.GetEssentialTrueDofs(essential_boundary, essential_tdofs);
    }
 
-   ofstream output;
-   if (myid == 0)
-   {
-      output.open(output_file);
-      MFEM_VERIFY(output.good(), "Unable to open output file " << output_file);
-      output << setprecision(16) << scientific;
-      WriteCSVHeader(output);
-   }
-
    Vector trajectory(survey_end);
    trajectory -= survey_start;
    const real_t survey_length = trajectory.Norml2();
    const int true_size = space.GetTrueVSize();
    const ComplexOperator::Convention convention = ComplexOperator::HERMITIAN;
+   RT_FECollection curl_finite_elements(order - 1, 3);
+   ParFiniteElementSpace curl_space(&mesh, &curl_finite_elements);
+   ParDiscreteLinearOperator curl(&space, &curl_space);
+   curl.AddDomainInterpolator(new CurlInterpolator);
+   curl.Assemble();
+   curl.Finalize();
 
-   for (real_t frequency : frequencies)
+   /** @brief Solve and write one survey for the current conductivity tensors.
+       @param current_output_file Rank-zero CSV destination.
+
+       The enclosing scope retains mesh, finite-element space, and tool
+       geometry. Material-dependent forms and numerical solvers are rebuilt. */
+   auto RunForward = [&](const string &current_output_file)
    {
-      const real_t omega = 2.0 * M_PI * frequency;
-      const real_t k0 = omega * sqrt(mu0 * eps0);
-      ConstantCoefficient inverse_mu_r(1.0 / mu_r);
-      ConstantCoefficient real_mass(-k0 * k0 * eps_r);
-      ScaledMatrixCoefficient imaginary_mass(sigma, omega * mu0);
-
-      unique_ptr<ConstantCoefficient> abc_real;
-      unique_ptr<ConstantCoefficient> abc_imaginary;
-      Array<int> absorbing_boundary;
-
-      ParSesquilinearForm form(&space, convention);
-      form.AddDomainIntegrator(new CurlCurlIntegrator(inverse_mu_r), nullptr);
-      form.AddDomainIntegrator(new VectorFEMassIntegrator(real_mass),
-                               new VectorFEMassIntegrator(imaginary_mass));
-
-      if (boundary_condition == 1 && mesh.bdr_attributes.Size())
-      {
-         absorbing_boundary.SetSize(mesh.bdr_attributes.Max());
-         absorbing_boundary = 1;
-         const complex<real_t> imaginary_unit(0.0, 1.0);
-         const complex<real_t> background_epsilon =
-            eps_r - imaginary_unit * sigma_background(0, 0) / (omega * eps0);
-         const complex<real_t> boundary_wave_number =
-            k0 * sqrt(mu_r * background_epsilon);
-         // exp(+i omega t), outgoing exp(-i k r): the weak boundary term is
-         // +i k/mu_r times the tangential-field mass matrix.
-         const complex<real_t> gamma =
-            imaginary_unit * boundary_wave_number / mu_r;
-         abc_real.reset(new ConstantCoefficient(gamma.real()));
-         abc_imaginary.reset(new ConstantCoefficient(gamma.imag()));
-         form.AddBoundaryIntegrator(new VectorFEMassIntegrator(*abc_real),
-                                    new VectorFEMassIntegrator(*abc_imaginary),
-                                    absorbing_boundary);
-      }
-
-      form.Assemble();
-      OperatorPtr system_operator;
-      form.FormSystemMatrix(essential_tdofs, system_operator);
-
-      unique_ptr<HypreParMatrix> real_block_operator;
-      unique_ptr<HypreILU> ilu;
-      unique_ptr<Solver> solver;
-
-      if (use_mumps)
-      {
-#ifdef MFEM_USE_COMPLEX_MUMPS
-         ComplexMUMPSSolver *mumps = new ComplexMUMPSSolver(MPI_COMM_WORLD);
-         mumps->SetPrintLevel(0);
-         mumps->SetMatrixSymType(ComplexMUMPSSolver::UNSYMMETRIC);
-         mumps->SetOperator(*system_operator.As<ComplexHypreParMatrix>());
-         solver.reset(mumps);
-#elif defined(MFEM_USE_MUMPS)
-         real_block_operator.reset(
-            system_operator.As<ComplexHypreParMatrix>()->GetSystemMatrix());
-         MUMPSSolver *mumps = new MUMPSSolver(MPI_COMM_WORLD);
-         mumps->SetPrintLevel(0);
-         mumps->SetMatrixSymType(MUMPSSolver::UNSYMMETRIC);
-         mumps->SetOperator(*real_block_operator);
-         solver.reset(mumps);
-#else
-         MFEM_ABORT("MUMPS was requested, but MFEM_USE_MUMPS is disabled.");
-#endif
-      }
-      else
-      {
-         // Apply ILU to the complete real 2x2 representation. A diagonal AMS
-         // approximation leaves the conductivity-dominated gradient subspace
-         // poorly conditioned and can stagnate even on the smoke-test mesh.
-         real_block_operator.reset(
-            system_operator.As<ComplexHypreParMatrix>()->GetSystemMatrix());
-         ilu.reset(new HypreILU);
-         // Include a global Schur-complement correction; type 0 is only
-         // block-Jacobi ILU and stagnates once the mesh spans MPI ranks.
-         ilu->SetType(10);
-         ilu->SetLevelOfFill(2);
-         ilu->SetOperator(*real_block_operator);
-
-         FGMRESSolver *fgmres = new FGMRESSolver(MPI_COMM_WORLD);
-         fgmres->SetPrintLevel(0);
-         fgmres->SetKDim(krylov_dimension);
-         fgmres->SetMaxIter(max_iterations);
-         fgmres->SetRelTol(relative_tolerance);
-         fgmres->SetAbsTol(absolute_tolerance);
-         fgmres->SetOperator(*real_block_operator);
-         fgmres->SetPreconditioner(*ilu);
-         solver.reset(fgmres);
-      }
-
+      const string evaluation_name =
+          filesystem::path(current_output_file).stem().string();
+      WriteVTKModel(vtk_directory, evaluation_name, mesh, sigma);
+      ofstream output;
       if (myid == 0)
       {
-         cout << "Solving " << frequency << " Hz with "
-              << (use_mumps ? "MUMPS" : "FGMRES+ILU") << "\n";
+         output.open(current_output_file);
+         MFEM_VERIFY(output.good(),
+                     "Unable to open output file " << current_output_file);
+         output << setprecision(16) << scientific;
+         WriteCSVHeader(output);
       }
 
-      for (int station = 0; station < stations; station++)
+      for (int frequency_index = 0;
+           frequency_index < static_cast<int>(frequencies.size());
+           frequency_index++)
       {
-         const real_t fraction =
-            (stations == 1) ? 0.0 : real_t(station) / real_t(stations - 1);
-         Vector transmitter(survey_start);
-         transmitter.Add(fraction, trajectory);
-         MFEM_VERIFY(PointIsInside(mesh, transmitter, point_tolerance),
-                     "Transmitter station " << station << " lies outside the mesh.");
-         vector<Vector> rhs(3), solution(3);
-         for (int transmitter_axis = 0; transmitter_axis < 3;
-              transmitter_axis++)
-         {
-            Vector moment(3);
-            GetFrameAxis(tool_frame, transmitter_axis, moment);
-            moment *= transmitter_moment;
-            unique_ptr<FiniteLoopCurrentCoefficient> loop_current;
-            unique_ptr<ConstantCoefficient> loop_rhs_scale;
-            unique_ptr<ScalarVectorProductCoefficient> loop_rhs;
-            ParComplexLinearForm linear_form(&space, convention);
-            if (source_type == 0)
-            {
-               linear_form.Assemble();
-               MFEM_VERIFY(AddPointMagneticDipoleRHS(
-                              mesh, space, transmitter, moment, omega,
-                              point_tolerance, linear_form),
-                           "Transmitter station " << station
-                           << " lies outside the mesh.");
-            }
-            else
-            {
-               loop_current.reset(new FiniteLoopCurrentCoefficient(
-                                     transmitter, moment, loop_radius,
-                                     wire_radius));
-               loop_rhs_scale.reset(new ConstantCoefficient(-omega * mu0));
-               loop_rhs.reset(new ScalarVectorProductCoefficient(
-                                 *loop_rhs_scale, *loop_current));
-               linear_form.AddDomainIntegrator(
-                  nullptr, new VectorFEDomainLFIntegrator(*loop_rhs));
-               linear_form.Assemble();
-            }
+         const real_t frequency = frequencies[frequency_index];
+         const real_t omega = 2.0 * M_PI * frequency;
+         const real_t k0 = omega * sqrt(mu0 * eps0);
+         ConstantCoefficient inverse_mu_r(1.0 / mu_r);
+         ConstantCoefficient real_mass(-k0 * k0 * eps_r);
+         ScaledMatrixCoefficient imaginary_mass(sigma, omega * mu0);
 
-            rhs[transmitter_axis].SetSize(2 * true_size);
-            linear_form.ParallelAssemble(rhs[transmitter_axis]);
-            SetHomogeneousEssentialRHS(essential_tdofs,
-                                       rhs[transmitter_axis], true_size);
-            solution[transmitter_axis].SetSize(2 * true_size);
-            solution[transmitter_axis] = 0.0;
+         unique_ptr<ConstantCoefficient> abc_real;
+         unique_ptr<ConstantCoefficient> abc_imaginary;
+         Array<int> absorbing_boundary;
+
+         ParSesquilinearForm form(&space, convention);
+         form.AddDomainIntegrator(new CurlCurlIntegrator(inverse_mu_r),
+                                  nullptr);
+         form.AddDomainIntegrator(new VectorFEMassIntegrator(real_mass),
+                                  new VectorFEMassIntegrator(imaginary_mass));
+
+         if (boundary_condition == 1 && mesh.bdr_attributes.Size())
+         {
+            absorbing_boundary.SetSize(mesh.bdr_attributes.Max());
+            absorbing_boundary = 1;
+            const complex<real_t> imaginary_unit(0.0, 1.0);
+            const complex<real_t> background_epsilon =
+                eps_r -
+                imaginary_unit * sigma_background(0, 0) / (omega * eps0);
+            const complex<real_t> boundary_wave_number =
+                k0 * sqrt(mu_r * background_epsilon);
+            // exp(+i omega t), outgoing exp(-i k r): the weak boundary term is
+            // +i k/mu_r times the tangential-field mass matrix.
+            const complex<real_t> gamma =
+                imaginary_unit * boundary_wave_number / mu_r;
+            abc_real.reset(new ConstantCoefficient(gamma.real()));
+            abc_imaginary.reset(new ConstantCoefficient(gamma.imag()));
+            form.AddBoundaryIntegrator(
+                new VectorFEMassIntegrator(*abc_real),
+                new VectorFEMassIntegrator(*abc_imaginary), absorbing_boundary);
          }
 
-         Array<const Vector *> rhs_array(3);
-         Array<Vector *> solution_array(3);
-         for (int axis = 0; axis < 3; axis++)
-         {
-            rhs_array[axis] = &rhs[axis];
-            solution_array[axis] = &solution[axis];
-         }
+         form.Assemble();
+         OperatorPtr system_operator;
+         form.FormSystemMatrix(essential_tdofs, system_operator);
+
+         unique_ptr<HypreParMatrix> real_block_operator;
+         unique_ptr<HypreILU> ilu;
+         unique_ptr<Solver> solver;
+
          if (use_mumps)
          {
-            // ComplexMUMPSSolver and MUMPSSolver both use one batched solve for
-            // the three source polarizations and retain the frequency's factors.
-            solver->ArrayMult(rhs_array, solution_array);
+#ifdef MFEM_USE_COMPLEX_MUMPS
+            ComplexMUMPSSolver *mumps = new ComplexMUMPSSolver(MPI_COMM_WORLD);
+            mumps->SetPrintLevel(0);
+            mumps->SetMatrixSymType(ComplexMUMPSSolver::UNSYMMETRIC);
+            mumps->SetOperator(*system_operator.As<ComplexHypreParMatrix>());
+            solver.reset(mumps);
+#elif defined(MFEM_USE_MUMPS)
+            real_block_operator.reset(
+                system_operator.As<ComplexHypreParMatrix>()->GetSystemMatrix());
+            MUMPSSolver *mumps = new MUMPSSolver(MPI_COMM_WORLD);
+            mumps->SetPrintLevel(0);
+            mumps->SetMatrixSymType(MUMPSSolver::UNSYMMETRIC);
+            mumps->SetOperator(*real_block_operator);
+            solver.reset(mumps);
+#else
+            MFEM_ABORT("MUMPS was requested, but MFEM_USE_MUMPS is disabled.");
+#endif
          }
          else
          {
-            IterativeSolver *iterative =
-               dynamic_cast<IterativeSolver *>(solver.get());
-            MFEM_VERIFY(iterative, "Internal iterative solver setup failed.");
-            for (int axis = 0; axis < 3; axis++)
-            {
-               iterative->Mult(rhs[axis], solution[axis]);
-               MFEM_VERIFY(iterative->GetConverged(),
-                           "GMRES failed at frequency " << frequency
-                           << " Hz, station " << station
-                           << ", transmitter axis " << axis << '.');
-            }
-         }
+            // Apply ILU to the complete real 2x2 representation. A diagonal AMS
+            // approximation leaves the conductivity-dominated gradient subspace
+            // poorly conditioned and can stagnate even on the smoke-test mesh.
+            real_block_operator.reset(
+                system_operator.As<ComplexHypreParMatrix>()->GetSystemMatrix());
+            ilu.reset(new HypreILU);
+            // Include a global Schur-complement correction; type 0 is only
+            // block-Jacobi ILU and stagnates once the mesh spans MPI ranks.
+            ilu->SetType(10);
+            ilu->SetLevelOfFill(2);
+            ilu->SetOperator(*real_block_operator);
 
-         vector<unique_ptr<ParComplexGridFunction>> electric_fields(3);
-         for (int axis = 0; axis < 3; axis++)
-         {
-            electric_fields[axis].reset(new ParComplexGridFunction(&space));
-            Vector solution_real, solution_imaginary;
-            solution_real.MakeRef(solution[axis], 0, true_size);
-            solution_imaginary.MakeRef(solution[axis], true_size, true_size);
-            electric_fields[axis]->real().SetFromTrueDofs(solution_real);
-            electric_fields[axis]->imag().SetFromTrueDofs(solution_imaginary);
-         }
-
-         for (real_t spacing : spacings)
-         {
-            Vector receiver(transmitter);
-            receiver.Add(-spacing, tool_axis);
-            complex<real_t> response[3][3];
-            bool receiver_found = true;
-
-            for (int transmitter_axis = 0; transmitter_axis < 3;
-                 transmitter_axis++)
-            {
-               Vector field_real(3), field_imaginary(3);
-               const bool found = SampleMagneticField(
-                  mesh, *electric_fields[transmitter_axis], receiver, omega,
-                  mu_r, point_tolerance, field_real, field_imaginary);
-               receiver_found = receiver_found && found;
-
-               for (int receiver_axis = 0; receiver_axis < 3; receiver_axis++)
-               {
-                  Vector receiver_direction(3);
-                  GetFrameAxis(tool_frame, receiver_axis, receiver_direction);
-                  if (found)
-                  {
-                     response[receiver_axis][transmitter_axis] =
-                        complex<real_t>(Dot3(receiver_direction, field_real),
-                                        Dot3(receiver_direction,
-                                             field_imaginary)) /
-                        transmitter_moment;
-                  }
-                  else
-                  {
-                     const real_t nan =
-                        numeric_limits<real_t>::quiet_NaN();
-                     response[receiver_axis][transmitter_axis] =
-                        complex<real_t>(nan, nan);
-                  }
-               }
-            }
-
-            if (!receiver_found && myid == 0)
-            {
-               cerr << "Warning: receiver for station " << station
-                    << ", spacing " << spacing << " lies outside the mesh.\n";
-            }
-
-            if (myid == 0)
-            {
-               output << station << ','
-                      << measured_depth_origin + fraction * survey_length << ','
-                      << frequency << ',' << spacing;
-               for (int d = 0; d < 3; d++) { output << ',' << transmitter[d]; }
-               for (int d = 0; d < 3; d++) { output << ',' << receiver[d]; }
-               for (int receiver_axis = 0; receiver_axis < 3; receiver_axis++)
-               {
-                  for (int transmitter_axis = 0; transmitter_axis < 3;
-                       transmitter_axis++)
-                  {
-                     output << ',' << response[receiver_axis][transmitter_axis].real()
-                            << ',' << response[receiver_axis][transmitter_axis].imag();
-                  }
-               }
-               output << '\n';
-            }
+            FGMRESSolver *fgmres = new FGMRESSolver(MPI_COMM_WORLD);
+            fgmres->SetPrintLevel(0);
+            fgmres->SetKDim(krylov_dimension);
+            fgmres->SetMaxIter(max_iterations);
+            fgmres->SetRelTol(relative_tolerance);
+            fgmres->SetAbsTol(absolute_tolerance);
+            fgmres->SetOperator(*real_block_operator);
+            fgmres->SetPreconditioner(*ilu);
+            solver.reset(fgmres);
          }
 
          if (myid == 0)
          {
-            cout << "  station " << station + 1 << '/' << stations << "\n";
+            cout << "Solving " << frequency << " Hz with "
+                 << (use_mumps ? "MUMPS" : "FGMRES+ILU") << "\n";
+         }
+
+         for (int station = 0; station < stations; station++)
+         {
+            const real_t fraction =
+                (stations == 1) ? 0.0 : real_t(station) / real_t(stations - 1);
+            Vector transmitter(survey_start);
+            transmitter.Add(fraction, trajectory);
+            MFEM_VERIFY(PointIsInside(mesh, transmitter, point_tolerance),
+                        "Transmitter station " << station
+                                               << " lies outside the mesh.");
+            vector<Vector> rhs(3), solution(3);
+            for (int transmitter_axis = 0; transmitter_axis < 3;
+                 transmitter_axis++)
+            {
+               Vector moment(3);
+               GetFrameAxis(tool_frame, transmitter_axis, moment);
+               moment *= transmitter_moment;
+               unique_ptr<FiniteLoopCurrentCoefficient> loop_current;
+               unique_ptr<ConstantCoefficient> loop_rhs_scale;
+               unique_ptr<ScalarVectorProductCoefficient> loop_rhs;
+               ParComplexLinearForm linear_form(&space, convention);
+               if (source_type == 0)
+               {
+                  linear_form.Assemble();
+                  MFEM_VERIFY(AddPointMagneticDipoleRHS(
+                                  mesh, space, transmitter, moment, omega,
+                                  point_tolerance, linear_form),
+                              "Transmitter station "
+                                  << station << " lies outside the mesh.");
+               }
+               else
+               {
+                  loop_current.reset(new FiniteLoopCurrentCoefficient(
+                      transmitter, moment, loop_radius, wire_radius));
+                  loop_rhs_scale.reset(new ConstantCoefficient(-omega * mu0));
+                  loop_rhs.reset(new ScalarVectorProductCoefficient(
+                      *loop_rhs_scale, *loop_current));
+                  linear_form.AddDomainIntegrator(
+                      nullptr, new VectorFEDomainLFIntegrator(*loop_rhs));
+                  linear_form.Assemble();
+               }
+
+               rhs[transmitter_axis].SetSize(2 * true_size);
+               linear_form.ParallelAssemble(rhs[transmitter_axis]);
+               SetHomogeneousEssentialRHS(essential_tdofs,
+                                          rhs[transmitter_axis], true_size);
+               solution[transmitter_axis].SetSize(2 * true_size);
+               solution[transmitter_axis] = 0.0;
+            }
+
+            Array<const Vector *> rhs_array(3);
+            Array<Vector *> solution_array(3);
+            for (int axis = 0; axis < 3; axis++)
+            {
+               rhs_array[axis] = &rhs[axis];
+               solution_array[axis] = &solution[axis];
+            }
+            if (use_mumps)
+            {
+               // ComplexMUMPSSolver and MUMPSSolver both use one batched solve
+               // for the three source polarizations and retain the frequency's
+               // factors.
+               solver->ArrayMult(rhs_array, solution_array);
+            }
+            else
+            {
+               IterativeSolver *iterative =
+                   dynamic_cast<IterativeSolver *>(solver.get());
+               MFEM_VERIFY(iterative,
+                           "Internal iterative solver setup failed.");
+               for (int axis = 0; axis < 3; axis++)
+               {
+                  iterative->Mult(rhs[axis], solution[axis]);
+                  MFEM_VERIFY(iterative->GetConverged(),
+                              "GMRES failed at frequency "
+                                  << frequency << " Hz, station " << station
+                                  << ", transmitter axis " << axis << '.');
+               }
+            }
+
+            vector<unique_ptr<ParComplexGridFunction>> electric_fields(3);
+            for (int axis = 0; axis < 3; axis++)
+            {
+               electric_fields[axis].reset(new ParComplexGridFunction(&space));
+               Vector solution_real, solution_imaginary;
+               solution_real.MakeRef(solution[axis], 0, true_size);
+               solution_imaginary.MakeRef(solution[axis], true_size, true_size);
+               electric_fields[axis]->real().SetFromTrueDofs(solution_real);
+               electric_fields[axis]->imag().SetFromTrueDofs(
+                   solution_imaginary);
+            }
+
+            vector<unique_ptr<ParGridFunction>> magnetic_real(3);
+            vector<unique_ptr<ParGridFunction>> magnetic_imaginary(3);
+            const real_t magnetic_scale = 1.0 / (omega * mu0 * mu_r);
+            for (int axis = 0; axis < 3; axis++)
+            {
+               magnetic_real[axis].reset(new ParGridFunction(&curl_space));
+               magnetic_imaginary[axis].reset(new ParGridFunction(&curl_space));
+               curl.Mult(electric_fields[axis]->imag(), *magnetic_real[axis]);
+               curl.Mult(electric_fields[axis]->real(),
+                         *magnetic_imaginary[axis]);
+               *magnetic_real[axis] *= -magnetic_scale;
+               *magnetic_imaginary[axis] *= magnetic_scale;
+            }
+            WriteVTKFields(vtk_directory, evaluation_name, frequency_index,
+                           station, frequency, mesh, electric_fields,
+                           magnetic_real, magnetic_imaginary);
+
+            for (real_t spacing : spacings)
+            {
+               Vector receiver(transmitter);
+               receiver.Add(-spacing, tool_axis);
+               complex<real_t> response[3][3];
+               bool receiver_found = true;
+
+               for (int transmitter_axis = 0; transmitter_axis < 3;
+                    transmitter_axis++)
+               {
+                  Vector field_real(3), field_imaginary(3);
+                  const bool found = SampleMagneticField(
+                      mesh, *electric_fields[transmitter_axis], receiver, omega,
+                      mu_r, point_tolerance, field_real, field_imaginary);
+                  receiver_found = receiver_found && found;
+
+                  for (int receiver_axis = 0; receiver_axis < 3;
+                       receiver_axis++)
+                  {
+                     Vector receiver_direction(3);
+                     GetFrameAxis(tool_frame, receiver_axis,
+                                  receiver_direction);
+                     if (found)
+                     {
+                        response[receiver_axis][transmitter_axis] =
+                            complex<real_t>(
+                                Dot3(receiver_direction, field_real),
+                                Dot3(receiver_direction, field_imaginary)) /
+                            transmitter_moment;
+                     }
+                     else
+                     {
+                        const real_t nan = numeric_limits<real_t>::quiet_NaN();
+                        response[receiver_axis][transmitter_axis] =
+                            complex<real_t>(nan, nan);
+                     }
+                  }
+               }
+
+               if (!receiver_found && myid == 0)
+               {
+                  cerr << "Warning: receiver for station " << station
+                       << ", spacing " << spacing
+                       << " lies outside the mesh.\n";
+               }
+
+               if (myid == 0)
+               {
+                  output << station << ','
+                         << measured_depth_origin + fraction * survey_length
+                         << ',' << frequency << ',' << spacing;
+                  for (int d = 0; d < 3; d++)
+                  {
+                     output << ',' << transmitter[d];
+                  }
+                  for (int d = 0; d < 3; d++) { output << ',' << receiver[d]; }
+                  for (int receiver_axis = 0; receiver_axis < 3;
+                       receiver_axis++)
+                  {
+                     for (int transmitter_axis = 0; transmitter_axis < 3;
+                          transmitter_axis++)
+                     {
+                        output
+                            << ','
+                            << response[receiver_axis][transmitter_axis].real()
+                            << ','
+                            << response[receiver_axis][transmitter_axis].imag();
+                     }
+                  }
+                  output << '\n';
+               }
+            }
+
+            if (myid == 0)
+            {
+               cout << "  station " << station + 1 << '/' << stations << "\n";
+            }
          }
       }
+
+      if (myid == 0)
+      {
+         cout << "Wrote full complex 3x3 H tensor responses to "
+              << current_output_file << '\n';
+      }
+   };
+
+   if (!server_directory[0])
+   {
+      RunForward(output_file);
+      return 0;
    }
 
    if (myid == 0)
    {
-      cout << "Wrote full complex 3x3 H tensor responses to "
-           << output_file << '\n';
+      MFEM_VERIFY(
+          filesystem::is_directory(server_directory),
+          "Server output directory does not exist: " << server_directory);
+      cout << "UDAR_SERVER_READY 1" << endl;
+   }
+   /** @brief Serve scalar isotropic conductivity requests from Python.
+
+       Rank 0 accepts @c E request_id sigma_background sigma_target, with S/m
+       conductivities, or @c Q. Valid requests are broadcast to all MPI ranks.
+       The protocol supports only the two scalar conductivities; geometry and
+       anisotropy remain fixed for the process lifetime. */
+   while (true)
+   {
+      int opcode = 0;
+      long long request = -1;
+      real_t background_value = 0.0;
+      real_t target_value = 0.0;
+      if (myid == 0)
+      {
+         string line;
+         if (!getline(cin, line)) { opcode = 2; }
+         else
+         {
+            istringstream input(line);
+            char command = 0;
+            input >> command;
+            string extra;
+            if (command == 'Q' && !(input >> extra)) { opcode = 2; }
+            else if (command == 'E' &&
+                     (input >> request >> background_value >> target_value) &&
+                     request >= 0 && !(input >> extra))
+            {
+               opcode = 1;
+            }
+            else
+            {
+               opcode = -1;
+            }
+         }
+      }
+      MPI_Bcast(&opcode, 1, MPI_INT, 0, mesh.GetComm());
+      if (opcode == 2) { break; }
+      if (opcode < 0)
+      {
+         if (myid == 0) { cout << "UDAR_SERVER_ERROR invalid_request" << endl; }
+         continue;
+      }
+      MPI_Bcast(&request, 1, MPI_LONG_LONG, 0, mesh.GetComm());
+      MPI_Bcast(&background_value, 1, MFEM_MPI_REAL_T, 0, mesh.GetComm());
+      MPI_Bcast(&target_value, 1, MFEM_MPI_REAL_T, 0, mesh.GetComm());
+      MFEM_VERIFY(isfinite(background_value) && background_value > 0.0 &&
+                      isfinite(target_value) && target_value > 0.0,
+                  "Server conductivities must be positive and finite.");
+      sigma_background = 0.0;
+      sigma_target = 0.0;
+      for (int d = 0; d < 3; d++)
+      {
+         sigma_background(d, d) = background_value;
+         sigma_target(d, d) = target_value;
+      }
+      sigma.SetConductivities(sigma_background, sigma_target);
+      ostringstream filename;
+      filename << "evaluation_" << setw(5) << setfill('0') << request << ".csv";
+      const string path =
+          (filesystem::path(server_directory) / filename.str()).string();
+      RunForward(path);
+      if (myid == 0) { cout << "UDAR_SERVER_DONE " << request << endl; }
    }
    return 0;
 }

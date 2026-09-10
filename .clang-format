@@ -1,0 +1,18 @@
+# Mirrors the applicable C++ layout rules in config/mfem.astylerc. MFEM's
+# `make style` remains authoritative; this file supplies editor defaults.
+---
+Language: Cpp
+BasedOnStyle: LLVM
+IndentWidth: 3
+TabWidth: 3
+UseTab: Never
+LineEnding: LF
+ColumnLimit: 80
+BreakBeforeBraces: Allman
+AllowShortBlocksOnASingleLine: Always
+AllowShortIfStatementsOnASingleLine: Always
+AllowShortLoopsOnASingleLine: true
+SpaceBeforeParens: ControlStatements
+PointerAlignment: Right
+SortIncludes: Never
+...

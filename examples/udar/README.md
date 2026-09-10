@@ -1,5 +1,9 @@
 # MFEM 3D UDAR forward solver
 
+The Python workflow with a C++ Trilinos/ROL inversion core is documented in
+[inversion/README.md](../../inversion/README.md). It supports bounded recovery
+of background/target isotropic conductivities and synthetic recovery checks.
+
 `udar3p` is a first parallel forward-modeling application for ultra-deep
 azimuthal resistivity (UDAR) studies. It uses MFEM Nedelec elements for the
 frequency-domain electric field and recovers the full complex 3x3 magnetic
@@ -18,6 +22,8 @@ behind each transmitter along the negative tool axis by the requested spacing.
 - Native complex MUMPS when `zmumps` is available, real-block MUMPS otherwise,
   or iterative flexible GMRES with a distributed ILU preconditioner.
 - Tidy CSV results plus 3x3 amplitude and phase curve panels.
+- ParaView VTK output for the Rh/Rv model and complex electric and magnetic
+  fields.
 
 The CSV stores `H(receiver axis, transmitter axis)` normalized by transmitter
 moment. With SI mesh coordinates its units are `m^-3`. Real and imaginary
@@ -62,6 +68,28 @@ The `-gmres` path uses FGMRES with distributed ILU and defaults to a relative
 residual tolerance of `1e-4`; tighten `-rtol` only after checking convergence
 for the chosen mesh and material contrast. MUMPS is preferred for reference
 solutions.
+
+### ParaView output
+
+Add `-vtk DIRECTORY` to write binary VTK files. For each CSV output named
+`NAME.csv`, the writer creates `DIRECTORY/NAME/model/model.pvd` with
+`Rh_ohm_m` and `Rv_ohm_m`, and one `fields_fNNN_stationNNN/*.pvd` collection
+per frequency and transmitter station. The field collections contain
+`E_real_x`, `E_imag_x`, `H_real_x`, and corresponding y/z transmitter fields.
+Open a `.pvd` file in ParaView; it locates the parallel `.pvtu` and per-rank
+`.vtu` pieces. Rh is the average xx/yy component of the inverse conductivity
+tensor and Rv is its zz component, so these labels use the global mesh axes.
+
+For repeated conductivity evaluations, `-server DIRECTORY` starts a persistent
+stdin/stdout protocol used by the Python inversion wrapper. It initializes MPI,
+the mesh, and the finite-element space once. Rank 0 prints
+`UDAR_SERVER_READY 1`; send
+`E REQUEST_ID SIGMA_BACKGROUND SIGMA_TARGET` for each scalar isotropic model.
+The response CSV is `DIRECTORY/evaluation_REQUEST_ID.csv`, with a five-digit
+zero-padded request ID, and `UDAR_SERVER_DONE REQUEST_ID` signals that the file
+is complete. Send `Q` for an orderly shutdown. All ranks must participate in
+the same server launch, and the output directory must already exist. The matrix
+and its numeric factorization are rebuilt after each conductivity update.
 
 ### Windows oneAPI MPI smoke test
 
