@@ -19,6 +19,11 @@ Do not mix MS-MPI, MinGW, or a different MSVC runtime with this stack. MUMPS
 uses `ifx` for Fortran and hypre uses the MSVC-compatible `icx` driver for
 C/C++. Every component links Intel MPI and oneMKL from the same oneAPI release.
 
+The optional `build-petsc-tao.ps1` driver adds PETSc/TAO to the same ABI family.
+It builds PETSc with MSVC `/MD`, Intel MPI, oneMKL LP64, real double scalars,
+and 32-bit indices. The static PETSc libraries are linked into `udar_tao.dll`,
+so Python still crosses only the small UDAR C ABI.
+
 The current Visual Studio 2026 STL requires Clang 20 or newer, while the
 installed oneAPI compiler is 2024.1. MFEM is therefore compiled with `cl`; it
 uses the same MSVC ABI as the `icx`-built hypre and MUMPS libraries.

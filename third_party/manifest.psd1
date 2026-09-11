@@ -14,4 +14,11 @@
    PugiRepository = 'https://github.com/zeux/pugixml.git'
    PugiTag        = 'v1.14'
    PugiCommit     = 'db78afc2b7d8f043b4bc6b185635d949ea2ed2a8'
+
+   # Optional PETSc/TAO inversion core (inversion/cpp/udar_tao.cpp).
+   PetscRepository = 'https://gitlab.com/petsc/petsc.git'
+   PetscTag        = 'v3.25.5'
+   PetscCommit     = 'a0b507cc1cc9eac739c34d6e71521f4854e84e36'
+   Win32feRepository = 'https://bitbucket.org/petsc/win32fe.git'
+   Win32feCommit     = 'f2ff43464a6f25d7ccd55fe164585feee2c8bd76'
 }

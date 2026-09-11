@@ -15,9 +15,11 @@ def load_config(path):
     with path.open(encoding="utf-8") as stream:
         config = json.load(stream)
     unknown = config.keys() - {"forward", "parameters", "channels", "noise",
-                               "optimizer", "synthetic_truth"}
+                               "optimizer", "synthetic_truth", "backend"}
     if unknown:
         raise ValueError(f"Unknown configuration keys: {sorted(unknown)}")
+    if config.get("backend", "rol") not in {"rol", "tao"}:
+        raise ValueError("backend must be 'rol' or 'tao'")
     parameters = config.get("parameters", [])
     if not parameters:
         raise ValueError("At least one inversion parameter is required")
@@ -58,7 +60,8 @@ def _write_iteration_models(path, forward, names):
             writer.writerow(row)
 
 
-def run_inversion(config_path, observed_path, output_dir, *, library=None):
+def run_inversion(config_path, observed_path, output_dir, *, library=None,
+                  backend=None):
     config, base = load_config(config_path)
     observations = TensorData.read(observed_path)
     channels = config.get("channels", CHANNELS)
@@ -84,8 +87,10 @@ def run_inversion(config_path, observed_path, output_dir, *, library=None):
     upper = [math.log(p["upper"]) for p in parameters]
     prior = [math.log(p.get("prior", p["initial"])) for p in parameters]
     try:
+        selected_backend = (backend or config.get("backend", "rol")).lower()
         result = minimize(predict, initial, lower, upper, observed, stddev, prior=prior,
-                          library=library, log_path=output / "rol.log",
+                          library=library, backend=selected_backend,
+                          log_path=output / f"{selected_backend}.log",
                           **config.get("optimizer", {}))
         recovered = dict(zip(names, map(math.exp, result["log_conductivity"])))
         predicted = forward.predict(recovered)
@@ -114,7 +119,7 @@ def run_inversion(config_path, observed_path, output_dir, *, library=None):
         raise
 
 
-def synthetic_recovery(config_path, output_dir, *, library=None):
+def synthetic_recovery(config_path, output_dir, *, library=None, backend=None):
     """Noiseless same-discretization recovery: a software check, not physics validation."""
     config, base = load_config(config_path)
     truth = config.get("synthetic_truth")
@@ -131,7 +136,9 @@ def synthetic_recovery(config_path, output_dir, *, library=None):
         forward.predict(truth).write(output / "observed.csv")
     finally:
         forward.close(force=True)
-    result = run_inversion(config_path, output / "observed.csv", output / "inversion", library=library)
+    result = run_inversion(config_path, output / "observed.csv",
+                           output / "inversion", library=library,
+                           backend=backend)
     errors = {name: abs(result["conductivity_s_per_m"][name]/truth[name]-1) for name in names}
     result.update(synthetic_truth=truth, relative_parameter_error=errors,
                   recovery_passed=result["converged"] and max(errors.values()) < 0.01,
