@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "udar-inversion"
 version = "0.1.0"
-description = "Python workflow for MFEM UDAR modeling and C++ Trilinos/ROL inversion"
+description = "Python workflow for adaptive MFEM UDAR modeling and C++ ROL/TAO inversion"
 requires-python = ">=3.10"
 dependencies = []
 

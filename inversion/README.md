@@ -1,6 +1,6 @@
 # UDAR inversion: Python interface with C++ ROL and PETSc/TAO cores
 
-This is the first executable inversion workflow for `examples/udar3p.cpp`.
+This is the first executable inversion workflow for `miniapps/udar/udar3p.cpp`.
 Python handles configuration, CSV observations and the forward adapter. The
 optimization algorithm, objective, regularization, finite-difference derivatives
 and bound handling run in C++ using either Trilinos/ROL or PETSc/TAO. No SciPy
@@ -22,6 +22,9 @@ slabs and boxes. Geometry, anisotropy, source/receiver layout and mesh stay fixe
 Each frequency/station/polarization is still solved by the existing forward code.
 
 By default, the wrapper launches one long-lived `udar3p` process for an inversion.
+Its MUMPS symbolic ordering is reused across conductivity updates because the
+mesh and matrix pattern remain fixed. Set `mumps_reuse: false` in a forward or
+frequency-mesh configuration only to disable this optimization.
 MPI, the mesh, and the Nedelec finite-element space are initialized once; each
 request updates the scalar isotropic background/target conductivity and writes a
 new tensor CSV. Material-dependent forms and numeric factorizations are rebuilt
@@ -29,10 +32,115 @@ for every request. Set `forward.persistent` to `false` to retain the one-process
 per-evaluation compatibility path. The server log and each request's output make
 the optimizer-to-forward interaction auditable.
 
+For iterative forward solves, set `solver` to `gmres` and choose
+`preconditioner: "ams"`. The Python adapter also accepts `ams_system_mode`,
+`ams_cycle_type`, `ams_iterations`, `ams_smoothing_iterations`,
+`ams_print_level`, and `ams_ilu_fallback`. Use MUMPS to generate and periodically
+check reference responses. On Windows, launch the inversion from a shell that
+has run Intel oneAPI `setvars.bat`; otherwise the MPI child cannot load
+`impi.dll`.
+
+## Adaptive and multi-frequency forward meshes
+
+`udar3p` accepts `-octree` to apply MFEM nonconforming, graded hexahedral or
+tetrahedral refinement around the complete transmitter-receiver path. The mesh remains
+coarse in the far formation. Use `octree`, `octree_levels`, `octree_radius`,
+and `octree_padding` in `forward` to pass the corresponding options through
+the Python adapter. The forward executable writes the resulting nonconforming
+mesh with each ParaView field collection, so refinement can be inspected
+directly.
+
+Different frequencies do not inherently require different meshes. They do
+require separate mesh-convergence checks: lower frequencies generally need a
+larger outer domain because their skin depth is longer, while higher frequencies
+often need a finer tool-region mesh because their skin depth is shorter. A
+single conservative mesh is simplest. When it is too expensive, split the
+acquisition into fixed frequency groups. Each group owns one persistent forward
+process and can choose a different base mesh and octree policy; its rows are
+merged into one ordered objective vector.
+
+```json
+"forward": {
+  "executable": "../../build/oneapi-mpi-mumps/miniapps/udar/udar3p.exe",
+  "mesh": "../../data/inline-hex.mesh",
+  "solver": "mumps",
+  "persistent": true,
+  "stations": 12,
+  "frequencies": [2000, 12000, 48000, 96000],
+  "frequency_meshes": [
+    {
+      "frequencies": [2000, 12000],
+      "octree": true,
+      "octree_levels": 1,
+      "octree_radius": 0.20,
+      "octree_padding": 0.05
+    },
+    {
+      "frequencies": [48000, 96000],
+      "octree": true,
+      "octree_levels": 3,
+      "octree_radius": 0.08,
+      "octree_padding": 0.02
+    }
+  ]
+}
+```
+
+The group frequency lists must partition `forward.frequencies` exactly once.
+Groups may override only `mesh`, `frequencies`, serial/parallel uniform
+refinement, and the octree controls. They run serially by default so MPI jobs
+are not oversubscribed. Set `forward.frequency_mesh_workers` only when each
+concurrent group has independent allocated MPI resources. The optimizer never
+changes a group's mesh inside an inversion, which keeps finite-difference
+gradients reproducible. Every group mesh must cover the complete requested
+tool path and represent the same physical formation, coordinates, and boundary
+model; only its numerical resolution or far-domain extent should differ.
+
+A moderate tetrahedral base mesh is a practical forward discretization for an
+inversion. Each `frequency_meshes` entry can select `inline-tet.mesh` and a
+nested refinement policy, while remaining fixed for the full inversion. The included
+`configs/tetrahedral_multifrequency_pml.json` is a complete example.
+
+Set `pml: true` in `forward` or a frequency group to add the Cartesian
+coordinate-stretch PML used by the forward solver. `pml_thickness`,
+`pml_conductivity`, and `pml_order` control its physical thickness, maximum
+artificial stretch conductivity, and grading. Keep these fixed over every
+finite-difference evaluation. The model VTK output provides `PML_region`,
+`PML_profile`, `PML_sigma_S_m`, and `cell_size` as cell arrays for checking
+the PML and the nested forward grid in ParaView.
+Keep several element layers through the PML in every frequency mesh; six to
+ten layers are a useful starting point for convergence tests.
+
+## Incremental station updates
+
+An `incremental_update` can reuse a previous `result.json`, solve only newly
+acquired stations, and freeze trusted parameters from the prior result. It
+starts unfrozen parameters from the prior values and records the merge in the
+new `result.json`.
+
+```json
+"incremental_update": {
+  "previous_result": "../station_0000_0011/result.json",
+  "active_stations": [12, 13, 14],
+  "freeze_parameters": ["sigma_background"],
+  "initialize_from_previous": true
+}
+```
+
+The wrapper passes `active_stations` to `udar3p --station-indices`, filters the
+objective to those CSV rows, and evaluates only those forward stations. The
+final conductivity dictionary merges the frozen prior values with the newly
+optimized values. At the current milestone the model is parameterized only by
+the global background and target conductivities, so `freeze_parameters` locks
+parameters, not spatial cells. A true regional fidelity mask needs the planned
+cellwise conductivity parameterization, spatial regularization, and a
+matrix-free tangent/adjoint; the update metadata is deliberately explicit
+about this limit.
+
 ## Build the C++ cores
 
 Build `udar3p` first using the existing oneAPI/MUMPS instructions in
-`examples/udar/README.md`. The inversion DLL is a separate CMake project and does
+`miniapps/udar/README.md`. The inversion DLL is a separate CMake project and does
 not rebuild or link MFEM. Source dependencies are pinned in
 `third_party/manifest.psd1`; download once from the repository root:
 
@@ -122,6 +230,7 @@ Either install with `python -m pip install -e inversion` or, from PowerShell:
 $env:PYTHONPATH = Join-Path $PWD 'inversion/python'
 python -m udar_inversion synthetic inversion/configs/uniform.json --output build/uniform-inversion
 python -m udar_inversion synthetic inversion/configs/box.json --output build/box-inversion
+python -m udar_inversion synthetic inversion/configs/uniform_multifrequency_octree.json --output build/uniform-octree-inversion
 python -m udar_inversion synthetic inversion/configs/uniform.json --backend tao --output build/uniform-tao-inversion
 ```
 
@@ -192,15 +301,20 @@ realistic open-domain UDAR response.
 
 Each inversion directory contains `configuration.json`, `observed.csv`,
 `predicted.csv`, `result.json`, `residuals.json`, `rol.log` or `tao.log`, and individual forward
-CSVs plus a server log and evaluation trace. Every forward evaluation also writes
-ParaView VTK data under `forward/vtk/evaluation_00001/`: `model/model.pvd`
-contains `Rh_ohm_m` and `Rv_ohm_m`, while each `fields_fNNN_stationNNN/*.pvd`
-contains real and imaginary `E` and `H` for the three transmitter axes. The
+CSVs plus a server log and evaluation trace. A single forward mesh writes
+ParaView VTK data under `forward/vtk/evaluation_00001/`; frequency groups use
+`forward/group_NN/vtk/evaluation_00001/`. Each `model/model.pvd` references
+per-rank legacy VTK pieces that store `Rh_ohm_m` and `Rv_ohm_m` as cell data,
+while each `fields_fNNN_stationNNN/*.pvd` contains real, imaginary, and
+complex-magnitude `E` and `H` for the three transmitter axes. The
 `iteration_models.csv` file maps every evaluated inversion model to its VTK
-directory; finite-difference evaluations are included so the result is fully
-auditable. Synthetic runs write the reference model under `true_model/vtk/`.
-Open a `.pvd` file in ParaView; it loads the associated parallel `.pvtu` and
-per-rank `.vtu` files automatically. Results include conductivity,
+directory. With frequency meshes it has one row per evaluation and mesh group,
+including the group's frequency list; finite-difference evaluations are included
+so the result is fully auditable. Synthetic runs write the reference model under
+`true_model/vtk/`.
+Open a `.pvd` file in ParaView; model collections load their per-rank `.vtk`
+files and field collections load the associated parallel `.pvtu` and per-rank
+`.vtu` files automatically. Results include conductivity,
 resistivity, weighted RMS, objective reduction, projected-gradient norm,
 iterations, forward counts, and persistent-server starts. `converged` is true
 only when the selected C++ backend reports convergence. An iteration limit or

@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import csv
+from concurrent.futures import ThreadPoolExecutor
 import json
 import math
 import os
@@ -18,6 +19,7 @@ GEOMETRY = ["md_m", "tx_x", "tx_y", "tx_z", "rx_x", "rx_y", "rx_z"]
 PARAMETERS = {"sigma_background": "-sig-bg", "sigma_target": "-sig-target"}
 OPTIONS = {
     "frequencies": "-freq", "spacings": "-sp", "stations": "-ns",
+    "station_indices": "-si",
     "survey_start": "-p0", "survey_end": "-p1", "tool_up": "-up",
     "formation_model": "-model", "sigma_background": "-sig-bg",
     "sigma_target": "-sig-target", "slab_center": "-slab-c",
@@ -25,12 +27,45 @@ OPTIONS = {
     "interface_width": "-iw", "box_minimum": "-box-min",
     "box_maximum": "-box-max", "order": "-o",
     "serial_refinements": "-rs", "parallel_refinements": "-rp",
+    "octree": "-octree", "octree_levels": "-octree-l",
+    "octree_radius": "-octree-r", "octree_padding": "-octree-pad",
+    "pml": "-pml", "pml_thickness": "-pml-t",
+    "pml_conductivity": "-pml-s", "pml_order": "-pml-o",
     "boundary_condition": "-bc", "source_type": "-src",
     "loop_radius": "-loop-r", "wire_radius": "-wire-r",
     "relative_permittivity": "-epsr", "relative_permeability": "-mur",
     "relative_tolerance": "-rtol", "maximum_iterations": "-maxit",
+    "preconditioner": "-pc", "ams_system_mode": "-ams-mode",
+    "ams_cycle_type": "-ams-cycle", "ams_iterations": "-ams-it",
+    "ams_smoothing_iterations": "-ams-smooth",
+    "ams_print_level": "-ams-print", "ams_ilu_fallback": "-ams-fallback",
+    "mumps_reuse": "-mumps-reuse",
     "vtk_directory": "-vtk",
 }
+
+FREQUENCY_MESH_OPTIONS = {
+    "frequencies", "mesh", "serial_refinements", "parallel_refinements",
+    "octree", "octree_levels", "octree_radius", "octree_padding",
+    "pml", "pml_thickness", "pml_conductivity", "pml_order",
+    "mumps_reuse",
+}
+
+
+def _process_path(path):
+    """Format a path for the native forward executable.
+
+    Standard Windows Python already returns native paths.  Cygwin Python uses
+    ``/cygdrive/X`` paths, which MFEM's native Windows file reader cannot open.
+    Keep Python-side paths unchanged and translate only process arguments.
+    """
+    value = str(path)
+    prefix = "/cygdrive/"
+    if os.name == "posix" and value.startswith(prefix) and \
+            len(value) > len(prefix) + 1 and value[len(prefix) + 1] == "/":
+        drive = value[len(prefix)].upper()
+        suffix = value[len(prefix) + 2:].replace("/", "\\")
+        return f"{drive}:\\{suffix}"
+    return value
 
 
 class TensorData:
@@ -92,11 +127,53 @@ class TensorData:
                 result.append(math.hypot(relative*amplitude, absolute))
         return result
 
+    def select_keys(self, reference):
+        """Return rows with exactly the acquisition keys in ``reference``."""
+        if not isinstance(reference, TensorData):
+            raise TypeError("reference must be TensorData")
+        missing = reference.by_key.keys() - self.by_key.keys()
+        if missing:
+            raise ValueError("Predicted data does not cover every selected observation")
+        return TensorData([self.by_key[key] for key in sorted(reference.by_key)],
+                          self.fieldnames)
 
-class ForwardModel:
-    """Replaceable prediction interface with a persistent udar3p process.
+    def select_stations(self, stations):
+        """Return a nonempty station subset without changing CSV validation."""
+        if not isinstance(stations, list) or not stations:
+            raise ValueError("active_stations must be a nonempty list")
+        wanted = set()
+        for station in stations:
+            if not isinstance(station, int) or isinstance(station, bool) or station < 0:
+                raise ValueError("active_stations must contain nonnegative integers")
+            wanted.add(float(station))
+        selected = [row for row in self.rows if float(row["station"]) in wanted]
+        if not selected:
+            raise ValueError("active_stations selects no observations")
+        return TensorData(selected, self.fieldnames)
 
-    ROL is serial; MPI parallelism belongs to the forward child processes.
+    @classmethod
+    def merge_frequency_groups(cls, groups):
+        """Combine distinct frequency groups into one validated tensor data set."""
+        if not groups:
+            raise ValueError("At least one frequency mesh group is required")
+        rows, seen = [], set()
+        fieldnames = groups[0].fieldnames
+        for data in groups:
+            if data.fieldnames != fieldnames:
+                raise ValueError("Frequency mesh groups use incompatible CSV columns")
+            for row in data.rows:
+                key = tuple(float(row[name]) for name in KEYS)
+                if key in seen:
+                    raise ValueError(f"Duplicate frequency-mesh response: {key}")
+                seen.add(key)
+                rows.append(row)
+        return cls(rows, fieldnames)
+
+
+class _ForwardProcess:
+    """One mesh-specific persistent-process adapter for the UDAR executable.
+
+    The optimizer is serial; MPI parallelism belongs to this forward child.
     Constructor paths are relative to base_dir, never to temporary run folders.
     """
     def __init__(self, configuration, work_dir, base_dir="."):
@@ -128,6 +205,17 @@ class ForwardModel:
             raise ValueError("formation_model must be 0, 1 or 2")
         if bool(self.config.get("survey_start")) != bool(self.config.get("survey_end")):
             raise ValueError("Supply both survey_start and survey_end")
+        if "station_indices" in self.config:
+            stations = self.config.get("stations")
+            selected = self.config["station_indices"]
+            if not isinstance(stations, int) or isinstance(stations, bool) or stations < 1:
+                raise ValueError("station_indices requires a positive integer stations count")
+            if not isinstance(selected, list) or not selected:
+                raise ValueError("station_indices must be a nonempty list")
+            if any(not isinstance(value, int) or isinstance(value, bool) or
+                   value < 0 or value >= stations for value in selected) or \
+                    len(set(selected)) != len(selected):
+                raise ValueError("station_indices must be unique indices within stations")
         self.persistent = self.config.get("persistent", True)
         if not isinstance(self.persistent, bool):
             raise ValueError("persistent must be true or false")
@@ -143,18 +231,27 @@ class ForwardModel:
         return (self.base_dir / path).resolve()
 
     def _arguments(self, conductivities=None, server=False, output=None):
-        args = list(self.launcher) + [str(self.executable), "-m", str(self.mesh),
-                                     "-"+self.solver]
+        # Keep the executable path in the controller's native form so Cygwin
+        # Python can launch it. File arguments below belong to native MFEM.
+        args = list(self.launcher) + [str(self.executable), "-m",
+                                     _process_path(self.mesh), "-"+self.solver]
         if server:
-            args.extend(["-server", str(self.work_dir)])
+            args.extend(["-server", _process_path(self.work_dir)])
         else:
-            args.extend(["-out", str(output)])
-        settings = {"formation_model": 0, "vtk_directory": str(self.vtk_dir),
+            args.extend(["-out", _process_path(output)])
+        settings = {"formation_model": 0,
+                    "vtk_directory": _process_path(self.vtk_dir),
                     **self.config,
                     **(conductivities or {})}
         for name, flag in OPTIONS.items():
             if name in settings:
                 value = settings[name]
+                if name in ("octree", "pml", "mumps_reuse",
+                            "ams_ilu_fallback") and \
+                        isinstance(value, bool):
+                    flag_name = name.replace("_", "-")
+                    args.append(f"-{flag_name}" if value else f"-no-{flag_name}")
+                    continue
                 text = ",".join(map(str, value)) if isinstance(value, list) else str(value)
                 args.extend([flag, text])
         return args
@@ -321,10 +418,174 @@ class ForwardModel:
         record = {"evaluation": self.evaluations, "conductivity": conductivities,
                   "persistent": self.persistent,
                   "seconds": time.monotonic()-start, "command": args,
-                  "output": str(output),
-                  "vtk": str(self.vtk_dir / f"evaluation_{self.evaluations:05d}")}
+                  "output": _process_path(output),
+                  "vtk": _process_path(
+                      self.vtk_dir / f"evaluation_{self.evaluations:05d}")}
         with (self.work_dir / "evaluations.jsonl").open("a", encoding="utf-8") as stream:
             stream.write(json.dumps(record, allow_nan=False)+"\n")
+        if len(self.cache) >= 256:
+            self.cache.clear()
+        self.cache[key] = data
+        return data
+
+
+class ForwardModel:
+    """Run one mesh or a deterministic set of frequency-specific meshes.
+
+    ``frequency_meshes`` keeps each frequency group in a separate persistent
+    ``udar3p`` process.  Every process owns a fixed mesh for the whole
+    inversion, so finite-difference evaluations remain deterministic while low
+    and high frequencies can use different adaptive domains.  Groups are
+    executed serially by default to avoid accidental MPI oversubscription.
+    Set ``frequency_mesh_workers`` only after allocating independent MPI
+    resources for the concurrent groups.
+    """
+    def __init__(self, configuration, work_dir, base_dir="."):
+        config = dict(configuration)
+        mesh_groups = config.pop("frequency_meshes", None)
+        workers = config.pop("frequency_mesh_workers", 1)
+        if not isinstance(workers, int) or isinstance(workers, bool) or workers < 1:
+            raise ValueError("frequency_mesh_workers must be a positive integer")
+        self.base_dir = Path(base_dir).resolve()
+        self.work_dir = Path(work_dir).resolve()
+        self._groups = []
+        self._multi_mesh = mesh_groups is not None
+        self.cache = {}
+        self.evaluations = 0
+        self.frequency_mesh_workers = workers
+
+        if mesh_groups is None:
+            self._groups.append(("group_00", _ForwardProcess(
+                config, self.work_dir, self.base_dir)))
+        else:
+            self._configure_frequency_meshes(config, mesh_groups)
+
+        first = self._groups[0][1]
+        self.executable = first.executable
+        self.mesh = first.mesh
+        self.vtk_dir = first.vtk_dir if not self._multi_mesh else self.work_dir
+
+    @staticmethod
+    def _frequency_key(value):
+        if not isinstance(value, (int, float)) or isinstance(value, bool):
+            raise ValueError("Frequencies must be positive finite numbers")
+        value = float(value)
+        if not math.isfinite(value) or value <= 0:
+            raise ValueError("Frequencies must be positive finite numbers")
+        return value
+
+    def _configure_frequency_meshes(self, config, mesh_groups):
+        if not isinstance(mesh_groups, list) or not mesh_groups:
+            raise ValueError("frequency_meshes must be a nonempty list")
+        base_frequencies = config.get("frequencies")
+        if not isinstance(base_frequencies, list) or not base_frequencies:
+            raise ValueError("frequency_meshes requires forward.frequencies")
+        expected = [self._frequency_key(value) for value in base_frequencies]
+        if len(set(expected)) != len(expected):
+            raise ValueError("forward.frequencies must be unique with frequency_meshes")
+
+        supplied = []
+        self.work_dir.mkdir(parents=True, exist_ok=False)
+        for index, group in enumerate(mesh_groups):
+            if not isinstance(group, dict) or group.keys() - FREQUENCY_MESH_OPTIONS:
+                raise ValueError("frequency mesh groups may override only mesh-resolution options")
+            frequencies = group.get("frequencies")
+            if not isinstance(frequencies, list) or not frequencies:
+                raise ValueError("Each frequency mesh group needs a nonempty frequencies list")
+            current = [self._frequency_key(value) for value in frequencies]
+            if len(set(current)) != len(current):
+                raise ValueError("A frequency mesh group contains duplicate frequencies")
+            supplied.extend(current)
+            child_config = {**config, **group}
+            name = f"group_{index:02d}"
+            self._groups.append((name, _ForwardProcess(
+                child_config, self.work_dir / name, self.base_dir)))
+
+        if len(set(supplied)) != len(supplied) or set(supplied) != set(expected):
+            raise ValueError("frequency_meshes must partition forward.frequencies exactly once")
+
+    @property
+    def server_starts(self):
+        return sum(group.server_starts for _, group in self._groups)
+
+    @property
+    def forward_contexts(self):
+        """Describe the fixed forward discretizations used by this run."""
+        return [
+            {
+                "name": name,
+                "frequencies_hz": group.config.get("frequencies", []),
+                "mesh": _process_path(group.mesh),
+                "octree": bool(group.config.get("octree", False)),
+                "octree_levels": group.config.get("octree_levels"),
+                "octree_radius": group.config.get("octree_radius"),
+                "pml": bool(group.config.get("pml", False)),
+                "pml_thickness": group.config.get("pml_thickness"),
+                "vtk_root": _process_path(group.vtk_dir),
+            }
+            for name, group in self._groups
+        ]
+
+    def close(self, force=False):
+        for _, group in self._groups:
+            group.close(force=force)
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *_):
+        self.close()
+
+    def __del__(self):
+        try:
+            self.close(force=True)
+        except Exception:
+            pass
+
+    def _predict_group(self, item, conductivities):
+        name, group = item
+        return name, group, group.predict(conductivities)
+
+    def predict(self, conductivities):
+        if not self._multi_mesh:
+            return self._groups[0][1].predict(conductivities)
+        if not conductivities or conductivities.keys() - PARAMETERS.keys():
+            raise ValueError("Supported parameters: sigma_background, sigma_target")
+        key = tuple(sorted(conductivities.items()))
+        if key in self.cache:
+            return self.cache[key]
+
+        self.evaluations += 1
+        start = time.monotonic()
+        if self.frequency_mesh_workers == 1:
+            results = [self._predict_group(item, conductivities)
+                       for item in self._groups]
+        else:
+            with ThreadPoolExecutor(max_workers=min(self.frequency_mesh_workers,
+                                                    len(self._groups))) as pool:
+                results = list(pool.map(
+                    lambda item: self._predict_group(item, conductivities),
+                    self._groups))
+        data = TensorData.merge_frequency_groups([result[2] for result in results])
+        contexts = []
+        for name, group, _ in results:
+            contexts.append({
+                "name": name,
+                "frequencies_hz": group.config["frequencies"],
+                "output": _process_path(
+                    group.work_dir / f"evaluation_{group.evaluations:05d}.csv"),
+                "vtk": _process_path(
+                    group.vtk_dir / f"evaluation_{group.evaluations:05d}"),
+            })
+        record = {
+            "evaluation": self.evaluations,
+            "conductivity": conductivities,
+            "persistent": all(group.persistent for _, group in self._groups),
+            "seconds": time.monotonic() - start,
+            "frequency_mesh_contexts": contexts,
+        }
+        with (self.work_dir / "evaluations.jsonl").open("a", encoding="utf-8") as stream:
+            stream.write(json.dumps(record, allow_nan=False) + "\n")
         if len(self.cache) >= 256:
             self.cache.clear()
         self.cache[key] = data

@@ -1,6 +1,6 @@
 {
   "forward": {
-    "executable": "../../build/oneapi-mpi-mumps/examples/udar3p.exe",
+    "executable": "../../build/oneapi-mpi-mumps/miniapps/udar/udar3p.exe",
     "mesh": "../../data/inline-hex.mesh",
     "solver": "mumps",
     "persistent": true,

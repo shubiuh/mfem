@@ -82,9 +82,9 @@ this workflow. MUMPS itself uses MPI and oneMKL LAPACK/BLAS in this stack.
 ## Smoke tests
 
 Run these from the initialized oneAPI environment after building. Change to
-the examples directory before launching the parallel examples because their
-default mesh paths (for example, `../data/inline-hex.mesh` for `udar3p`) are
-relative to the process working directory:
+the relevant executable directory before launching parallel programs because
+their default mesh paths are relative to the process working directory. The
+UDAR miniapp uses `../../data/inline-hex.mesh` from its build directory:
 
 ```powershell
 .\build\oneapi-mpi-mumps\examples\ex1.exe -no-vis
@@ -93,8 +93,11 @@ relative to the process working directory:
 ```powershell
 Push-Location .\build\oneapi-mpi-mumps\examples
 mpiexec -n 2 .\ex1p.exe -no-vis
+Pop-Location
+Push-Location .\build\oneapi-mpi-mumps\miniapps\udar
 mpiexec -n 2 .\udar3p.exe `
   -mumps -freq 2000 -ns 1 -sp 0.08 -out udar3p_smoke.csv
+Pop-Location
 mpiexec -n 2 .\udar3p.exe `
   -gmres -freq 2000 -ns 1 -sp 0.08 -out udar3p_gmres_smoke.csv
 Pop-Location

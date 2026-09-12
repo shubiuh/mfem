@@ -1,0 +1,49 @@
+{
+  "forward": {
+    "executable": "../../build/oneapi-mpi-mumps/miniapps/udar/udar3p.exe",
+    "mesh": "../../data/inline-tet.mesh",
+    "solver": "mumps",
+    "persistent": true,
+    "formation_model": 0,
+    "frequencies": [12000, 48000, 96000],
+    "spacings": [0.08, 0.16],
+    "stations": 3,
+    "sigma_background": 0.1,
+    "boundary_condition": 0,
+    "pml": true,
+    "pml_thickness": 0.15,
+    "pml_conductivity": 1.0,
+    "timeout_seconds": 180,
+    "frequency_meshes": [
+      {
+        "frequencies": [12000],
+        "mesh": "../../data/inline-tet.mesh",
+        "octree": true,
+        "octree_levels": 1,
+        "octree_radius": 0.18,
+        "octree_padding": 0.04
+      },
+      {
+        "frequencies": [48000, 96000],
+        "mesh": "../../data/inline-tet.mesh",
+        "octree": true,
+        "octree_levels": 3,
+        "octree_radius": 0.08,
+        "octree_padding": 0.02
+      }
+    ]
+  },
+  "parameters": [
+    {"name": "sigma_background", "initial": 0.1, "lower": 0.01, "upper": 2.0}
+  ],
+  "channels": ["Hxx_imag", "Hyy_imag", "Hzz_imag"],
+  "noise": {"relative": 0.00001, "absolute": 0.00000001},
+  "optimizer": {
+    "max_iterations": 50,
+    "gradient_tolerance": 0.000001,
+    "step_tolerance": 0.0000000001,
+    "difference_step": 0.001,
+    "regularization": 0.0
+  },
+  "synthetic_truth": {"sigma_background": 0.3}
+}
