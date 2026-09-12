@@ -1,0 +1,3 @@
+x_m,y_m,z_m,length_m,azimuth_deg,dip_deg,current_A,radius_m
+-600,0,0,800,0,0,1,350
+600,0,0,800,180,0,1,350

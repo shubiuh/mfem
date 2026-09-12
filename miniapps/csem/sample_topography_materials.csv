@@ -1,0 +1,3 @@
+attribute,Rh_ohm_m,Rv_ohm_m,dip_degrees,relative_permittivity,invertible
+1,100000000,100000000,0,1,0
+2,1000,1500,15,10,1
