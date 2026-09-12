@@ -25,24 +25,38 @@ they do not copy Palace implementation files into MFEM.
 1. **Cached, batched survey sampling (implemented).** Locate all receivers once per station,
    evaluate all three transmitter fields in one pass, and use one MPI reduction.
    Do not project H into an RT space unless field visualization is requested.
-2. **Solver reuse and controls (symbolic reuse implemented).** Reuse MUMPS
-   symbolic analysis while the matrix pattern is unchanged; next expose
-   ordering, BLR, and out-of-core controls and record assembly, setup,
-   factorization, solve, and sampling timings.
+2. **Solver reuse and controls (symbolic reuse and timings implemented).**
+   Reuse MUMPS symbolic analysis while the matrix pattern is unchanged and
+   record assembly, setup, solve, field-output, sampling, Krylov-iteration,
+   and fallback metrics. Next expose ordering, BLR, and out-of-core controls.
 3. **H(curl) preconditioning (implemented).** Assemble a positive shifted
    auxiliary operator and configure Hypre AMS. Complex-operator and explicit
    real-block modes are selectable, with lazy distributed-ILU recovery. Final
    multi-rank performance validation remains part of the Windows MPI checks.
-4. **Mesh hierarchy and AMR.** Preserve refinement levels for geometric
-   multigrid, add PML-resolution checks, and use curl/flux recovery plus
-   Dörfler marking for response-driven refinement. Frequency meshes remain
-   fixed during each inversion objective/gradient evaluation.
-5. **Forward-operator refactor.** Separate mesh/material/source, frequency
-   operator, solver, receiver evaluation, and output. This is required before
-   safe libCEED partial assembly or GPU execution.
-6. **Postprocessing.** Add cellwise electric/magnetic energy, loss density,
-   Poynting vector, mesh and solver metadata, and device-capable output for
-   large high-order cases.
+4. **Mesh hierarchy and AMR (PML diagnostics and hierarchy implemented).** Report a
+   conservative element-layer count, maximum normal element span, and maximum
+   polynomial-grading jump independently on all six Cartesian PML sides.
+   Retain parallel local and uniform refinement levels, Nedelec spaces and
+   true-DOF prolongation/transpose restriction for geometric multigrid. Next
+   add level-wise auxiliary Maxwell operators, smoothers and a coarse solver,
+   then use curl/flux recovery plus Dörfler marking for response-driven refinement. Frequency
+   meshes remain fixed during each inversion objective/gradient evaluation.
+5. **Forward-operator refactor (frequency systems implemented).**
+   `UDARFrequencySystem` now owns frequency-dependent coefficients, Maxwell
+   assembly, real-block conversion, and direct or iterative solver state.
+   Mesh/material configuration, sources, receiver evaluation, and output have
+   explicit remaining boundaries. Guarded native partial assembly is now
+   available for order >= 2 hex meshes with complex AMS cycle 13, PEC, no PML and no
+   ILU fallback. The AMS auxiliary matrix remains assembled. Validate GPU
+   execution and expand boundary/element support before extending this gate.
+6. **Postprocessing (field diagnostics implemented).** Output electric and
+   magnetic energy density, physical ohmic loss density, active Poynting
+   vector, mesh size, and solver timing metadata. Next add integrated power
+   balances. Output profiling and a production-writer scaling benchmark now
+   isolate host derived-field evaluation. Introduce device output after a
+   representative survey confirms a material end-to-end share, and validate
+   transfer-inclusive speedup and numerical agreement on an accelerator build;
+   the current oneAPI build is CPU-only. See OUTPUT_PERFORMANCE.md.
 7. **Multi-frequency reduction.** Introduce a projection-based adaptive
    frequency sweep for line search and early inversion iterations only after
    full-order solves and derivatives are stable, with periodic validation.

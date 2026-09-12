@@ -26,7 +26,9 @@
 
 #include "mfem.hpp"
 #include "udar3p_adapt.hpp"
+#include "udar3p_frequency.hpp"
 #include "udar3p_pml.hpp"
+#include "udar3p_postprocess.hpp"
 #include "udar3p_points.hpp"
 #include "udar3p_solver.hpp"
 
@@ -314,26 +316,6 @@ class FormationSigmaCoefficient : public MatrixCoefficient
    }
 };
 
-class ScaledMatrixCoefficient : public MatrixCoefficient
-{
- private:
-   MatrixCoefficient &coefficient;
-   real_t scale;
-
- public:
-   ScaledMatrixCoefficient(MatrixCoefficient &coefficient_, real_t scale_)
-       : MatrixCoefficient(3), coefficient(coefficient_), scale(scale_)
-   {
-   }
-
-   void Eval(DenseMatrix &value, ElementTransformation &T,
-             const IntegrationPoint &ip) override
-   {
-      coefficient.Eval(value, T, ip);
-      value *= scale;
-   }
-};
-
 /** @brief Scalar horizontal or vertical resistivity derived from conductivity.
 
     The horizontal value is the mean of the xx and yy entries of the inverse
@@ -362,37 +344,6 @@ class ResistivityCoefficient : public Coefficient
    }
 };
 
-/** @brief Magnitude of a complex vector field represented by real and imaginary
-   parts.
-
-    The coefficient evaluates @f$\sqrt{\mathbf{u}_r\cdot\mathbf{u}_r +
-    \mathbf{u}_i\cdot\mathbf{u}_i}@f$, which is the magnitude of a complex
-    phasor vector at the requested physical point. */
-class ComplexVectorMagnitudeCoefficient : public Coefficient
-{
- private:
-   VectorCoefficient &real_part;
-   VectorCoefficient &imaginary_part;
-
- public:
-   ComplexVectorMagnitudeCoefficient(VectorCoefficient &real_part_,
-                                     VectorCoefficient &imaginary_part_)
-       : real_part(real_part_), imaginary_part(imaginary_part_)
-   {
-      MFEM_VERIFY(real_part.GetVDim() == imaginary_part.GetVDim(),
-                  "Complex vector parts must have the same dimension.");
-   }
-
-   real_t Eval(ElementTransformation &T, const IntegrationPoint &ip) override
-   {
-      Vector real_value(real_part.GetVDim());
-      Vector imaginary_value(imaginary_part.GetVDim());
-      real_part.Eval(real_value, T, ip);
-      imaginary_part.Eval(imaginary_value, T, ip);
-      return sqrt(InnerProduct(real_value, real_value) +
-                  InnerProduct(imaginary_value, imaginary_value));
-   }
-};
 
 class FiniteLoopCurrentCoefficient : public VectorCoefficient
 {
@@ -776,83 +727,6 @@ void WriteVTKModel(const string &directory, const string &evaluation_name,
    }
 }
 
-/** @brief Write complex E and H fields for one frequency and tool station.
-    @param directory Root directory selected with @c -vtk.
-    @param evaluation_name Stem of the CSV response file.
-    @param frequency_index Zero-based index in the requested frequency list.
-    @param station Zero-based transmitter station index.
-    @param frequency Frequency in Hz, stored as the ParaView time value.
-    @param mesh Parallel mesh.
-    @param electric_fields Three complex E fields for x, y, and z transmitters.
-    @param magnetic_real Real H fields in the RT space.
-    @param magnetic_imaginary Imaginary H fields in the RT space.
-
-    Field names use transmitter-axis suffixes: for example @c E_real_x and
-    @c H_imag_z. The scalar fields @c E_magnitude_x and @c H_magnitude_x are
-    the magnitudes of their corresponding complex vector phasors. Values use
-    the exp(+i omega t) phasor convention. */
-void WriteVTKFields(
-    const string &directory, const string &evaluation_name, int frequency_index,
-    int station, real_t frequency, ParMesh &mesh,
-    const vector<unique_ptr<ParComplexGridFunction>> &electric_fields,
-    const vector<unique_ptr<ParGridFunction>> &magnetic_real,
-    const vector<unique_ptr<ParGridFunction>> &magnetic_imaginary)
-{
-   if (directory.empty()) { return; }
-
-   ostringstream name;
-   name << "fields_f" << setw(3) << setfill('0') << frequency_index
-        << "_station" << setw(3) << station;
-   ParaViewDataCollection collection(name.str(), &mesh);
-   collection.SetPrefixPath(directory + "/" + evaluation_name + "/");
-   collection.SetDataFormat(VTKFormat::BINARY);
-   collection.SetHighOrderOutput(true);
-   collection.SetCycle(station);
-   collection.SetTime(frequency);
-   const char axis[3] = {'x', 'y', 'z'};
-   vector<unique_ptr<VectorGridFunctionCoefficient>> field_coefficients;
-   vector<unique_ptr<ComplexVectorMagnitudeCoefficient>> magnitude_coefficients;
-   field_coefficients.reserve(12);
-   magnitude_coefficients.reserve(6);
-   for (int transmitter_axis = 0; transmitter_axis < 3; transmitter_axis++)
-   {
-      const string suffix(1, axis[transmitter_axis]);
-      collection.RegisterField("E_real_" + suffix,
-                               &electric_fields[transmitter_axis]->real());
-      collection.RegisterField("E_imag_" + suffix,
-                               &electric_fields[transmitter_axis]->imag());
-      collection.RegisterField("H_real_" + suffix,
-                               magnetic_real[transmitter_axis].get());
-      collection.RegisterField("H_imag_" + suffix,
-                               magnetic_imaginary[transmitter_axis].get());
-      field_coefficients.emplace_back(
-          make_unique<VectorGridFunctionCoefficient>(
-              &electric_fields[transmitter_axis]->real()));
-      field_coefficients.emplace_back(
-          make_unique<VectorGridFunctionCoefficient>(
-              &electric_fields[transmitter_axis]->imag()));
-      field_coefficients.emplace_back(
-          make_unique<VectorGridFunctionCoefficient>(
-              magnetic_real[transmitter_axis].get()));
-      field_coefficients.emplace_back(
-          make_unique<VectorGridFunctionCoefficient>(
-              magnetic_imaginary[transmitter_axis].get()));
-      magnitude_coefficients.emplace_back(
-          make_unique<ComplexVectorMagnitudeCoefficient>(
-              *field_coefficients[field_coefficients.size() - 4],
-              *field_coefficients[field_coefficients.size() - 3]));
-      magnitude_coefficients.emplace_back(
-          make_unique<ComplexVectorMagnitudeCoefficient>(
-              *field_coefficients[field_coefficients.size() - 2],
-              *field_coefficients[field_coefficients.size() - 1]));
-      collection.RegisterCoeffField(
-          "E_magnitude_" + suffix,
-          magnitude_coefficients[magnitude_coefficients.size() - 2].get());
-      collection.RegisterCoeffField("H_magnitude_" + suffix,
-                                    magnitude_coefficients.back().get());
-   }
-   collection.Save();
-}
 
 } // namespace
 
@@ -916,8 +790,15 @@ int main(int argc, char *argv[])
    bool use_octree = false;
    bool use_pml = false;
    bool use_ilu_fallback = true;
+   const char *assembly_mode = "auto";
+   bool profile_vtk = false;
 
    OptionsParser args(argc, argv);
+   args.AddOption(&profile_vtk, "-vtk-profile", "--vtk-profile",
+                  "-no-vtk-profile", "--no-vtk-profile",
+                  "Measure host derived-field evaluation inside ParaView Save.");
+   args.AddOption(&assembly_mode, "-assembly", "--assembly",
+                  "Maxwell assembly: auto, full, or guarded partial.");
    args.AddOption(&mesh_file, "-m", "--mesh", "3D mesh file.");
    args.AddOption(&order, "-o", "--order", "Nedelec finite element order.");
    args.AddOption(&serial_refinements, "-rs", "--refinements-serial",
@@ -1190,8 +1071,19 @@ int main(int argc, char *argv[])
       }
       MFEM_VERIFY(octree_radius > 0.0 && octree_padding >= 0.0,
                   "Octree radius must be positive and padding nonnegative.");
+      serial_mesh.EnsureNCMesh(true);
+   }
+
+   ND_FECollection finite_elements(order, 3);
+   auto *coarse_mesh = new ParMesh(MPI_COMM_WORLD, serial_mesh);
+   serial_mesh.Clear();
+   auto *coarse_space = new ParFiniteElementSpace(coarse_mesh, &finite_elements);
+   ParFiniteElementSpaceHierarchy hierarchy(coarse_mesh, coarse_space,
+                                            true, true);
+   if (use_octree)
+   {
       const int octree_passes =
-          RefineUDARToolRegion(serial_mesh, survey_start, survey_end, tool_axis,
+          RefineUDARToolRegion(hierarchy, survey_start, survey_end, tool_axis,
                                *max_element(spacings.begin(), spacings.end()),
                                octree_radius, octree_padding, octree_levels);
       if (myid == 0)
@@ -1201,15 +1093,22 @@ int main(int argc, char *argv[])
       }
    }
 
-   ParMesh mesh(MPI_COMM_WORLD, serial_mesh);
-   serial_mesh.Clear();
    for (int level = 0; level < parallel_refinements; level++)
    {
-      mesh.UniformRefinement();
+      hierarchy.AddUniformlyRefinedLevel();
+   }
+   ParFiniteElementSpace &space = hierarchy.GetFinestFESpace();
+   ParMesh &mesh = *space.GetParMesh();
+   for (int level = 0; level < hierarchy.GetNumLevels(); level++)
+   {
+      const auto unknowns = hierarchy.GetFESpaceAtLevel(level).GlobalTrueVSize();
+      if (myid == 0)
+      {
+         cout << "H(curl) hierarchy level " << level << ": " << unknowns
+              << " true unknowns\n";
+      }
    }
    if (myid == 0) { cout << "UDAR unknowns: "; }
-   ND_FECollection finite_elements(order, 3);
-   ParFiniteElementSpace space(&mesh, &finite_elements);
    if (myid == 0)
    {
       cout << space.GlobalTrueVSize() << " complex ("
@@ -1262,6 +1161,60 @@ int main(int argc, char *argv[])
       filesystem::create_directories(vtk_directory);
    }
    MPI_Barrier(mesh.GetComm());
+
+   if (pml)
+   {
+      const vector<UDARPMLSideDiagnostics> pml_diagnostics =
+          AnalyzeUDARPMLResolution(mesh, *pml);
+      if (myid == 0)
+      {
+         filesystem::path diagnostics_path;
+         if (vtk_directory[0])
+         {
+            diagnostics_path =
+                filesystem::path(vtk_directory) / "pml_resolution.csv";
+         }
+         else if (server_directory[0])
+         {
+            diagnostics_path =
+                filesystem::path(server_directory) / "pml_resolution.csv";
+         }
+         else
+         {
+            const filesystem::path response_path(output_file);
+            diagnostics_path =
+                response_path.parent_path() /
+                (response_path.stem().string() + "_pml_resolution.csv");
+         }
+
+         cout << "PML mesh-resolution diagnostics:\n";
+         for (const UDARPMLSideDiagnostics &entry : pml_diagnostics)
+         {
+            cout << "  " << entry.SideName() << ": "
+                 << entry.conservative_layers << " conservative layer(s), "
+                 << entry.intersected_elements << " intersected element(s), "
+                 << "max profile jump " << entry.maximum_profile_jump
+                 << ", max normal span " << entry.maximum_normal_span
+                 << '\n';
+            if (entry.conservative_layers < 4)
+            {
+               cout << "  Warning: " << entry.SideName()
+                    << " PML has fewer than four conservative element layers; "
+                    << "refine the outer mesh or increase PML thickness.\n";
+            }
+            if (entry.maximum_profile_jump > 0.35)
+            {
+               cout << "  Warning: " << entry.SideName()
+                    << " PML grading changes by more than 0.35 in one element; "
+                    << "refine the absorbing layer.\n";
+            }
+         }
+         WriteUDARPMLResolutionCSV(diagnostics_path.string(), pml_diagnostics,
+                                   *pml);
+         cout << "Wrote PML diagnostics to " << diagnostics_path.string()
+              << '\n';
+      }
+   }
 
    Array<int> essential_tdofs;
    if (boundary_condition == 0 && mesh.bdr_attributes.Size())
@@ -1320,23 +1273,59 @@ int main(int argc, char *argv[])
           mesh, station_receivers[station_position], point_tolerance));
    }
 
-#ifdef MFEM_USE_COMPLEX_MUMPS
-   vector<unique_ptr<ComplexMUMPSSolver>> mumps_cache(frequencies.size());
-#elif defined(MFEM_USE_MUMPS)
-   vector<unique_ptr<MUMPSSolver>> mumps_cache(frequencies.size());
-#endif
+   vector<unique_ptr<UDARFrequencySystem>> frequency_systems;
+   frequency_systems.reserve(frequencies.size());
+   for (real_t frequency : frequencies)
+   {
+      UDARFrequencySystemOptions frequency_options;
+      frequency_options.frequency = frequency;
+      frequency_options.epsilon0 = eps0;
+      frequency_options.mu0 = mu0;
+      frequency_options.relative_permittivity = eps_r;
+      frequency_options.relative_permeability = mu_r;
+      frequency_options.boundary_condition = boundary_condition;
+      frequency_options.use_mumps = use_mumps;
+      frequency_options.reuse_mumps_ordering = reuse_mumps_ordering;
+      frequency_options.assembly = assembly_mode;
+      frequency_options.iterative.preconditioner = iterative_preconditioner;
+      frequency_options.iterative.system_mode = ams_system_mode;
+      frequency_options.iterative.maximum_iterations = max_iterations;
+      frequency_options.iterative.krylov_dimension = krylov_dimension;
+      frequency_options.iterative.relative_tolerance = relative_tolerance;
+      frequency_options.iterative.absolute_tolerance = absolute_tolerance;
+      frequency_options.iterative.ams_cycle_type = ams_cycle_type;
+      frequency_options.iterative.ams_iterations = ams_iterations;
+      frequency_options.iterative.ams_smoothing_iterations =
+          ams_smoothing_iterations;
+      frequency_options.iterative.ams_print_level = ams_print_level;
+      frequency_options.iterative.ilu_fallback = use_ilu_fallback;
+      frequency_systems.emplace_back(make_unique<UDARFrequencySystem>(
+          space, sigma, pml.get(), essential_tdofs, frequency_options));
+      if (myid == 0)
+      {
+         const auto &system = *frequency_systems.back();
+         cout << "Maxwell assembly at " << frequency << " Hz: "
+              << system.AssemblyMode();
+         if (!system.AssemblyReason().empty())
+         { cout << " (" << system.AssemblyReason() << ')'; }
+         cout << '\n';
+      }
+   }
 
    /** @brief Solve and write one survey for the current conductivity tensors.
        @param current_output_file Rank-zero CSV destination.
 
-       The enclosing scope retains mesh, finite-element space, and tool
-       geometry. Material-dependent forms and numerical solvers are rebuilt. */
+       The enclosing scope retains mesh, finite-element space, tool geometry,
+       and one UDARFrequencySystem per frequency. Material-dependent operators
+       and iterative preconditioners are rebuilt; MUMPS objects retain reusable
+       symbolic state for the fixed sparsity pattern. */
    auto RunForward = [&](const string &current_output_file)
    {
       const string evaluation_name =
           filesystem::path(current_output_file).stem().string();
+      const long long global_elements = mesh.GetGlobalNE();
       WriteVTKModel(vtk_directory, evaluation_name, mesh, sigma, pml.get());
-      ofstream output;
+      ofstream output, timing_output;
       if (myid == 0)
       {
          output.open(current_output_file);
@@ -1344,150 +1333,51 @@ int main(int argc, char *argv[])
                      "Unable to open output file " << current_output_file);
          output << setprecision(16) << scientific;
          WriteCSVHeader(output);
+         const filesystem::path response_path(current_output_file);
+         const filesystem::path timing_path =
+             response_path.parent_path() /
+             (response_path.stem().string() + "_timing.csv");
+         timing_output.open(timing_path);
+         MFEM_VERIFY(timing_output.good(),
+                     "Unable to open timing output " << timing_path.string());
+         timing_output << setprecision(9) << scientific
+                       << "frequency_hz,global_elements,complex_unknowns,"
+                       << "solver,preconditioner,system_mode,assembly_mode,assembly_s,"
+                       << "solver_setup_s,rhs_s,solve_s,field_output_s,"
+                       << "sampling_s,vtk_save_s,derived_eval_s,"
+                       << "krylov_iterations,ilu_fallbacks,vtk_profiled\n";
       }
 
       for (int frequency_index = 0;
            frequency_index < static_cast<int>(frequencies.size());
            frequency_index++)
       {
-         const real_t frequency = frequencies[frequency_index];
-         const real_t omega = 2.0 * M_PI * frequency;
-         const real_t k0 = omega * sqrt(mu0 * eps0);
-         ConstantCoefficient inverse_mu_r(1.0 / mu_r);
-         ConstantCoefficient real_mass(-k0 * k0 * eps_r);
-         ScaledMatrixCoefficient imaginary_mass(sigma, omega * mu0);
-
-         unique_ptr<UDARPMLCurlCoefficient> pml_curl_real;
-         unique_ptr<UDARPMLCurlCoefficient> pml_curl_imaginary;
-         unique_ptr<UDARPMLMassCoefficient> pml_mass_real;
-         unique_ptr<UDARPMLMassCoefficient> pml_mass_imaginary;
-
-         unique_ptr<ConstantCoefficient> abc_real;
-         unique_ptr<ConstantCoefficient> abc_imaginary;
-         Array<int> absorbing_boundary;
-         real_t absorbing_mass = 0.0;
-
-         ParSesquilinearForm form(&space, convention);
-         if (pml)
-         {
-            pml_curl_real.reset(new UDARPMLCurlCoefficient(*pml, omega, eps0,
-                                                           1.0 / mu_r, false));
-            pml_curl_imaginary.reset(new UDARPMLCurlCoefficient(
-                *pml, omega, eps0, 1.0 / mu_r, true));
-            pml_mass_real.reset(new UDARPMLMassCoefficient(
-                sigma, *pml, omega, eps0, -k0 * k0 * eps_r, omega * mu0,
-                false));
-            pml_mass_imaginary.reset(new UDARPMLMassCoefficient(
-                sigma, *pml, omega, eps0, -k0 * k0 * eps_r, omega * mu0, true));
-            form.AddDomainIntegrator(
-                new CurlCurlIntegrator(*pml_curl_real),
-                new CurlCurlIntegrator(*pml_curl_imaginary));
-            form.AddDomainIntegrator(
-                new VectorFEMassIntegrator(*pml_mass_real),
-                new VectorFEMassIntegrator(*pml_mass_imaginary));
-         }
-         else
-         {
-            form.AddDomainIntegrator(new CurlCurlIntegrator(inverse_mu_r),
-                                     nullptr);
-            form.AddDomainIntegrator(
-                new VectorFEMassIntegrator(real_mass),
-                new VectorFEMassIntegrator(imaginary_mass));
-         }
-
-         if (boundary_condition == 1 && mesh.bdr_attributes.Size())
-         {
-            absorbing_boundary.SetSize(mesh.bdr_attributes.Max());
-            absorbing_boundary = 1;
-            const complex<real_t> imaginary_unit(0.0, 1.0);
-            const complex<real_t> background_epsilon =
-                eps_r -
-                imaginary_unit * sigma_background(0, 0) / (omega * eps0);
-            const complex<real_t> boundary_wave_number =
-                k0 * sqrt(mu_r * background_epsilon);
-            // exp(+i omega t), outgoing exp(-i k r): the weak boundary term is
-            // +i k/mu_r times the tangential-field mass matrix.
-            const complex<real_t> gamma =
-                imaginary_unit * boundary_wave_number / mu_r;
-            absorbing_mass = abs(gamma);
-            abc_real.reset(new ConstantCoefficient(gamma.real()));
-            abc_imaginary.reset(new ConstantCoefficient(gamma.imag()));
-            form.AddBoundaryIntegrator(
-                new VectorFEMassIntegrator(*abc_real),
-                new VectorFEMassIntegrator(*abc_imaginary), absorbing_boundary);
-         }
-
-         form.Assemble();
-         OperatorPtr system_operator;
-         form.FormSystemMatrix(essential_tdofs, system_operator);
-
-         unique_ptr<HypreParMatrix> real_block_operator;
-         unique_ptr<Solver> owned_solver;
-         Solver *solver = nullptr;
-
-         if (use_mumps)
-         {
-#ifdef MFEM_USE_COMPLEX_MUMPS
-            if (!mumps_cache[frequency_index])
-            {
-               mumps_cache[frequency_index].reset(
-                   new ComplexMUMPSSolver(MPI_COMM_WORLD));
-               mumps_cache[frequency_index]->SetPrintLevel(0);
-               mumps_cache[frequency_index]->SetMatrixSymType(
-                   ComplexMUMPSSolver::UNSYMMETRIC);
-               mumps_cache[frequency_index]->SetReorderingReuse(
-                   reuse_mumps_ordering);
-            }
-            mumps_cache[frequency_index]->SetOperator(
-                *system_operator.As<ComplexHypreParMatrix>());
-            solver = mumps_cache[frequency_index].get();
-#elif defined(MFEM_USE_MUMPS)
-            real_block_operator.reset(
-                system_operator.As<ComplexHypreParMatrix>()->GetSystemMatrix());
-            if (!mumps_cache[frequency_index])
-            {
-               mumps_cache[frequency_index].reset(
-                   new MUMPSSolver(MPI_COMM_WORLD));
-               mumps_cache[frequency_index]->SetPrintLevel(0);
-               mumps_cache[frequency_index]->SetMatrixSymType(
-                   MUMPSSolver::UNSYMMETRIC);
-               mumps_cache[frequency_index]->SetReorderingReuse(
-                   reuse_mumps_ordering);
-            }
-            mumps_cache[frequency_index]->SetOperator(*real_block_operator);
-            solver = mumps_cache[frequency_index].get();
-#else
-            MFEM_ABORT("MUMPS was requested, but MFEM_USE_MUMPS is disabled.");
-#endif
-         }
-         else
-         {
-            UDARIterativeSolverOptions solver_options;
-            solver_options.preconditioner = iterative_preconditioner;
-            solver_options.system_mode = ams_system_mode;
-            solver_options.maximum_iterations = max_iterations;
-            solver_options.krylov_dimension = krylov_dimension;
-            solver_options.relative_tolerance = relative_tolerance;
-            solver_options.absolute_tolerance = absolute_tolerance;
-            solver_options.ams_cycle_type = ams_cycle_type;
-            solver_options.ams_iterations = ams_iterations;
-            solver_options.ams_smoothing_iterations = ams_smoothing_iterations;
-            solver_options.ams_print_level = ams_print_level;
-            solver_options.ilu_fallback = use_ilu_fallback;
-            owned_solver.reset(new UDARIterativeSolver(
-                *system_operator.As<ComplexHypreParMatrix>(), space, sigma,
-                pml.get(), omega, eps0, mu0, eps_r, mu_r, essential_tdofs,
-                absorbing_boundary.Size() ? &absorbing_boundary : nullptr,
-                absorbing_mass, solver_options));
-            solver = owned_solver.get();
-         }
+         UDARFrequencySystem &frequency_system =
+             *frequency_systems[frequency_index];
+         const real_t frequency = frequency_system.Frequency();
+         const real_t omega = frequency_system.Omega();
+         StopWatch phase_timer;
+         phase_timer.Start();
+         frequency_system.AssembleOperator(sigma_background(0, 0));
+         phase_timer.Stop();
+         const double assembly_seconds = phase_timer.RealTime();
+         phase_timer.Restart();
+         frequency_system.ConfigureSolver();
+         phase_timer.Stop();
+         const double solver_setup_seconds = phase_timer.RealTime();
+         double rhs_seconds = 0.0;
+         double solve_seconds = 0.0;
+         double field_output_seconds = 0.0;
+         double vtk_save_seconds = 0.0;
+         double derived_eval_seconds = 0.0;
+         double sampling_seconds = 0.0;
+         int krylov_iterations = 0;
+         int ilu_fallbacks = 0;
 
          if (myid == 0)
          {
             cout << "Solving " << frequency << " Hz with "
-                 << (use_mumps ? "MUMPS"
-                               : static_cast<UDARIterativeSolver *>(solver)
-                                     ->Description())
+                 << frequency_system.SolverDescription()
                  << endl;
          }
 
@@ -1500,6 +1390,7 @@ int main(int argc, char *argv[])
                 (stations == 1) ? 0.0 : real_t(station) / real_t(stations - 1);
             const Vector &transmitter = station_transmitters[station_position];
             vector<Vector> rhs(3), solution(3);
+            phase_timer.Restart();
             for (int transmitter_axis = 0; transmitter_axis < 3;
                  transmitter_axis++)
             {
@@ -1538,6 +1429,8 @@ int main(int argc, char *argv[])
                solution[transmitter_axis].SetSize(2 * true_size);
                solution[transmitter_axis] = 0.0;
             }
+            phase_timer.Stop();
+            rhs_seconds += phase_timer.RealTime();
 
             Array<const Vector *> rhs_array(3);
             Array<Vector *> solution_array(3);
@@ -1546,29 +1439,21 @@ int main(int argc, char *argv[])
                rhs_array[axis] = &rhs[axis];
                solution_array[axis] = &solution[axis];
             }
-            if (use_mumps)
+            phase_timer.Restart();
+            const UDARFrequencySolveStats solve_stats =
+                frequency_system.Solve(rhs_array, solution_array);
+            krylov_iterations += solve_stats.krylov_iterations;
+            ilu_fallbacks += solve_stats.ilu_fallbacks;
+            if (solve_stats.ilu_fallbacks > 0 && myid == 0)
             {
-               // ComplexMUMPSSolver and MUMPSSolver both use one batched solve
-               // for the three source polarizations and retain the frequency's
-               // factors.
-               solver->ArrayMult(rhs_array, solution_array);
+               cout << "  AMS required distributed ILU recovery for "
+                    << solve_stats.ilu_fallbacks
+                    << " source solve(s) at station " << station << ".\n";
             }
-            else
-            {
-               UDARIterativeSolver *iterative =
-                   static_cast<UDARIterativeSolver *>(solver);
-               for (int axis = 0; axis < 3; axis++)
-               {
-                  iterative->Mult(rhs[axis], solution[axis]);
-                  if (iterative->UsedFallback() && myid == 0)
-                  {
-                     cout << "  AMS did not converge for station " << station
-                          << ", transmitter axis " << axis
-                          << "; recovered with distributed ILU.\n";
-                  }
-               }
-            }
+            phase_timer.Stop();
+            solve_seconds += phase_timer.RealTime();
 
+            phase_timer.Restart();
             vector<unique_ptr<ParComplexGridFunction>> electric_fields(3);
             for (int axis = 0; axis < 3; axis++)
             {
@@ -1599,10 +1484,16 @@ int main(int argc, char *argv[])
                   *magnetic_real[axis] *= -magnetic_scale;
                   *magnetic_imaginary[axis] *= magnetic_scale;
                }
-               WriteVTKFields(vtk_directory, evaluation_name, frequency_index,
-                              station, frequency, mesh, electric_fields,
-                              magnetic_real, magnetic_imaginary);
+               const auto vtk_stats = WriteUDARVTKFields(
+                              vtk_directory, evaluation_name, frequency_index,
+                              station, frequency, mesh, sigma, eps0 * eps_r,
+                              mu0 * mu_r, electric_fields, magnetic_real,
+                              magnetic_imaginary, profile_vtk);
+               vtk_save_seconds += vtk_stats.save_seconds;
+               derived_eval_seconds += vtk_stats.derived_evaluation_seconds;
             }
+            phase_timer.Stop();
+            field_output_seconds += phase_timer.RealTime();
 
             vector<const ParComplexGridFunction *> electric_field_views(3);
             for (int axis = 0; axis < 3; axis++)
@@ -1611,9 +1502,12 @@ int main(int argc, char *argv[])
             }
             vector<DenseMatrix> receiver_field_real;
             vector<DenseMatrix> receiver_field_imaginary;
+            phase_timer.Restart();
             receiver_evaluators[station_position]->EvaluateMagneticFields(
                 electric_field_views, omega, mu0, mu_r, receiver_field_real,
                 receiver_field_imaginary);
+            phase_timer.Stop();
+            sampling_seconds += phase_timer.RealTime();
 
             for (int spacing_index = 0;
                  spacing_index < static_cast<int>(spacings.size());
@@ -1698,6 +1592,47 @@ int main(int argc, char *argv[])
                     << " (selected " << station_position + 1 << '/'
                     << station_indices.size() << ")\n";
             }
+         }
+
+         const double local_timing[8] = {
+             assembly_seconds, solver_setup_seconds, rhs_seconds,
+             solve_seconds, field_output_seconds, sampling_seconds,
+             vtk_save_seconds, derived_eval_seconds};
+         double maximum_timing[8] = {};
+         MPI_Reduce(local_timing, maximum_timing, 8, MPI_DOUBLE, MPI_MAX, 0,
+                    mesh.GetComm());
+         int global_krylov_iterations = 0;
+         int maximum_fallbacks = 0;
+         MPI_Reduce(&krylov_iterations, &global_krylov_iterations, 1, MPI_INT,
+                    MPI_MAX, 0, mesh.GetComm());
+         MPI_Reduce(&ilu_fallbacks, &maximum_fallbacks, 1, MPI_INT, MPI_MAX, 0,
+                    mesh.GetComm());
+         if (myid == 0)
+         {
+            const string solver_name = frequency_system.SolverDescription();
+            timing_output << frequency << ',' << global_elements << ','
+                          << space.GlobalTrueVSize() << ',' << solver_name
+                          << ','
+                          << (frequency_system.UsesMUMPS()
+                                  ? "direct"
+                                  : frequency_system.Preconditioner())
+                          << ','
+                          << (frequency_system.UsesMUMPS()
+                                  ? "complex-or-real-block"
+                                  : frequency_system.SystemMode())
+                          << ',' << frequency_system.AssemblyMode();
+            for (double value : maximum_timing)
+            {
+               timing_output << ',' << value;
+            }
+            timing_output << ',' << global_krylov_iterations << ','
+                          << maximum_fallbacks << ','
+                          << (profile_vtk && vtk_directory[0] ? 1 : 0) << '\n';
+            cout << "  timing (max rank): assembly " << maximum_timing[0]
+                 << " s, setup " << maximum_timing[1] << " s, RHS "
+                 << maximum_timing[2] << " s, solve " << maximum_timing[3]
+                 << " s, fields " << maximum_timing[4] << " s, sampling "
+                 << maximum_timing[5] << " s\n";
          }
       }
 

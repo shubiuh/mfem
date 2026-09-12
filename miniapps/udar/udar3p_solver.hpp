@@ -40,14 +40,16 @@ struct UDARIterativeSolverOptions
     convention, the imaginary copy receives the required minus sign.
 
     The @c complex system mode applies FGMRES directly to
-    ComplexHypreParMatrix and avoids materializing its full real matrix. The
+    ComplexOperator and avoids materializing its full real matrix. A partially
+    assembled operator requires AMS, complex mode and disabled ILU fallback;
+    the positive AMS auxiliary matrix is still fully assembled. The
     @c real mode uses the assembled distributed real 2-by-2 matrix. If AMS
     fails to converge and fallback is enabled, the solve is retried with the
     existing distributed Schur-corrected ILU preconditioner. */
 class UDARIterativeSolver : public Solver
 {
  private:
-   const ComplexHypreParMatrix &complex_operator;
+   const ComplexOperator &complex_operator;
    UDARIterativeSolverOptions options;
    mutable std::unique_ptr<HypreParMatrix> real_block_operator;
    std::unique_ptr<HypreParMatrix> shifted_operator;
@@ -58,12 +60,14 @@ class UDARIterativeSolver : public Solver
    std::unique_ptr<FGMRESSolver> primary_solver;
    mutable std::unique_ptr<FGMRESSolver> fallback_solver;
    mutable bool used_fallback = false;
+   mutable int last_iterations = 0;
+   mutable real_t last_final_norm = 0.0;
 
    void ConfigureKrylov(FGMRESSolver &solver) const;
    void BuildILUFallback() const;
 
  public:
-   UDARIterativeSolver(const ComplexHypreParMatrix &operator_,
+   UDARIterativeSolver(const ComplexOperator &operator_,
                        ParFiniteElementSpace &edge_space,
                        MatrixCoefficient &conductivity,
                        const UDARCartesianPML *pml, real_t omega,
@@ -77,6 +81,15 @@ class UDARIterativeSolver : public Solver
 
    /** @brief Return whether the most recent solve required ILU recovery. */
    bool UsedFallback() const { return used_fallback; }
+
+   /** @brief Return Krylov iterations used by the most recent solve.
+
+       When AMS recovery is required, this includes both the failed primary
+       solve and the successful ILU solve. */
+   int GetLastIterations() const { return last_iterations; }
+
+   /** @brief Return the final residual norm from the successful solver. */
+   real_t GetLastFinalNorm() const { return last_final_norm; }
 
    /** @brief Return a concise description for logs. */
    std::string Description() const;

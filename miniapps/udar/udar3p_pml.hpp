@@ -7,6 +7,8 @@
 #include "mfem.hpp"
 
 #include <complex>
+#include <string>
+#include <vector>
 
 namespace mfem
 {
@@ -34,6 +36,12 @@ class UDARCartesianPML
    /** @brief Return the normalized grading on one coordinate axis. */
    real_t AxisProfile(const Vector &point, int axis) const;
 
+   /** @brief Return the normalized grading for one side of an axis.
+       @param point Physical coordinate.
+       @param axis Cartesian axis in the range [0, 2].
+       @param upper Select the maximum-coordinate side when true. */
+   real_t SideProfile(const Vector &point, int axis, bool upper) const;
+
    /** @brief Return the largest directional grading at a point. */
    real_t Profile(const Vector &point) const;
 
@@ -47,7 +55,45 @@ class UDARCartesianPML
    /** @brief Evaluate the three diagonal coordinate-stretch factors. */
    void Stretch(const Vector &point, real_t omega, real_t epsilon0,
                 std::complex<real_t> stretch[3]) const;
+
+   const Vector &Minimum() const { return minimum; }
+   const Vector &Maximum() const { return maximum; }
+   real_t Thickness() const { return thickness; }
+   real_t MaximumConductivity() const { return maximum_conductivity; }
+   int PolynomialOrder() const { return polynomial_order; }
 };
+
+/** @brief Mesh-resolution diagnostics for one Cartesian PML side. */
+struct UDARPMLSideDiagnostics
+{
+   int axis = 0;
+   bool upper = false;
+   real_t boundary_coordinate = 0.0;
+   real_t interface_coordinate = 0.0;
+   long long intersected_elements = 0;
+   int conservative_layers = 0;
+   real_t maximum_normal_span = 0.0;
+   real_t maximum_profile_jump = 0.0;
+   real_t maximum_conductivity_jump = 0.0;
+
+   /** @brief Return a stable label such as @c x_min or @c z_max. */
+   std::string SideName() const;
+};
+
+/** @brief Analyze element resolution independently on all six PML sides.
+
+    The conservative layer count is floor(thickness / maximum normal element
+    span). The grading jump is the largest variation of the side-specific
+    normalized PML profile across the vertices of any intersecting element.
+    Returned values are global across the parallel mesh. */
+std::vector<UDARPMLSideDiagnostics> AnalyzeUDARPMLResolution(
+    ParMesh &mesh, const UDARCartesianPML &pml);
+
+/** @brief Write one CSV row per Cartesian PML side. */
+void WriteUDARPMLResolutionCSV(
+    const std::string &path,
+    const std::vector<UDARPMLSideDiagnostics> &diagnostics,
+    const UDARCartesianPML &pml);
 
 /** @brief Real or imaginary PML-transformed inverse-permeability tensor. */
 class UDARPMLCurlCoefficient : public MatrixCoefficient

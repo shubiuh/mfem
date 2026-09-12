@@ -39,13 +39,17 @@ class ShiftedMassCoefficient : public MatrixCoefficient
 } // namespace
 
 UDARIterativeSolver::UDARIterativeSolver(
-    const ComplexHypreParMatrix &operator_, ParFiniteElementSpace &edge_space,
+    const ComplexOperator &operator_, ParFiniteElementSpace &edge_space,
     MatrixCoefficient &conductivity, const UDARCartesianPML *pml, real_t omega,
     real_t epsilon0, real_t mu0, real_t eps_r, real_t mu_r,
     const Array<int> &essential_tdofs, Array<int> *absorbing_boundary,
     real_t absorbing_mass, const UDARIterativeSolverOptions &options_)
     : Solver(operator_.Height()), complex_operator(operator_), options(options_)
 {
+   MFEM_VERIFY(dynamic_cast<const ComplexHypreParMatrix *>(&operator_) ||
+                   (options.preconditioner == "ams" &&
+                    options.system_mode == "complex" && !options.ilu_fallback),
+               "A matrix-free operator requires complex AMS without ILU fallback.");
    MFEM_VERIFY(options.preconditioner == "ilu" ||
                    options.preconditioner == "ams",
                "Iterative preconditioner must be 'ilu' or 'ams'.");
@@ -139,7 +143,9 @@ UDARIterativeSolver::UDARIterativeSolver(
    ConfigureKrylov(*primary_solver);
    if (options.system_mode == "real")
    {
-      real_block_operator.reset(complex_operator.GetSystemMatrix());
+      real_block_operator.reset(
+          dynamic_cast<const ComplexHypreParMatrix &>(complex_operator)
+          .GetSystemMatrix());
       primary_solver->SetOperator(*real_block_operator);
    }
    else
@@ -166,7 +172,10 @@ void UDARIterativeSolver::BuildILUFallback() const
 {
    if (!real_block_operator)
    {
-      real_block_operator.reset(complex_operator.GetSystemMatrix());
+      const auto *matrix =
+          dynamic_cast<const ComplexHypreParMatrix *>(&complex_operator);
+      MFEM_VERIFY(matrix, "ILU requires an assembled complex matrix.");
+      real_block_operator.reset(matrix->GetSystemMatrix());
    }
    ilu.reset(new HypreILU);
    ilu->SetType(10);
@@ -188,6 +197,8 @@ void UDARIterativeSolver::Mult(const Vector &right_hand_side,
 {
    used_fallback = false;
    primary_solver->Mult(right_hand_side, solution);
+   last_iterations = primary_solver->GetNumIterations();
+   last_final_norm = primary_solver->GetFinalNorm();
    if (primary_solver->GetConverged()) { return; }
 
    MFEM_VERIFY(options.preconditioner == "ams" && options.ilu_fallback,
@@ -196,6 +207,8 @@ void UDARIterativeSolver::Mult(const Vector &right_hand_side,
    solution = 0.0;
    fallback_solver->Mult(right_hand_side, solution);
    used_fallback = true;
+   last_iterations += fallback_solver->GetNumIterations();
+   last_final_norm = fallback_solver->GetFinalNorm();
    MFEM_VERIFY(fallback_solver->GetConverged(),
                "FGMRES failed with both shifted AMS and distributed ILU.");
 }

@@ -14,10 +14,14 @@ behind each transmitter along the negative tool axis by the requested spacing.
 
 The miniapp is self-contained under `miniapps/udar`: `udar3p.cpp` owns command
 line handling and the survey workflow, while the adaptation, PML, distributed
-point-location, and linear-solver implementations live in separate
-`udar3p_*.hpp/.cpp` modules. It has dedicated CMake and make build files and
-keeps the executable name `udar3p` for compatibility with the inversion
-wrapper.
+point-location, frequency-system assembly, electromagnetic postprocessing, and
+linear-solver implementations live in separate `udar3p_*.hpp/.cpp` modules.
+`UDARFrequencySystem` owns the Maxwell form, coefficient lifetimes, assembled
+operator, real-block conversion, and solver for one frequency. These objects
+persist across inversion requests, allowing MUMPS symbolic state to be reused
+while material-dependent operators are rebuilt safely. The miniapp has
+dedicated CMake and make build files and keeps the executable name `udar3p` for
+compatibility with the inversion wrapper.
 
 ## Capabilities
 
@@ -123,13 +127,118 @@ per-rank legacy `.vtk` pieces containing `Rh_ohm_m` and `Rv_ohm_m` as
 **cell data**, and one `fields_fNNN_stationNNN/*.pvd` collection per frequency
 and transmitter station. The field collections contain `E_real_x`, `E_imag_x`,
 `E_magnitude_x`, `H_real_x`, `H_imag_x`, `H_magnitude_x`, and corresponding
-y/z transmitter fields. Open a `.pvd` file in ParaView; the model collection
+y/z transmitter fields. They also contain `electric_energy_J_m3_x`,
+`magnetic_energy_J_m3_x`, `ohmic_loss_W_m3_x`, and the active
+`poynting_W_m2_x` vector for each transmitter axis. Energy uses the configured
+isotropic permittivity and permeability. Ohmic loss uses only the physical
+formation conductivity and excludes the artificial PML stretch. Open a `.pvd`
+file in ParaView; the model collection
 locates its per-rank `.vtk` pieces and field collections locate their `.pvtu`
 and `.vtu` pieces. Rh is the average xx/yy component of the inverse
 conductivity tensor and Rv is its zz component, so these labels use the global
 mesh axes.
 
-### Tetrahedra and PML
+Every response CSV has a sibling `NAME_timing.csv`. Each frequency row records
+the global element and complex-unknown counts, solver and preconditioner modes,
+maximum MPI-rank wall times for operator assembly, solver setup, right-hand
+side construction, solves, field output, and receiver sampling, plus aggregate
+Krylov iterations and ILU recoveries. These measurements make frequency-mesh
+and solver choices directly comparable during inversion development.
+
+### Measuring derived-field output before device implementation
+
+Add `-vtk-profile` to a representative forward run with `-vtk DIRECTORY` to
+measure host derived-coefficient evaluation inside ParaView `Save()`. The
+timing CSV now includes `vtk_save_s`, `derived_eval_s`, and `vtk_profiled`.
+`vtk_save_s` includes mesh/field serialization and file writing;
+`derived_eval_s` includes host FE interpolation and coefficient algebra for
+magnitudes, energy, loss and Poynting fields. It is a subset of Save time,
+which is itself within `field_output_s`; do not add these nested measurements
+when computing total runtime. Times are maxima across MPI ranks, so different
+columns may refer to different ranks. A zero `derived_eval_s` with
+`vtk_profiled=0` means unmeasured, not free. Profiling adds two clock reads per
+coefficient call; compare with an unprofiled run to assess overhead.
+
+Build the explicit CMake target `udar_output_benchmark` for an output-only
+scaling study using the production writer. Example arguments:
+
+```text
+-n 32 -o 2 -r 3 -out build/udar-output-n32
+```
+
+It constructs manufactured ND fields and curl-derived RT fields for all three
+transmitter orientations, alternates raw E/H and complete output, then runs a
+separate instrumented pass. Each repeated mode overwrites its own collection;
+all timings are retained in `timing.csv`. The current production writer uses
+one visualization subdivision (eight vertex samples per hex), independently
+of FE order. This benchmark estimates output cost at large FE sizes but does
+not establish its share of a production Maxwell solve. See
+[OUTPUT_PERFORMANCE.md](OUTPUT_PERFORMANCE.md) for measured results and the
+remaining device-validation gate. The production output backend remains host.
+
+### Partial assembly
+
+`-assembly auto` (the default) selects partial assembly only for constant-order
+hex meshes with Nedelec order at least 2, complex FGMRES with AMS
+(`-gmres -pc ams -ams-mode complex`) with AMS cycle 13 (`-ams-cycle 13`),
+disabled ILU fallback
+(`-no-ams-fallback`), PEC boundaries (`-bc 0`), and no PML. Locally refined
+nonconforming hex meshes are supported. `-assembly full` always uses the
+assembled path. `-assembly partial` requests PA but obeys the same guards;
+an incompatible request uses full assembly and prints the reason. Solver,
+boundary and fallback choices are never changed implicitly.
+
+Only the Maxwell operator uses partial assembly. The positive shifted AMS
+auxiliary operator remains fully assembled, so this mode does not remove all
+high-order matrix storage. MUMPS, ILU, explicit real-block mode, order-1,
+tetrahedral/mixed meshes, variable order, PML and absorbing-boundary runs retain
+full assembly. PA reduces Maxwell matrix storage; it does not guarantee faster
+solves or improve AMS convergence. With ILU fallback disabled, a failed AMS
+solve reports nonconvergence as usual.
+
+This initial PA gate admits only the tested AMS cycle 13. Cycle 14 reached
+the iteration limit in a higher-order forward check using the assembled
+operator as well; its high-order convergence needs separate investigation.
+An example selection, appended to the normal survey arguments, is:
+
+```text
+-o 2 -gmres -pc ams -ams-mode complex -ams-cycle 13 -no-ams-fallback -bc 0 -no-pml -assembly auto
+```
+
+The startup log reports the actual selection for every frequency, and each
+timing CSV includes an `assembly_mode` column. Material updates rebuild PA
+quadrature data and the AMS auxiliary matrix. The explicit CMake target
+`udar_assembly_test` compares full and partial operator actions on locally
+refined order-2 and order-3 hex meshes, including anisotropic conductivity,
+PEC rows and repeated material updates. Run MPI workers with the initialized
+oneAPI environment; on Windows pass `-genv PATH "%PATH%"` to `mpiexec`.
+
+### Mesh hierarchy and PML
+
+The forward solver retains a `ParFiniteElementSpaceHierarchy` throughout the
+survey and persistent inversion requests. Serial uniform refinements (`-rs`)
+define its coarse mesh. The mesh is then partitioned once; each tool-region
+refinement pass (`-octree-l`) and each parallel uniform refinement (`-rp`)
+adds a separate mesh and Nedelec space. Refinement copies the parent mesh, so
+coarse levels remain intact. No repartitioning is performed between levels.
+Both hex and tet tool refinement use MFEM nonconforming meshes.
+
+Each adjacent pair retains an MFEM `TrueTransferOperator` with hanging-node
+constraints and edge orientations handled by the finite element spaces.
+`Mult` prolongs coarse true DOFs and `MultTranspose` restricts residuals.
+`GetFESpaceAtLevel` exposes each level for auxiliary Maxwell assembly and
+level-specific essential-boundary DOFs. The existing forward solver uses
+`GetFinestFESpace`; retaining the hierarchy does not yet select a geometric
+multigrid cycle. Level operators, smoothers and the coarse solve are the next
+implementation stage. Keeping these meshes, spaces and transfers increases
+memory usage, and the inherited coarse partition may need load-balancing work
+before large distributed local-refinement runs.
+
+Build the explicit CMake target `udar_hierarchy_test` to check hex and tet
+hierarchies with two local refinement passes followed by a uniform pass.
+Run it in the initialized oneAPI environment, directly or through MPI. It
+checks coarse-mesh preservation, interpolation of a representable field with
+nonzero curl, and the prolongation/restriction transpose identity.
 
 `udar3p` accepts both hexahedral and tetrahedral 3D meshes. A Cartesian PML
 does not require hexahedra: its stretch tensor is evaluated in physical
@@ -159,6 +268,22 @@ value 1, and enable surface edges to inspect the PML elements. Rh and Rv remain
 the physical formation properties and do not include the artificial PML.
 Use at least four elements, preferably six to ten, through the PML thickness;
 the `cell_size` array makes an under-resolved absorbing layer easy to identify.
+
+When PML is enabled, the miniapp analyzes all six Cartesian sides before the
+first solve. For each side it reports the number of intersected elements, the
+largest element span normal to the boundary, a conservative layer count
+`floor(PML thickness / maximum normal span)`, and the largest normalized
+grading change contained in one element. A layer count below four or a grading
+jump above 0.35 produces a warning. The conservative definition avoids
+overstating resolution on tetrahedral, nonuniform, and locally refined meshes.
+
+The complete report is written to `pml_resolution.csv` in the ParaView or
+persistent-server directory. Without either directory it is written beside the
+response as `NAME_pml_resolution.csv`. Its `max_conductivity_jump_S_m` column
+converts the normalized grading jump to the corresponding artificial stretch-
+conductivity change. Compare this report between frequency meshes together
+with receiver-response convergence; the diagnostic measures mesh resolution
+of the chosen PML profile and does not by itself establish boundary accuracy.
 
 For repeated conductivity evaluations, `-server DIRECTORY` starts a persistent
 stdin/stdout protocol used by the Python inversion wrapper. It initializes MPI,

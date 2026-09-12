@@ -5,6 +5,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <memory>
 
 namespace mfem
 {
@@ -57,7 +58,7 @@ int RefineUDARToolRegion(Mesh &mesh, const Vector &survey_start,
    refinement_start.Add(-(maximum_spacing + padding), tool_axis);
    Vector refinement_end(survey_end);
    refinement_end.Add(padding, tool_axis);
-   mesh.EnsureNCMesh();
+   mesh.EnsureNCMesh(true);
 
    int passes = 0;
    for (int level = 0; level < levels; level++)
@@ -82,6 +83,62 @@ int RefineUDARToolRegion(Mesh &mesh, const Vector &survey_start,
       }
       if (elements.Size() == 0) { break; }
       mesh.GeneralRefinement(elements, 1);
+      passes++;
+   }
+   return passes;
+}
+
+int RefineUDARToolRegion(ParFiniteElementSpaceHierarchy &hierarchy,
+                         const Vector &survey_start, const Vector &survey_end,
+                         const Vector &tool_axis, real_t maximum_spacing,
+                         real_t core_radius, real_t padding, int levels)
+{
+   MFEM_VERIFY(levels >= 1 && core_radius > 0.0 && padding >= 0.0,
+               "Invalid tool-region refinement parameters.");
+   MFEM_VERIFY(hierarchy.GetNumLevels() > 0,
+               "Tool refinement requires a coarse space.");
+   Vector start(survey_start), end(survey_end);
+   start.Add(-(maximum_spacing + padding), tool_axis);
+   end.Add(padding, tool_axis);
+   int passes = 0;
+   for (int level = 0; level < levels; level++)
+   {
+      ParFiniteElementSpace &coarse = hierarchy.GetFinestFESpace();
+      MFEM_VERIFY(coarse.GetParMesh()->Nonconforming(),
+                  "Enable nonconforming refinement before partitioning.");
+      std::unique_ptr<ParMesh> fine_mesh(new ParMesh(*coarse.GetParMesh()));
+      const real_t radius =
+          core_radius * pow(2.0, real_t(levels - level - 1)) + padding;
+      Array<int> marked;
+      for (int element = 0; element < fine_mesh->GetNE(); element++)
+      {
+         const Geometry::Type geometry =
+             fine_mesh->GetElementBaseGeometry(element);
+         MFEM_VERIFY(geometry == Geometry::CUBE ||
+                     geometry == Geometry::TETRAHEDRON,
+                     "Tool refinement requires hex or tet elements.");
+         Vector center;
+         fine_mesh->GetElementCenter(element, center);
+         const real_t element_radius =
+             0.5 * sqrt(3.0) * fine_mesh->GetElementSize(element, 2);
+         if (PointSegmentDistance(center, start, end) <= radius + element_radius)
+         {
+            marked.Append(element);
+         }
+      }
+      const int local_marked = marked.Size();
+      int any_marked = 0;
+      MPI_Allreduce(&local_marked, &any_marked, 1, MPI_INT, MPI_MAX,
+                    fine_mesh->GetComm());
+      if (!any_marked) { break; }
+      fine_mesh->GeneralRefinement(marked, 1);
+      std::unique_ptr<ParFiniteElementSpace> fine_space(
+          new ParFiniteElementSpace(fine_mesh.get(), coarse.FEColl(),
+                                    coarse.GetVDim(), coarse.GetOrdering()));
+      std::unique_ptr<Operator> transfer(
+          new TrueTransferOperator(coarse, *fine_space));
+      hierarchy.AddLevel(fine_mesh.release(), fine_space.release(),
+                         transfer.release(), true, true, true);
       passes++;
    }
    return passes;
